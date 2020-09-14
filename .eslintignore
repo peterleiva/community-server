@@ -1,0 +1,4 @@
+# copy-files.js
+dist
+node_modules
+copy-files.js
