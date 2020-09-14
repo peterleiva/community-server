@@ -481,18 +481,18 @@
         "signature": "b60af9a543b4d5b123f9162105b9b160858c5074eee087aa6cacb9837e76b563",
         "affectsGlobalScope": false
       },
-      "./src/routes/index.ts": {
-        "version": "0ac9705dfce648a66c3c9a55a3e6a82e291036e7f5ee2cfeaec0e457b290d8c0",
-        "signature": "c106970ee4b686b5ebf0964ea4e0d1b2af02bdecd2d5cfeecedeb7bb5b2f404b",
+      "./node_modules/@types/cors/index.d.ts": {
+        "version": "f6283751acbb93a4ade61ab11ee4bb7139b12c5aa6307f5b89f058af60eec332",
+        "signature": "f6283751acbb93a4ade61ab11ee4bb7139b12c5aa6307f5b89f058af60eec332",
         "affectsGlobalScope": false
       },
-      "./src/routes/users.ts": {
-        "version": "de863829ce5c3a8c2661c059292e7ab8f18c6763cb6335a96bb2c66fa33b3494",
-        "signature": "c106970ee4b686b5ebf0964ea4e0d1b2af02bdecd2d5cfeecedeb7bb5b2f404b",
+      "./src/lib/middlewares/cors.ts": {
+        "version": "6549e94dbe416305b8f1d68d462d82b45335720dc661865c8e4a764ff31b1826",
+        "signature": "adf5f17d059a829777447ad1729b7f9e6ecc9d8ec1824d81c240964b98121b7c",
         "affectsGlobalScope": false
       },
       "./src/app.ts": {
-        "version": "0070b729677b7ebc1f3daa3b1606909a332da66c4f2916346f872163b01aa575",
+        "version": "e9bdc6473197909dce3423533fc9f95b6117dea577305fa376cdbb28f9504a70",
         "signature": "4654f92731de7c18eb496ebf4134d15c881a25c2d6579affd293cde1951e4ced",
         "affectsGlobalScope": false
       },
@@ -654,12 +654,6 @@
       "outDir": "./dist",
       "rootDir": "./src",
       "noImplicitAny": true,
-      "baseUrl": "./",
-      "paths": {
-        "@core/*": [
-          "src/*"
-        ]
-      },
       "configFilePath": "./tsconfig.json"
     },
     "referencedMap": {
@@ -760,6 +754,16 @@
         "./node_modules/@types/node/ts3.4/util.d.ts"
       ],
       "./node_modules/@types/cookie-parser/index.d.ts": [
+        "./node_modules/@types/express/index.d.ts",
+        "./node_modules/@types/graceful-fs/index.d.ts",
+        "./node_modules/@types/node/ts3.1/fs.d.ts",
+        "./node_modules/@types/node/ts3.1/process.d.ts",
+        "./node_modules/@types/node/ts3.1/util.d.ts",
+        "./node_modules/@types/node/ts3.4/fs.d.ts",
+        "./node_modules/@types/node/ts3.4/process.d.ts",
+        "./node_modules/@types/node/ts3.4/util.d.ts"
+      ],
+      "./node_modules/@types/cors/index.d.ts": [
         "./node_modules/@types/express/index.d.ts",
         "./node_modules/@types/graceful-fs/index.d.ts",
         "./node_modules/@types/node/ts3.1/fs.d.ts",
@@ -1920,8 +1924,17 @@
         "./node_modules/@types/node/ts3.4/fs.d.ts",
         "./node_modules/@types/node/ts3.4/process.d.ts",
         "./node_modules/@types/node/ts3.4/util.d.ts",
-        "./src/routes/index.ts",
-        "./src/routes/users.ts"
+        "./src/lib/middlewares/cors.ts"
+      ],
+      "./src/lib/middlewares/cors.ts": [
+        "./node_modules/@types/cors/index.d.ts",
+        "./node_modules/@types/graceful-fs/index.d.ts",
+        "./node_modules/@types/node/ts3.1/fs.d.ts",
+        "./node_modules/@types/node/ts3.1/process.d.ts",
+        "./node_modules/@types/node/ts3.1/util.d.ts",
+        "./node_modules/@types/node/ts3.4/fs.d.ts",
+        "./node_modules/@types/node/ts3.4/process.d.ts",
+        "./node_modules/@types/node/ts3.4/util.d.ts"
       ],
       "./src/main.ts": [
         "./node_modules/@types/debug/index.d.ts",
@@ -1934,26 +1947,6 @@
         "./node_modules/@types/node/ts3.4/process.d.ts",
         "./node_modules/@types/node/ts3.4/util.d.ts",
         "./src/app.ts"
-      ],
-      "./src/routes/index.ts": [
-        "./node_modules/@types/express/index.d.ts",
-        "./node_modules/@types/graceful-fs/index.d.ts",
-        "./node_modules/@types/node/ts3.1/fs.d.ts",
-        "./node_modules/@types/node/ts3.1/process.d.ts",
-        "./node_modules/@types/node/ts3.1/util.d.ts",
-        "./node_modules/@types/node/ts3.4/fs.d.ts",
-        "./node_modules/@types/node/ts3.4/process.d.ts",
-        "./node_modules/@types/node/ts3.4/util.d.ts"
-      ],
-      "./src/routes/users.ts": [
-        "./node_modules/@types/express/index.d.ts",
-        "./node_modules/@types/graceful-fs/index.d.ts",
-        "./node_modules/@types/node/ts3.1/fs.d.ts",
-        "./node_modules/@types/node/ts3.1/process.d.ts",
-        "./node_modules/@types/node/ts3.1/util.d.ts",
-        "./node_modules/@types/node/ts3.4/fs.d.ts",
-        "./node_modules/@types/node/ts3.4/process.d.ts",
-        "./node_modules/@types/node/ts3.4/util.d.ts"
       ]
     },
     "exportedModulesMap": {
@@ -2054,6 +2047,16 @@
         "./node_modules/@types/node/ts3.4/util.d.ts"
       ],
       "./node_modules/@types/cookie-parser/index.d.ts": [
+        "./node_modules/@types/express/index.d.ts",
+        "./node_modules/@types/graceful-fs/index.d.ts",
+        "./node_modules/@types/node/ts3.1/fs.d.ts",
+        "./node_modules/@types/node/ts3.1/process.d.ts",
+        "./node_modules/@types/node/ts3.1/util.d.ts",
+        "./node_modules/@types/node/ts3.4/fs.d.ts",
+        "./node_modules/@types/node/ts3.4/process.d.ts",
+        "./node_modules/@types/node/ts3.4/util.d.ts"
+      ],
+      "./node_modules/@types/cors/index.d.ts": [
         "./node_modules/@types/express/index.d.ts",
         "./node_modules/@types/graceful-fs/index.d.ts",
         "./node_modules/@types/node/ts3.1/fs.d.ts",
@@ -3205,11 +3208,10 @@
       "./src/app.ts": [
         "./node_modules/@types/express-serve-static-core/index.d.ts"
       ],
-      "./src/routes/index.ts": [
-        "./node_modules/@types/express-serve-static-core/index.d.ts"
-      ],
-      "./src/routes/users.ts": [
-        "./node_modules/@types/express-serve-static-core/index.d.ts"
+      "./src/lib/middlewares/cors.ts": [
+        "./node_modules/@types/express-serve-static-core/index.d.ts",
+        "./node_modules/@types/express/index.d.ts",
+        "./node_modules/@types/qs/index.d.ts"
       ]
     },
     "semanticDiagnosticsPerFile": [
@@ -3223,6 +3225,7 @@
       "./node_modules/@types/color-name/index.d.ts",
       "./node_modules/@types/connect/index.d.ts",
       "./node_modules/@types/cookie-parser/index.d.ts",
+      "./node_modules/@types/cors/index.d.ts",
       "./node_modules/@types/debug/index.d.ts",
       "./node_modules/@types/express-serve-static-core/index.d.ts",
       "./node_modules/@types/express/index.d.ts",
@@ -3337,9 +3340,8 @@
       "./node_modules/typescript/lib/lib.es5.d.ts",
       "./node_modules/typescript/lib/lib.esnext.intl.d.ts",
       "./src/app.ts",
-      "./src/main.ts",
-      "./src/routes/index.ts",
-      "./src/routes/users.ts"
+      "./src/lib/middlewares/cors.ts",
+      "./src/main.ts"
     ]
   },
   "version": "4.0.2"
