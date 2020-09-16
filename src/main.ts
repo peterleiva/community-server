@@ -60,9 +60,7 @@ function onError(error: NodeJS.ErrnoException) {
     throw error;
   }
 
-  const bind = typeof port === 'string'
-    ? 'Pipe ' + port
-    : 'Port ' + port;
+  const bind = typeof port === 'string' ? 'Pipe ' + port : 'Port ' + port;
 
   // handle specific listen errors with friendly messages
   switch (error.code) {
@@ -84,12 +82,12 @@ function onError(error: NodeJS.ErrnoException) {
  */
 
 function onListening() {
-	const addr = server.address();
-	if (addr) {
-		const bind = typeof addr === 'string'
-			? 'pipe ' + addr
-			: 'port ' + addr.port;
-		debug('Listening on ' + bind);
-		console.log('Listening on ' + bind);
-	}
+  const addr = server.address();
+  if (addr) {
+    const bind =
+      typeof addr === 'string' ? 'pipe ' + addr : 'port ' + addr.port;
+
+    debug('Listening on ' + bind);
+    console.log('Listening on ' + bind);
+  }
 }
