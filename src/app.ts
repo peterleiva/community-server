@@ -3,10 +3,12 @@ import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
+import { connect as databaseSetup } from './config/database/setup';
 import cors from './lib/middlewares/cors';
-import { connect } from './config/database/setup';
+import { middleware as graphQLMiddleware } from './lib/graphql/server';
+import './config/env';
 
-connect();
+databaseSetup();
 
 const app = express();
 
@@ -16,5 +18,7 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+app.use(graphQLMiddleware);
 
 export default app;
