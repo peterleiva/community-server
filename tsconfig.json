@@ -7,11 +7,7 @@
     "noImplicitAny": true,
     "resolveJsonModule": true,
 
-    "baseUrl": "./src",
-    "paths": {
-      "@config/*": ["./config/*"],
-      "@lib/*": ["./lib/*"]
-    }
+    "baseUrl": "./src"
   },
   "include": ["src/**/*"],
   "exclude": ["dist", "node_modules"]

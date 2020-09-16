@@ -5,13 +5,13 @@
   "author": "Peter Leiva <pleiva@id.uff.br>",
   "license": "MIT",
   "private": false,
-  "bin": "./dist/bin/main.js",
+  "bin": "dist/main.js",
   "engines": {
     "node": ">=12.18.3"
   },
   "scripts": {
-    "start": "npm run build && node -r tsconfig-paths/register dist/main.js",
-    "start:live": "ts-node-dev -r tsconfig-paths/register --respawn --transpile-only src/main.ts",
+    "start": "npm run build && dist/main.js",
+    "start:live": "ts-node-dev --respawn --transpile-only src/main.ts",
     "build": "npm run lint && npm run cp-statics && tsc --build && chmod u+x dist/main.js",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "lint:fix": "npm run lint --fix",
@@ -49,7 +49,6 @@
     "shelljs": "^0.8.4",
     "ts-jest": "^26.3.0",
     "ts-node-dev": "^1.0.0-pre.62",
-    "tsconfig-paths": "^3.9.0",
     "typescript": "^4.0.2"
   }
 }

@@ -4,7 +4,7 @@ import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 
 import cors from './lib/middlewares/cors';
-import { connect } from '@config/database/setup';
+import { connect } from './config/database/setup';
 
 connect();
 
