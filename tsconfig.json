@@ -3,12 +3,14 @@
   "compilerOptions": {
     "incremental": true,
     "outDir": "./dist",
-    "rootDir": "./src",
     "noImplicitAny": true,
     "resolveJsonModule": true,
-
-    "baseUrl": "./src"
+    "sourceMap": true,
+    "baseUrl": "src",
+    "paths": {
+      "@lib/*": ["lib/*"],
+      "@config/*": ["config/*"]
+    }
   },
-  "include": ["src/**/*"],
   "exclude": ["dist", "node_modules"]
 }
