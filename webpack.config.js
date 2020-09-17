@@ -2,6 +2,7 @@ const path = require('path');
 const { BannerPlugin } = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpackNodeExternals = require('webpack-node-externals');
+const copyWebpackPlugin = require('copy-webpack-plugin');
 
 const { NODE_ENV: mode = 'development' } = { ...process.env };
 
@@ -23,6 +24,9 @@ module.exports = {
   },
 
   plugins: [
+    new copyWebpackPlugin({
+      patterns: [{ from: 'src/public', to: 'public' }],
+    }),
     new BannerPlugin({
       banner: '#!/usr/bin/env node',
       raw: true,

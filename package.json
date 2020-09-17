@@ -12,7 +12,7 @@
   "scripts": {
     "start": "npm run build && dist/main.bundle.js",
     "start:server": "nodemon dist/main.bundle.js",
-    "build": "webpack && npm run cp-statics && chmod u+x dist/main.bundle.js",
+    "build": "webpack && chmod u+x dist/main.bundle.js",
     "build:server": "webpack --watch",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "cp-statics": "./copy-files.js",
@@ -41,6 +41,7 @@
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
     "clean-webpack-plugin": "^3.0.0",
+    "copy-webpack-plugin": "^6.1.0",
     "dotenv": "^8.2.0",
     "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
