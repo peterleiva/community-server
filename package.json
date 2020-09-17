@@ -8,10 +8,11 @@
   "engines": {
     "node": ">=12.18.3"
   },
+  "bin": "dist/main.bundle.js",
   "scripts": {
-    "start": "npm run build && node dist/main.bundle.js",
+    "start": "npm run build && dist/main.bundle.js",
     "start:server": "nodemon dist/main.bundle.js",
-    "build": "webpack && npm run cp-statics",
+    "build": "webpack && npm run cp-statics && chmod u+x dist/main.bundle.js",
     "build:server": "webpack --watch",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "cp-statics": "./copy-files.js",

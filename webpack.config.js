@@ -1,4 +1,5 @@
 const path = require('path');
+const { BannerPlugin } = require('webpack');
 const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 const webpackNodeExternals = require('webpack-node-externals');
 
@@ -21,7 +22,14 @@ module.exports = {
     contentBase: './dist',
   },
 
-  plugins: [new CleanWebpackPlugin()],
+  plugins: [
+    new BannerPlugin({
+      banner: '#!/usr/bin/env node',
+      raw: true,
+      entryOnly: true,
+    }),
+    new CleanWebpackPlugin(),
+  ],
   externals: [webpackNodeExternals()],
   resolve: {
     extensions: ['.tsx', '.ts'],
