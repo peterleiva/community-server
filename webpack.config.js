@@ -8,8 +8,13 @@ const { NODE_ENV: mode = 'development' } = { ...process.env };
 
 module.exports = {
   target: 'node',
-  mode,
   entry: './src/main.ts',
+  output: {
+    filename: '[name].bundle.js',
+    path: path.join(__dirname, 'dist'),
+  },
+  mode,
+
   module: {
     rules: [
       {
@@ -19,6 +24,7 @@ module.exports = {
     ],
   },
   devtool: 'inline-source-map',
+
   devServer: {
     contentBase: './dist',
   },
@@ -35,16 +41,12 @@ module.exports = {
     new CleanWebpackPlugin(),
   ],
   externals: [webpackNodeExternals()],
+
   resolve: {
     extensions: ['.tsx', '.ts'],
     alias: {
       ['@config']: path.join(__dirname, 'src', 'config'),
       ['@lib']: path.join(__dirname, 'src', 'lib'),
     },
-  },
-
-  output: {
-    filename: '[name].bundle.js',
-    path: path.join(__dirname, 'dist'),
   },
 };
