@@ -1,5 +1,8 @@
 import { Document, model, Schema } from 'mongoose';
 
+/**
+ * Classifies topics by named categories
+ */
 export class Category {
   id!: string;
   name!: string;

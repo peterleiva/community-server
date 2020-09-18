@@ -2,6 +2,12 @@ import { Schema, Document, model } from 'mongoose';
 import { User, UserModel } from 'users';
 import CategoryModel, { Category } from './category.model';
 
+/**
+ * Represents a post by user
+ *
+ * A topic is a subject which some user like to discuss with other users. Topic
+ * can be categorized or have some aditional statitical informations
+ */
 export class Topic {
   id!: string;
   title!: string;

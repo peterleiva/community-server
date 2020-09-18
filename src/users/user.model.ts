@@ -1,5 +1,8 @@
 import { Document, model, Schema } from 'mongoose';
 
+/**
+ * Application user which can post topics and interact with each other
+ */
 export class User {
   id!: string;
   name!: string;
