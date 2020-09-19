@@ -1,15 +1,16 @@
-import { Document, model, Schema } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
+import Color from '../lib/mongoose/types/color';
 
 /**
  * Classifies topics by named categories
  */
 export class Category {
-  id!: string;
+  id!: Types.ObjectId;
   name!: string;
   hexColor?: string;
 }
 
-export const schema = new Schema({
+const schema = new Schema({
   name: {
     type: String,
     required: true,
@@ -18,12 +19,11 @@ export const schema = new Schema({
 
   hexColor: {
     type: Color,
-    default: '000',
+    default: 0x0,
   },
 });
 
 type CategoryDocument = Category & Document;
 
 export const CategoryModel = model<CategoryDocument>('Category', schema);
-
 export default CategoryModel;
