@@ -7,7 +7,7 @@ import Color from '../lib/mongoose/types/color';
 export class Category {
   id!: Types.ObjectId;
   name!: string;
-  hexColor?: string;
+  backgroundColor!: string;
 }
 
 const schema = new Schema({
@@ -17,9 +17,10 @@ const schema = new Schema({
     trim: true,
   },
 
-  hexColor: {
+  backgroundColor: {
     type: Color,
     default: 0x0,
+    get: (v: number) => '#' + v.toString(16),
   },
 });
 
