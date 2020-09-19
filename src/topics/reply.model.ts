@@ -1,4 +1,4 @@
-import { Document, model, Schema } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 import { User, UserModel } from 'users';
 
 /**
@@ -8,6 +8,7 @@ import { User, UserModel } from 'users';
  * structure of comments for a topic posted by some user.
  */
 export class Reply {
+  id!: Types.ObjectId;
   author!: User;
   repliedTo?: Reply;
   createdAt!: Date;

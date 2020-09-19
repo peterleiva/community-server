@@ -1,5 +1,5 @@
-import { Schema, Document, model } from 'mongoose';
-import { User, UserModel } from 'users';
+import { Schema, Document, model, Types } from 'mongoose';
+import { User, UserModel } from '../users';
 import CategoryModel, { Category } from './category.model';
 
 /**
@@ -9,7 +9,7 @@ import CategoryModel, { Category } from './category.model';
  * can be categorized or have some aditional statitical informations
  */
 export class Topic {
-  id!: string;
+  id!: Types.ObjectId;
   title!: string;
   author!: User;
   category?: Category;
