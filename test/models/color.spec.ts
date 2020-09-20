@@ -27,7 +27,6 @@ describe('Color Type', () => {
         expect(() => type.cast('#GAAAAA')).toThrow(TypeError);
       });
 
-      // it('hexadecimal number ');
       it('Contains 4 hex numbers', () => {
         expect(() => type.cast('#1234')).toThrow(TypeError);
       });

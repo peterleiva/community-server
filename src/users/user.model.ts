@@ -15,7 +15,7 @@ export class User {
 
 export type UserDocument = User & Document;
 
-const schema = new Schema(
+const UserSchema = new Schema(
   {
     name: {
       type: String,
@@ -46,6 +46,6 @@ const schema = new Schema(
   { timestamps: true }
 );
 
-export const UserModel = model<UserDocument>('User', schema);
+export const UserModel = model<UserDocument>('User', UserSchema);
 
 export default UserModel;

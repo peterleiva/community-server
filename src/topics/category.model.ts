@@ -10,7 +10,7 @@ export class Category {
   backgroundColor!: string;
 }
 
-const schema = new Schema({
+const CategorySchema = new Schema({
   name: {
     type: String,
     required: true,
@@ -20,11 +20,15 @@ const schema = new Schema({
   backgroundColor: {
     type: Color,
     default: 0x0,
-    get: (v: number) => '#' + v.toString(16),
+    get: (v: number) => '#' + v.toString(16).padStart(6, '0'),
   },
 });
 
-type CategoryDocument = Category & Document;
+export type CategoryDocument = Category & Document;
 
-export const CategoryModel = model<CategoryDocument>('Category', schema);
+export const CategoryModel = model<CategoryDocument>(
+  'Category',
+  CategorySchema
+);
+
 export default CategoryModel;

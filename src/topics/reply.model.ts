@@ -1,5 +1,5 @@
 import { Document, model, Schema, Types } from 'mongoose';
-import { User, UserModel } from 'users';
+import { User, UserModel } from '../users';
 
 /**
  * Represents a comment from a user to a specific topic.
