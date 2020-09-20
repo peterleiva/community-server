@@ -1,14 +1,10 @@
 {
-  "extends": "@tsconfig/node12/tsconfig.json",
-  "compilerOptions": {
-    "incremental": true,
-    "outDir": "./dist",
-    "rootDir": "./src",
-    "noImplicitAny": true,
-    "resolveJsonModule": true,
-
-    "baseUrl": "./src"
-  },
-  "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules"]
+  "references": [
+    {
+      "path": "./tsconfig.build.json"
+    },
+    {
+      "path": "./tsconfig.test.json"
+    }
+  ]
 }
