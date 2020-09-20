@@ -1,5 +1,8 @@
 {
   "development": {
     "database": "community"
+  },
+  "test": {
+    "database": "test_community"
   }
 }
