@@ -62,4 +62,4 @@ typings/
 
 # builds
 dist/
-tsconfig.tsbuildinfo
+*.tsbuildinfo
