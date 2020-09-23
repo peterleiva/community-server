@@ -13,9 +13,7 @@ export class Topic {
   title!: string;
   author!: User;
   category?: Category;
-  fixed = false;
-  views = 0;
-  lastVisitAt?: Date;
+  fixed?: boolean;
   createdAt!: Date;
   updatedAt!: Date;
 }
@@ -48,14 +46,6 @@ const TopicSchema = new Schema(
       type: Boolean,
       default: false,
     },
-
-    views: {
-      type: Number,
-      default: 0,
-      min: 0,
-    },
-
-    lastVisitAt: Date,
   },
   { timestamps: true }
 );
