@@ -1,6 +1,8 @@
 import { Schema, Document, model, Types } from 'mongoose';
 import { User, UserModel } from '../users';
 import CategoryModel, { Category } from './category.model';
+import { ReplyModel, Reply } from './reply.model';
+import autopopulate from 'mongoose-autopopulate';
 
 /**
  * Represents a post by user
@@ -16,6 +18,7 @@ export class Topic {
   fixed?: boolean;
   createdAt!: Date;
   updatedAt!: Date;
+  replies?: Reply[];
 }
 
 export type TopicDocument = Topic & Document;
@@ -30,14 +33,14 @@ const TopicSchema = new Schema(
       trim: true,
     },
 
-    authorId: {
+    author: {
       type: Schema.Types.ObjectId,
       ref: UserModel,
       immutable: true,
       required: true,
     },
 
-    categoryId: {
+    category: {
       type: Schema.Types.ObjectId,
       ref: CategoryModel,
     },
@@ -49,6 +52,18 @@ const TopicSchema = new Schema(
   },
   { timestamps: true }
 );
+
+TopicSchema.plugin(autopopulate);
+
+// Populate direct replies from the topic
+TopicSchema.virtual('replies', {
+  ref: ReplyModel,
+  localField: '_id',
+  foreignField: 'topicId',
+
+  justOne: false,
+  options: { match: { repliedTo: null } },
+});
 
 export const TopicModel = model<TopicDocument>('Topic', TopicSchema);
 
