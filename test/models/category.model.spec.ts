@@ -1,4 +1,3 @@
-import { Types } from 'mongoose';
 import CategoryFactory from 'factories/category';
 import { CategoryModel, Category, CategoryDocument } from 'src/topics';
 import databaseSetup from 'test/utils/database';
