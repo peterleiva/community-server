@@ -1,6 +1,7 @@
-import { Document, model, Schema, Types } from 'mongoose';
-import { User, UserModel } from '../users';
-import TopicModel, { Topic } from './topic.model';
+import mongoose, { Document, model, Schema, Types } from 'mongoose';
+import { User, UserDocument, UserModel } from '../users';
+import TopicModel, { Topic, TopicDocument } from './topic.model';
+import autopopulate from 'mongoose-autopopulate';
 
 /**
  * Represents a comment from a user to a specific topic.
@@ -8,32 +9,67 @@ import TopicModel, { Topic } from './topic.model';
  * Replies can itself be replies by other users, so if constructs a tree
  * structure of comments for a topic posted by some user.
  */
-export class Reply {
-  id!: Types.ObjectId;
-  author!: User;
-  replies?: Reply;
-  topic!: Topic;
-  createdAt!: Date;
-  updatedAt!: Date;
+export interface Reply {
+  id: Types.ObjectId;
+  author: User;
+  replies?: Reply[];
+  repliedTo?: Reply;
+  topic: Topic;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export const ReplySchema = new Schema(
+const ReplySchema = new Schema(
   {
-    authorId: {
+    author: {
       type: Schema.Types.ObjectId,
       ref: UserModel,
       required: true,
       immutable: true,
+      autopopulate: true,
     },
 
-    repliesIds: [
+    replies: [
       {
         type: Schema.Types.ObjectId,
         ref: 'Reply',
+        validate: [
+          {
+            validator: function (
+              this: ReplyDocument,
+              reply: ReplyDocument
+            ): boolean {
+              return reply.repliedTo.equals(this.id);
+            },
+            message: function (
+              this: ReplyDocument,
+              props: { path: string; value: unknown }
+            ): string {
+              return (
+                `${props.path} must have parent set to ${this.id} but ` +
+                `it have ${props.value}`
+              );
+            },
+          },
+          {
+            validator: function (reply: ReplyDocument): boolean {
+              return reply.repliedTo.topic.equals(reply.topic);
+            },
+            message: `Replies topic must be the same as repliedTo`,
+          },
+        ],
       },
     ],
 
-    topicId: {
+    repliedTo: {
+      type: Schema.Types.ObjectId,
+      ref: 'Reply',
+      default: null,
+      immutable: true,
+      autopopulate: true,
+    },
+
+    topic: {
       type: Schema.Types.ObjectId,
       ref: TopicModel,
       required: true,
@@ -43,7 +79,15 @@ export const ReplySchema = new Schema(
   { timestamps: true }
 );
 
-export type ReplyDocument = Reply & Document;
+ReplySchema.plugin(autopopulate);
+
+export type ReplyDocument = Reply &
+  Document & {
+    author: UserDocument;
+    topic: TopicDocument;
+    repliedTo: ReplyDocument;
+    replies: ReplyDocument[];
+  };
 
 export const ReplyModel = model<ReplyDocument>('Reply', ReplySchema);
 
