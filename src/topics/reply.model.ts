@@ -1,5 +1,6 @@
 import { Document, model, Schema, Types } from 'mongoose';
 import { User, UserModel } from '../users';
+import TopicModel, { Topic } from './topic.model';
 
 /**
  * Represents a comment from a user to a specific topic.
@@ -10,7 +11,8 @@ import { User, UserModel } from '../users';
 export class Reply {
   id!: Types.ObjectId;
   author!: User;
-  repliedTo?: Reply;
+  replies?: Reply;
+  topic!: Topic;
   createdAt!: Date;
   updatedAt!: Date;
 }
@@ -21,11 +23,21 @@ export const ReplySchema = new Schema(
       type: Schema.Types.ObjectId,
       ref: UserModel,
       required: true,
+      immutable: true,
     },
 
-    repliedToId: {
+    repliesIds: [
+      {
+        type: Schema.Types.ObjectId,
+        ref: 'Reply',
+      },
+    ],
+
+    topicId: {
       type: Schema.Types.ObjectId,
-      ref: 'Reply',
+      ref: TopicModel,
+      required: true,
+      immutable: true,
     },
   },
   { timestamps: true }
