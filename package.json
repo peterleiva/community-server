@@ -21,6 +21,7 @@
     "test": "jest"
   },
   "dependencies": {
+    "@types/mongoose-autopopulate": "^0.10.1",
     "apollo-server-express": "^2.17.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
@@ -28,6 +29,7 @@
     "express": "~4.16.1",
     "faker": "^5.1.0",
     "mongoose": "^5.10.5",
+    "mongoose-autopopulate": "^0.12.2",
     "morgan": "~1.9.1",
     "rosie": "^2.0.1"
   },
