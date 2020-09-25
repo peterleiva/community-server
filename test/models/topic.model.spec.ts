@@ -19,8 +19,10 @@ describe('Topic', () => {
     let replies$: Promise<ReplyDocument[]>;
 
     beforeEach(async () => {
-      replies$ = ReplyModel.create(
-        await Promise.all(ReplyFactory.buildList(3))
+      replies$ = Promise.resolve(
+        ReplyModel.create(
+          await Promise.all(ReplyFactory.buildList(3, { topic: topic._id }))
+        )
       );
     });
 
@@ -40,7 +42,7 @@ describe('Topic', () => {
           })
         );
 
-        await topic.populate('replies').execPopulate();
+        topic = await topic.populate('replies').execPopulate();
 
         expect(topic.replies).toEqual(
           expect.arrayContaining(
@@ -49,6 +51,7 @@ describe('Topic', () => {
         );
       });
     });
+
     describe('.numReplies', () => {
       it("Gets 0 when there's no reply", async () => {
         await topic.populate('numReplies').execPopulate();
@@ -64,12 +67,12 @@ describe('Topic', () => {
           await Promise.all(
             ReplyFactory.buildList(3, {
               topic: topic._id,
-              repliedTo: replies[random.number(3)]._id,
+              repliedTo: replies[random.number(2)]._id,
             })
           )
         );
 
-        await topic.populate('numReplies').execPopulate();
+        topic = await topic.populate('numReplies').execPopulate();
         expect(topic.numReplies).toBe(replies.length + response.length);
       });
     });
@@ -84,17 +87,15 @@ describe('Topic', () => {
       );
     });
 
-    it.only('Get all participants', async () => {
-      await replies$;
+    it('Get all participants', async () => {
+      const replies = await replies$;
+      const participants = await topic.participants.append({
+        $project: { _id: 1 },
+      });
 
-      const top = await topic
-        .populate({
-          path: 'participants',
-          model: 'Reply',
-        })
-        .execPopulate();
+      const repliesIds = replies.map((r) => ({ _id: r.author._id }));
 
-      console.log('parts', top.participants);
+      expect(repliesIds).toEqual(expect.arrayContaining(participants));
     });
   });
 });

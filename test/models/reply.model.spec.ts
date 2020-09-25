@@ -21,7 +21,7 @@ describe('Reply', () => {
 
     beforeEach(async () => {
       replyFactory = ReplyFactory.build();
-      response$ = ReplyModel.create(await replyFactory);
+      response$ = Promise.resolve(ReplyModel.create(await replyFactory));
     });
 
     it('Set topic automatically when no topic is set', async () => {
