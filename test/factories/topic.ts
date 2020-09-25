@@ -8,7 +8,7 @@ import { CategoryModel } from 'src/topics';
 
 export default Factory.define('topic')
   .sequence('_id', () => new Types.ObjectId())
-  .attr('title', lorem.words())
+  .attr('title', () => lorem.words())
   .attr('fixed', random.boolean())
   .after(async (topic) => {
     if (!topic.author) {
