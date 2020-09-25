@@ -4,10 +4,10 @@ import Color from '../lib/mongoose/types/color';
 /**
  * Classifies topics by named categories
  */
-export class Category {
-  id!: Types.ObjectId;
-  name!: string;
-  backgroundColor!: string;
+export interface Category {
+  id: Types.ObjectId;
+  name: string;
+  backgroundColor: string;
 }
 
 const CategorySchema = new Schema({
@@ -15,12 +15,15 @@ const CategorySchema = new Schema({
     type: String,
     required: true,
     trim: true,
+    unique: true,
+    minlength: 1,
+    maxlength: 144,
   },
 
   backgroundColor: {
     type: Color,
     default: 0x0,
-    get: (v: number) => '#' + v.toString(16).padStart(6, '0'),
+    get: (color: number) => '#' + color.toString(16).padStart(6, '0'),
   },
 });
 
