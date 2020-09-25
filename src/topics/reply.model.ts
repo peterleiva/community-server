@@ -1,4 +1,4 @@
-import mongoose, { Document, model, Schema, Types } from 'mongoose';
+import { Document, model, Schema } from 'mongoose';
 import { User, UserDocument, UserModel } from '../users';
 import TopicModel, { Topic, TopicDocument } from './topic.model';
 import autopopulate from 'mongoose-autopopulate';
@@ -10,7 +10,7 @@ import autopopulate from 'mongoose-autopopulate';
  * structure of comments for a topic posted by some user.
  */
 export interface Reply {
-  id: Types.ObjectId;
+  id?: any;
   author: User;
   replies?: Reply[];
   repliedTo?: Reply;
@@ -71,7 +71,7 @@ const ReplySchema = new Schema(
 
     topic: {
       type: Schema.Types.ObjectId,
-      ref: TopicModel,
+      ref: 'Topic',
       required: true,
       immutable: true,
     },
@@ -81,13 +81,12 @@ const ReplySchema = new Schema(
 
 ReplySchema.plugin(autopopulate);
 
-export type ReplyDocument = Reply &
-  Document & {
-    author: UserDocument;
-    topic: TopicDocument;
-    repliedTo: ReplyDocument;
-    replies: ReplyDocument[];
-  };
+export interface ReplyDocument extends Document, Reply {
+  author: UserDocument;
+  topic: TopicDocument;
+  repliedTo: ReplyDocument;
+  replies: ReplyDocument[];
+}
 
 export const ReplyModel = model<ReplyDocument>('Reply', ReplySchema);
 
