@@ -24,6 +24,7 @@ const ReplySchema = new Schema(
     author: {
       type: Schema.Types.ObjectId,
       ref: UserModel,
+      index: true,
       required: true,
       immutable: true,
       autopopulate: true,
@@ -74,6 +75,7 @@ const ReplySchema = new Schema(
       ref: 'Topic',
       required: true,
       immutable: true,
+      index: true,
     },
   },
   { timestamps: true }
