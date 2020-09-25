@@ -1,8 +1,7 @@
-import { Schema, Document, model, Types } from 'mongoose';
-import { User, UserModel } from '../users';
-import CategoryModel, { Category } from './category.model';
-import { ReplyModel, Reply } from './reply.model';
-import autopopulate from 'mongoose-autopopulate';
+import { Schema, Document, model } from 'mongoose';
+import { User, UserDocument, UserModel } from '../users';
+import CategoryModel, { Category, CategoryDocument } from './category.model';
+import { ReplyModel, Reply, ReplyDocument } from './reply.model';
 
 /**
  * Represents a post by user
@@ -10,27 +9,35 @@ import autopopulate from 'mongoose-autopopulate';
  * A topic is a subject which some user like to discuss with other users. Topic
  * can be categorized or have some aditional statitical informations
  */
-export class Topic {
-  id!: Types.ObjectId;
-  title!: string;
-  author!: User;
+export interface Topic {
+  id?: any;
+  title: string;
+  author: User;
+  participants?: User[];
   category?: Category;
-  fixed?: boolean;
-  createdAt!: Date;
-  updatedAt!: Date;
   replies?: Reply[];
+  fixed?: boolean;
+  numReplies: number;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
-export type TopicDocument = Topic & Document;
+export interface TopicDocument extends Topic, Document {
+  replies?: ReplyDocument[];
+  author: UserDocument;
+  participants?: UserDocument[];
+  category?: CategoryDocument;
+}
 
 const TopicSchema = new Schema(
   {
     title: {
       type: String,
       required: true,
-      maxlength: 255,
-      minlength: 1,
       trim: true,
+      unique: true,
+      minlength: 1,
+      maxlength: 255,
     },
 
     author: {
@@ -53,18 +60,20 @@ const TopicSchema = new Schema(
   { timestamps: true }
 );
 
-TopicSchema.plugin(autopopulate);
-
 // Populate direct replies from the topic
 TopicSchema.virtual('replies', {
   ref: ReplyModel,
   localField: '_id',
-  foreignField: 'topicId',
-
-  justOne: false,
+  foreignField: 'topic',
   options: { match: { repliedTo: null } },
 });
 
-export const TopicModel = model<TopicDocument>('Topic', TopicSchema);
+TopicSchema.virtual('numReplies', {
+  ref: ReplyModel,
+  localField: '_id',
+  foreignField: 'topic',
+  count: true,
+});
 
+export const TopicModel = model<TopicDocument>('Topic', TopicSchema);
 export default TopicModel;
