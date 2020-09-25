@@ -11,11 +11,15 @@ export default Factory.define('topic')
   .attr('title', lorem.words())
   .attr('fixed', random.boolean())
   .after(async (topic) => {
-    const author = await UserModel.create(UserFactory.build());
-    const category = await CategoryModel.create(CategoryFactory.build());
+    if (!topic.author) {
+      const author = await UserModel.create(UserFactory.build());
+      topic.author = author._id;
+    }
 
-    topic.author = author._id;
-    topic.category = category._id;
+    if (!topic.category) {
+      const category = await CategoryModel.create(CategoryFactory.build());
+      topic.category = category._id;
+    }
 
     return topic;
   });
