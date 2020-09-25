@@ -1,4 +1,4 @@
-import { Schema, Document, model } from 'mongoose';
+import { Schema, Document, model, Aggregate } from 'mongoose';
 import { User, UserDocument, UserModel } from '../users';
 import CategoryModel, { Category, CategoryDocument } from './category.model';
 import { ReplyModel, Reply, ReplyDocument } from './reply.model';
@@ -9,25 +9,45 @@ import { ReplyModel, Reply, ReplyDocument } from './reply.model';
  * A topic is a subject which some user like to discuss with other users. Topic
  * can be categorized or have some aditional statitical informations
  */
-export interface Topic {
+export class Topic {
   id?: any;
-  title: string;
-  author: User;
-  participants?: User[];
+  _id?: any;
+  title!: string;
+  author!: User;
   category?: Category;
   replies?: Reply[];
   fixed?: boolean;
-  numReplies: number;
-  createdAt: Date;
-  updatedAt: Date;
+  numReplies!: number;
+  createdAt!: Date;
+  updatedAt!: Date;
+  private _participants: Aggregate<UserDocument[]> | undefined;
+
+  get participants(): Aggregate<UserDocument[]> {
+    this._participants ||= UserModel.aggregate<UserDocument>([
+      {
+        $graphLookup: {
+          from: 'replies',
+          startWith: '$_id',
+          connectFromField: '_id',
+          connectToField: 'author',
+          as: 'replies',
+          restrictSearchWithMatch: { topic: this._id },
+        },
+      },
+      { $match: { 'replies.topic': { $exists: true } } },
+    ]);
+
+    return this._participants;
+  }
 }
 
-export interface TopicDocument extends Topic, Document {
-  replies?: ReplyDocument[];
-  author: UserDocument;
-  participants?: UserDocument[];
-  category?: CategoryDocument;
-}
+export type TopicDocument = Topic &
+  Document & {
+    replies?: ReplyDocument[];
+    author: UserDocument;
+    participants?: UserDocument[];
+    category?: CategoryDocument;
+  };
 
 const TopicSchema = new Schema(
   {
@@ -74,6 +94,8 @@ TopicSchema.virtual('numReplies', {
   foreignField: 'topic',
   count: true,
 });
+
+TopicSchema.loadClass(Topic);
 
 export const TopicModel = model<TopicDocument>('Topic', TopicSchema);
 export default TopicModel;
