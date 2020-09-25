@@ -20,7 +20,7 @@ describe('Topic', () => {
 
     beforeEach(async () => {
       replies$ = ReplyModel.create(
-        await Promise.all(ReplyFactory.buildList(3, { topic: topic._id }))
+        await Promise.all(ReplyFactory.buildList(3))
       );
     });
 
@@ -85,7 +85,7 @@ describe('Topic', () => {
     });
 
     it.only('Get all participants', async () => {
-      const replies = await replies$;
+      await replies$;
 
       const top = await topic
         .populate({
