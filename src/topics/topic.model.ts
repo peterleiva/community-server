@@ -1,7 +1,7 @@
 import { Schema, Document, model, Aggregate } from 'mongoose';
 import { User, UserDocument, UserModel } from '../users';
 import CategoryModel, { Category, CategoryDocument } from './category.model';
-import { ReplyModel, Reply, ReplyDocument } from './reply.model';
+import { Reply, ReplyDocument } from './reply.model';
 
 /**
  * Represents a post by user
@@ -82,14 +82,14 @@ const TopicSchema = new Schema(
 
 // Populate direct replies from the topic
 TopicSchema.virtual('replies', {
-  ref: ReplyModel,
+  ref: 'Reply',
   localField: '_id',
   foreignField: 'topic',
   options: { match: { repliedTo: null } },
 });
 
 TopicSchema.virtual('numReplies', {
-  ref: ReplyModel,
+  ref: 'Reply',
   localField: '_id',
   foreignField: 'topic',
   count: true,

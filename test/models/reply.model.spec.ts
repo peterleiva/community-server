@@ -16,23 +16,23 @@ describe('Reply', () => {
   });
 
   describe('Middleware', () => {
-    let response$: Promise<ReplyDocument>;
-    let replyFactory;
+    let response$: () => Promise<ReplyDocument>;
 
     beforeEach(async () => {
-      replyFactory = ReplyFactory.build();
-      response$ = Promise.resolve(ReplyModel.create(await replyFactory));
+      response$ = async () =>
+        await ReplyModel.create(await ReplyFactory.build());
     });
 
     it('Set topic automatically when no topic is set', async () => {
-      reply.replies.push(await response$);
+      const response = await response$();
+      reply.replies.push(response);
       reply = await reply.save();
 
       expect(reply.replies.map((r) => r.repliedTo)).toContain(reply._id);
     });
 
     it('Change topic to the top-level topic', async () => {
-      reply.replies.push(await response$);
+      reply.replies.push(await response$());
       reply = await reply.save();
 
       const topics = reply.replies.map((r) => r.topic);
@@ -51,7 +51,7 @@ describe('Reply', () => {
           reply.replies?.push(await response);
 
           reply.save((error) => {
-            expect(error?.errors['replies.0']?.message).toEqual(
+            expect(error?.errors?.['replies.0']?.message).toEqual(
               'Replies topic must be the same as repliedTo'
             );
 

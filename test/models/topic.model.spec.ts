@@ -16,14 +16,13 @@ describe('Topic', () => {
   });
 
   describe('Methods', () => {
-    let replies$: Promise<ReplyDocument[]>;
+    let replies$: () => Promise<ReplyDocument[]>;
 
-    beforeEach(async () => {
-      replies$ = Promise.resolve(
-        ReplyModel.create(
+    beforeEach(() => {
+      replies$ = async () =>
+        await ReplyModel.create(
           await Promise.all(ReplyFactory.buildList(3, { topic: topic._id }))
-        )
-      );
+        );
     });
 
     describe('.replies', () => {
@@ -33,7 +32,7 @@ describe('Topic', () => {
       });
 
       it('Get direct topic replies', async () => {
-        const replies = await replies$;
+        const replies = await replies$();
 
         await ReplyModel.create(
           await ReplyFactory.build({
@@ -42,7 +41,7 @@ describe('Topic', () => {
           })
         );
 
-        topic = await topic.populate('replies').execPopulate();
+        await topic.populate('replies').execPopulate();
 
         expect(topic.replies).toEqual(
           expect.arrayContaining(
@@ -60,7 +59,7 @@ describe('Topic', () => {
       });
 
       it('Return direct all replies direct or not', async () => {
-        const replies = await replies$;
+        const replies = await replies$();
 
         // creates a list of response to the first reply
         const response = await ReplyModel.create(
