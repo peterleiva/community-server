@@ -41,14 +41,11 @@ const ReplySchema = new Schema(
             ): boolean | undefined {
               return reply.repliedTo?.equals(this.id);
             },
-            message: function (
-              this: ReplyDocument,
-              props: { path: string; value: unknown }
-            ): string {
-              return (
-                `${props.path} must have parent set to ${this.id} but ` +
-                `it have ${props.value}`
-              );
+            message: function (props: {
+              path: string;
+              value: ReplyDocument;
+            }): string {
+              return `${props.path}' repliedTo must set id to its own parent`;
             },
           },
           {

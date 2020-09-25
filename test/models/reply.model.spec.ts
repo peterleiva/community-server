@@ -43,7 +43,7 @@ describe('Reply', () => {
   describe('validations', () => {
     describe('.replies', () => {
       describe('Validating Topic', () => {
-        it("Is invalid when doesn't have same topic", async (done) => {
+        it("Is invalid when replies doens't have same topic", async (done) => {
           const response = ReplyModel.create(
             await ReplyFactory.build({ repliedTo: reply._id })
           );
@@ -53,6 +53,23 @@ describe('Reply', () => {
           reply.save((error) => {
             expect(error?.errors['replies.0']?.message).toEqual(
               'Replies topic must be the same as repliedTo'
+            );
+
+            done();
+          });
+        });
+
+        it("Is invalid when replies' repliedTo isn't id", async (done) => {
+          const repliedTo = await ReplyModel.create(await ReplyFactory.build());
+          const response = ReplyModel.create(
+            await ReplyFactory.build({ repliedTo: repliedTo._id })
+          );
+
+          reply.replies?.push(await response);
+
+          reply.save((error) => {
+            expect(error?.errors['replies.0']?.message).toEqual(
+              `replies.0' repliedTo must set id to its own parent`
             );
 
             done();
