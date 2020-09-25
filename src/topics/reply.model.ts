@@ -1,6 +1,6 @@
 import { Document, model, Schema } from 'mongoose';
 import { User, UserDocument, UserModel } from '../users';
-import TopicModel, { Topic, TopicDocument } from './topic.model';
+import { Topic, TopicDocument } from './topic.model';
 import autopopulate from 'mongoose-autopopulate';
 
 /**
@@ -38,8 +38,8 @@ const ReplySchema = new Schema(
             validator: function (
               this: ReplyDocument,
               reply: ReplyDocument
-            ): boolean {
-              return reply.repliedTo.equals(this.id);
+            ): boolean | undefined {
+              return reply.repliedTo?.equals(this.id);
             },
             message: function (
               this: ReplyDocument,
@@ -52,8 +52,12 @@ const ReplySchema = new Schema(
             },
           },
           {
-            validator: function (reply: ReplyDocument): boolean {
-              return reply.repliedTo.topic.equals(reply.topic);
+            validator: async function (
+              this: ReplyDocument,
+              reply: ReplyDocument
+            ): Promise<boolean | undefined> {
+              reply = await reply.populate('repliedTo').execPopulate();
+              return reply.repliedTo?.topic?.equals(reply.topic);
             },
             message: `Replies topic must be the same as repliedTo`,
           },
@@ -66,7 +70,6 @@ const ReplySchema = new Schema(
       ref: 'Reply',
       default: null,
       immutable: true,
-      autopopulate: true,
     },
 
     topic: {
@@ -81,10 +84,18 @@ const ReplySchema = new Schema(
 
 ReplySchema.plugin(autopopulate);
 
+ReplySchema.pre('save', async function (this: ReplyDocument) {
+  for (const reply of this.replies) {
+    reply.isNew = true;
+    reply.repliedTo = this._id;
+    reply.topic = this.topic;
+  }
+});
+
 export interface ReplyDocument extends Document, Reply {
   author: UserDocument;
   topic: TopicDocument;
-  repliedTo: ReplyDocument;
+  repliedTo?: ReplyDocument;
   replies: ReplyDocument[];
 }
 
