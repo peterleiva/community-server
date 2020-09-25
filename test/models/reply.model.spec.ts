@@ -15,32 +15,64 @@ describe('Reply', () => {
     expect(reply.author).toBeInstanceOf(UserModel);
   });
 
+  describe('Middleware', () => {
+    let response$: Promise<ReplyDocument>;
+    let replyFactory;
+
+    beforeEach(async () => {
+      replyFactory = ReplyFactory.build();
+      response$ = ReplyModel.create(await replyFactory);
+    });
+
+    it('Set topic automatically when no topic is set', async () => {
+      reply.replies.push(await response$);
+      reply = await reply.save();
+
+      expect(reply.replies.map((r) => r.repliedTo)).toContain(reply._id);
+    });
+
+    it('Change topic to the top-level topic', async () => {
+      reply.replies.push(await response$);
+      reply = await reply.save();
+
+      const topics = reply.replies.map((r) => r.topic);
+      expect(topics).toContain(reply.topic);
+    });
+  });
+
   describe('validations', () => {
     describe('.replies', () => {
       describe('Validating Topic', () => {
-        it('Is invalid when does not have the same topic', async () => {
-          const response = await ReplyModel.create(
-            await ReplyFactory.build({ repliedTo: reply.id })
+        it("Is invalid when doesn't have same topic", async (done) => {
+          const response = ReplyModel.create(
+            await ReplyFactory.build({ repliedTo: reply._id })
           );
-          reply.replies?.push(response);
-          const error = reply.validateSync();
 
-          expect(error?.errors['replies.0']?.message).toEqual(
-            'Replies topic have to the same as repliedTo'
-          );
+          reply.replies?.push(await response);
+
+          reply.save((error) => {
+            expect(error?.errors['replies.0']?.message).toEqual(
+              'Replies topic must be the same as repliedTo'
+            );
+
+            done();
+          });
         });
 
-        it('Is valid when have the same topic', async () => {
+        it('Is valid when have the same topic', async (done) => {
           const response = await ReplyModel.create(
-            await ReplyFactory.build(
-              { repliedTo: reply.id },
-              { topicId: reply.topic }
-            )
+            await ReplyFactory.build({
+              repliedTo: reply.id,
+              topic: reply.topic,
+            })
           );
 
           reply.replies?.push(response);
 
-          expect(reply.validateSync()).toBeUndefined();
+          reply.save((error) => {
+            expect(error).toBeNull();
+            done();
+          });
         });
       });
     });
@@ -51,21 +83,19 @@ describe('Reply', () => {
 
     beforeEach(async () => {
       response = await ReplyModel.create(
-        await ReplyFactory.build(
-          { repliedTo: reply.id },
-          { topicId: reply.topic }
-        )
+        await ReplyFactory.build({ repliedTo: reply._id, topic: reply.topic })
       );
 
       reply.replies?.push(response);
       await reply.save();
     });
     it('Save reply to replies list', () => {
-      response.depopulate('author');
-      expect(reply.replies).toContain([response]);
+      expect(reply.replies).toEqual(
+        expect.arrayContaining([expect.objectContaining({ _id: response._id })])
+      );
     });
 
-    it("Have response' topic equal to reply", () => {
+    it("Have response's topic equal to reply", () => {
       expect(response.topic).toBe(reply.topic);
     });
 
