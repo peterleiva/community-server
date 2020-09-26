@@ -5,9 +5,13 @@
 import log from 'loglevel';
 import { gql, makeExecutableSchema } from 'apollo-server-express';
 import { merge } from 'lodash';
+import {
+  typeDefs as scalarTypeDefs,
+  resolvers as scalarResolvers,
+} from './scalars';
 import { CategorySchema, TopicSchema } from '../../topics';
 
-const baseTypes = gql`
+const baseTypeDefs = gql`
   type Query {
     _empty: String
   }
@@ -17,9 +21,10 @@ const baseTypes = gql`
   }
 `;
 
+console.log(CategorySchema.typeDefs);
 export default makeExecutableSchema({
-  typeDefs: [baseTypes, CategorySchema.typeDefs, TopicSchema.typeDefs],
-  resolvers: merge(CategorySchema.resolvers, TopicSchema.resolvers),
+  typeDefs: [baseTypeDefs, scalarTypeDefs],
+  resolvers: merge(scalarResolvers),
   logger: {
     log: log.error,
   },
