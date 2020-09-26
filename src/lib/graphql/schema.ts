@@ -5,26 +5,36 @@
 import log from 'loglevel';
 import { gql, makeExecutableSchema } from 'apollo-server-express';
 import { merge } from 'lodash';
-import {
-  typeDefs as scalarTypeDefs,
-  resolvers as scalarResolvers,
-} from './scalars';
-import { CategorySchema, TopicSchema } from '../../topics';
+import * as ScalarsSchema from './scalars';
+import { CategorySchema, TopicSchema, ReplySchema } from '../../topics';
+import { UserSchema } from '../../users';
 
 const baseTypeDefs = gql`
-  type Query {
-    _empty: String
+  type Mutation {
+    _empty: Void
   }
 
-  type Mutation {
-    _empty: String
+  type Query {
+    _empty: Void
   }
 `;
 
-console.log(CategorySchema.typeDefs);
 export default makeExecutableSchema({
-  typeDefs: [baseTypeDefs, scalarTypeDefs],
-  resolvers: merge(scalarResolvers),
+  typeDefs: [
+    baseTypeDefs,
+    ScalarsSchema.typeDefs,
+    CategorySchema.typeDefs,
+    TopicSchema.typeDefs,
+    UserSchema.typeDefs,
+    ReplySchema.typeDefs,
+  ],
+  resolvers: merge(
+    ScalarsSchema.resolvers,
+    CategorySchema.resolvers,
+    TopicSchema.resolvers,
+    UserSchema.resolvers,
+    ReplySchema.resolvers
+  ),
   logger: {
     log: log.error,
   },
