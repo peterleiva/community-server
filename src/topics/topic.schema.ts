@@ -6,38 +6,44 @@ import TopicModel, { TopicDocument } from './topic.model';
 
 export const typeDefs = gql`
   """
-  Topic represents a single point which a user would like to discuss with
-  others
+   Topic represents a single point which users would like to discuss with others
+  some specific subject. A topic represents this subject which can be comments
+  by others, represented by a reply
   """
   type Topic {
-    "topic identifier"
+    "Unique topic identifier"
     id: ID!
-    "Topic title, a unique string with at most 255 characters, representing a
-		subject to be discussed"
+    """
+      Title of subject an author would like to discuss, body may have detailed
+    information. A title is unique string with characters up to 255 long
+    """
     title: String!
-		"Topic's author, the person who created the topic"
-    # author: User!
-		"Represents a topic, optional, classifier to categorize topics"
+    "Topic creator, the person who start the conversation"
+    author: User!
+    "Topic, optional, classifier according to a group of subjects"
     category: Category
-		"Comments sent by other users on this topic"
-    # replies: [Reply!]!
-		"All topics participants, which includes all people who comments the topic
-		and the author itself"
-		# participants: [User!]!
-		"Indicate if topic must be fixed at the top when retriveing a ordered list"
-    fixed: Boolean
-		"Quantity of comments the topic have. Any, comment is count, in the depeest
-		level"
+    "Indicates whether topic is fixed to the top when retrieved as a list"
+    fixed: Boolean!
+    "Get all topic participants, which means all people who left a reply"
+    participants: [User!]!
+    "Comments to the topics"
+    replies: [Reply!]!
+    "Number of replies to the topic, whetever how deep it was sent"
     numReplies: UnsignedInt!
-		"Create date"
+    "Creation date"
     createdAt: DateTime!
-		"Last update date"
+    "Last update date"
     updatedAt: DateTime!
   }
 
-	extend type Mutation {
-		topics(): [Topic!]!
-	}
+  extend type Query {
+    """
+    Get all topics stored by users. The result is paginated by default, so that
+    securely can use pagination on client side to retrieve subjects worth of
+    discussion. Topics can be ordered according to certain fields
+    """
+    topics: [Topic!]!
+  }
 `;
 
 export const resolvers = {
@@ -64,7 +70,7 @@ export const resolvers = {
     },
   },
 
-  Mutation: {
+  Query: {
     async topics(): Promise<TopicDocument[]> {
       return TopicModel.find({}).exec();
     },
