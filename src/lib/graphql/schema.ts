@@ -17,6 +17,28 @@ const baseTypeDefs = gql`
   type Query {
     _empty: Void
   }
+
+	interface Connection {
+		totalCount: Int!;
+		edges: [EdgeConnection!]!
+		pageInfo: PageInfo!
+	}
+
+	interface EdgeConnection {
+		node: NodeConnection
+		cursor: Base64!
+		friendshipTime: DateTime!
+	}
+
+	interface NodeConnection {
+		name: String!
+	}
+
+	interface PageInfo {
+		endCursor: Base64!
+		startCursor: Base64!
+		hasNextPage: Boolean!
+	}
 `;
 
 export default makeExecutableSchema({
