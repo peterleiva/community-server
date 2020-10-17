@@ -8,6 +8,7 @@ import { merge } from 'lodash';
 import * as ScalarsSchema from './scalars';
 import { CategorySchema, TopicSchema, ReplySchema } from '../../topics';
 import { UserSchema } from '../../users';
+import ConnectionSchema from './connection.schema';
 
 const baseTypeDefs = gql`
   type Mutation {
@@ -17,33 +18,12 @@ const baseTypeDefs = gql`
   type Query {
     _empty: Void
   }
-
-	interface Connection {
-		totalCount: Int!;
-		edges: [EdgeConnection!]!
-		pageInfo: PageInfo!
-	}
-
-	interface EdgeConnection {
-		node: NodeConnection
-		cursor: Base64!
-		friendshipTime: DateTime!
-	}
-
-	interface NodeConnection {
-		name: String!
-	}
-
-	interface PageInfo {
-		endCursor: Base64!
-		startCursor: Base64!
-		hasNextPage: Boolean!
-	}
 `;
 
 export default makeExecutableSchema({
   typeDefs: [
     baseTypeDefs,
+    ConnectionSchema,
     ScalarsSchema.typeDefs,
     CategorySchema.typeDefs,
     TopicSchema.typeDefs,
