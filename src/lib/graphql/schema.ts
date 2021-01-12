@@ -23,7 +23,7 @@ const baseTypeDefs = gql`
 export default makeExecutableSchema({
   typeDefs: [
     baseTypeDefs,
-    ConnectionSchema,
+    // ConnectionSchema,
     ScalarsSchema.typeDefs,
     CategorySchema.typeDefs,
     TopicSchema.typeDefs,
