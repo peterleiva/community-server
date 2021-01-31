@@ -11,18 +11,17 @@
   },
   "scripts": {
     "start": "npm run build && dist/main.js",
-    "start:live": "ts-node-dev --project tsconfig.build.json  --respawn --transpile-only src/main.ts",
+    "dev": "ts-node-dev --project tsconfig.build.json  --respawn --transpile-only src/main.ts",
     "build": "npm run lint && npm run cp-statics && tsc  --project tsconfig.build.json && chmod u+x dist/main.js",
     "lint": "eslint \"**/*.{ts,tsx}\"",
-    "lint:fix": "npm run lint --fix",
     "cp-statics": "./copy-files.js",
-    "prettier:check": "prettier --check .",
-    "prettier:fix": "prettier --write .",
+    "format": "prettier --write .",
     "test": "jest"
   },
   "dependencies": {
     "@types/mongoose-autopopulate": "^0.10.1",
     "apollo-server-express": "^2.17.0",
+    "casual": "^1.6.2",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "debug": "~2.6.9",
