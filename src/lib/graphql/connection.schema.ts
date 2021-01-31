@@ -11,6 +11,12 @@ import { gql } from 'apollo-server-express';
 
 export default gql`
   """
+   This field return a type that serializes as a String; this may be a opaque
+  String. It is used for navigate forwarding between nodes
+  """
+  scalar Cursor
+
+  """
     Connection pattern define a way for slicing and paginate the results.
   Thereof first defines the slicing. After defines the pagination, passing a
   opaque cursor as a start point
@@ -54,12 +60,6 @@ export default gql`
     "Cursor is a start point for after arg for navigate through nodes"
     cursor: Cursor!
   }
-
-  """
-   This field return a type that serializes as a String; this may be a opaque
-  String. It is used for navigate forwarding between nodes
-  """
-  scalar Cursor
 
   interface Node {
     id: ObjectID!

@@ -10,9 +10,9 @@ export const typeDefs = gql`
   some specific subject. A topic represents this subject which can be comments
   by others, represented by a reply
   """
-  type Topic {
+  type Topic implements Node {
     "Unique topic identifier"
-    id: ID!
+    id: ObjectID!
     """
       Title of subject an author would like to discuss, body may have detailed
     information. A title is unique string with characters up to 255 long
@@ -43,16 +43,48 @@ export const typeDefs = gql`
     discussion. Topics can be ordered according to certain fields
     """
     topics(
-      connection: ConnectionInput = { first: 20 }
-      sortBy: [SortTopicsInput!]
-    ): [Topic!]!
+      sortBy: SortTopicsInput
+      pagination: ConnectionInput = { first: 20 }
+    ): TopicsConnection
   }
 
+  """
+  Argumento usado pela consulta topics para ordenar os topicos por title e
+  createdAt. Para slicing e paginar os tópicos retornados
+  """
   input SortTopicsInput {
     title: Sort
     createdAt: Sort
   }
+
+  """
+  TopicsConnection aglomera metainformações sobre o relacionamento tópicos com a consulta topics, neste caso possui informações sobre a paginação e nós retornados como resultado do input ConnectionInput.
+  """
+  type TopicsConnection implements Connection {
+    "Conexões retornadas pela paginação"
+    edges: [TopicEdge!]!
+    "Informações sobre a página"
+    pageInfo: PageInfo!
+    "Tamanho da página retornada, caso não seja a última página ele deve retornar o número do conjunto de resultado especificado pelo argumento first no input pagination. Caso seja a última página retornar um número inferior ao especificado em first"
+    pageSize: PositiveInt!
+    "Número total de em todas de resultados em todas as páginas"
+    totalCount: PositiveInt!
+  }
+
+  """
+  TopicEdge representa uma aresta de conexão, ou seja, cada nó possui um tópico que por sua vez possui um cursor que pode ser usado para realizar um offset a partir do input SortTopicsInput
+  """
+  type TopicEdge implements Edge {
+    "Um nó é o resultado em si, um topico representa um nó de conexão"
+    node: Topic
+    "Cursor onde o nó vive"
+    cursor: Cursor!
+  }
 `;
+export interface TopicsConnection {
+  first: number;
+  cursor: string;
+}
 
 export const resolvers = {
   Topic: {
