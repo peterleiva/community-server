@@ -5,6 +5,10 @@ export const typeDefs = gql`
     stats: Stats
   }
 
+  """
+  Stats represents statistical numbers envolving the app. General stufs like
+  numbers of users and so on
+  """
   type Stats {
     """
       Solutions is the total undistinguished replies obtained by a topic.

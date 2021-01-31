@@ -12,7 +12,7 @@ export const path = '/api';
 const OPTIONS: ApolloServerExpressConfig = {
   schema,
   mocks,
-  // mockEntireSchema: false,
+  mockEntireSchema: true,
   engine: {
     reportSchema: true,
     graphVariant: 'current',

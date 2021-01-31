@@ -1,12 +1,15 @@
 import _ from 'lodash';
 import casual from 'casual';
 import topic from '../../../topics/__mocks__/query';
+import { Types } from 'mongoose';
 
-const query = _.merge(topic);
+const Query = _.merge(topic);
 
 export default {
-  ...query,
+  ...Query,
   PositiveInt: (): number => casual.integer(0),
   UnsignedInt: (): number => casual.integer(0),
   DateTime: (): string => new Date().toISOString(),
+  ObjectID: (): Types.ObjectId => new Types.ObjectId(),
+  Cursor: (): number => casual.integer(0),
 };
