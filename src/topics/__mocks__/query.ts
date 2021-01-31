@@ -7,9 +7,9 @@ const inc = incrementer();
 
 export default {
   Query: () => ({
-    topics: (_, { connection }: { connection: TopicsConnection }) => ({
+    topics: (_, { pagination }: { pagination: TopicsConnection }) => ({
       edges: () =>
-        new MockList(connection.first, () => ({
+        new MockList(pagination.first, () => ({
           cursor: () => {
             const val = inc.next().value;
             return new Buffer('' + val).toString('base64');
