@@ -8,7 +8,7 @@ import { merge } from 'lodash';
 import * as ScalarsSchema from './scalars';
 import { CategorySchema, TopicSchema, ReplySchema } from '../../topics';
 import { UserSchema } from '../../users';
-import ConnectionSchema from './connection.schema';
+import { StatsSchema } from '../../stats';
 
 const baseTypeDefs = gql`
   type Mutation {
@@ -29,6 +29,7 @@ export default makeExecutableSchema({
     TopicSchema.typeDefs,
     UserSchema.typeDefs,
     ReplySchema.typeDefs,
+    StatsSchema.typeDefs,
   ],
   resolvers: merge(
     ScalarsSchema.resolvers,

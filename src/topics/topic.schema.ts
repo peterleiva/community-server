@@ -28,7 +28,7 @@ export const typeDefs = gql`
     participants: [User!]!
     "Comments to the topics"
     replies: [Reply!]!
-    "Number of replies to the topic, whetever how deep it was sent"
+    "Number of replies to the topic, whatever how deep it was sent"
     numReplies: UnsignedInt!
     "Creation date"
     createdAt: DateTime!
