@@ -42,7 +42,10 @@ export const typeDefs = gql`
     securely can use pagination on client side to retrieve subjects worth of
     discussion. Topics can be ordered according to certain fields
     """
-    topics(sortBy: [SortTopicsInput!]): [Topic!]!
+    topics(
+      connection: ConnectionInput = { first: 20 }
+      sortBy: [SortTopicsInput!]
+    ): [Topic!]!
   }
 
   input SortTopicsInput {

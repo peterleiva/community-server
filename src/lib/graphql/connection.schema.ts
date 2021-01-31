@@ -1,58 +1,89 @@
 /**
- * Define connection pattern for paginating and send metadata information about
- * a relationship between nodes
+ * In the query, the connection model provides a standard mechanism for slicing
+ * and paginating the result set.
+ * In the response, the connection model provides a standard way of providing
+ * cursors, and a way of telling the client when more results are available.
+ *
  * @see https://relay.dev/graphql/connections.htm
  */
 
 import { gql } from 'apollo-server-express';
 
 export default gql`
-	"""
-	Connection pattern input, the values to slicing and paginating the result set
-	"""
+  """
+    Connection pattern define a way for slicing and paginate the results.
+  Thereof first defines the slicing. After defines the pagination, passing a
+  opaque cursor as a start point
+  """
   input ConnectionInput {
-    first: Int!
-    after: Base64!
+    "Returns at most first edges"
+    first: NonNegativeInt!
+    "After is a start point to begin to look for nodes"
+    after: Cursor
   }
 
   """
-  Defines a way for paginating, slicing, providing metadata about the
-	connection and page information about relationship between types
+    Defines a way for paginating, slicing, providing metadata about the
+   connection and page information about relationship between types. Every
+  type which implements Connection, ends with Connection on its type
   """
   interface Connection {
     edges: [Edge!]!
     pageInfo: PageInfo!
-		"""
-		Total count of relations to this particular page. Normally it is the size
-		of slicing, defined by first argument from ConnectionInput, but it can be
-		less when the last page do not fit in this size
-		"""
-    totalCount: Int! #ver esse aqu
+    """
+      Count of relationships to this particular connection. Consist of sliceing
+    size, defined by first argument from ConnectionInput, but it can be less
+    when the last page do not fit in this size
+    """
+    pageSize: PositiveInt!
+    totalCount: PositiveInt!
   }
 
-	"""
-	Information about the relationships. It defines any metadata only related to
-	to eonnection between two nodes. Also, defines the opaque cursor
-	"""
+  """
+   Each edge in the connection, we asked for a cursor. This cursor is an opaque
+  string, and is precisely what we would pass to the after arg to paginate
+  starting after this edge.
+  """
   interface Edge {
+    """
+    This field must return either a Scalar, Enum, Object, Interface, Union, or
+    a Non‐Null wrapper around one of those types. Notably, this field cannot
+    return a list.
+    """
     node: Node
-		"Opaque cursor passed to after argument to paginating the resource"
-    cursor: Base64!
-    friendshipTime: DateTime! #ver esse aqu
+    "Cursor is a start point for after arg for navigate through nodes"
+    cursor: Cursor!
   }
 
-	"""
-	Specifies the Node itself, which means the information about the type that is
-	connected to
-	"""
+  """
+   This field return a type that serializes as a String; this may be a opaque
+  String. It is used for navigate forwarding between nodes
+  """
+  scalar Cursor
+
   interface Node {
-
+    id: ObjectID!
   }
 
-  interface PageInfo {
-    endCursor: Base64!
-    startCursor: Base64!
-		"Tells if there's more nodes or it reached the end"
+  """
+  Define information about the pagination status, a start and end cursor is
+  defined. They provide cursor for first and last node. Also it informs if it
+  has previous or next page
+  """
+  type PageInfo {
+    "Cursor corresponding to the first node in edges"
+    startCursor: Cursor
+    "Cursor corresponding last node in edges"
+    endCursor: Cursor
+    """
+    Tell us if there are more edges available, or if we’ve reached the end of
+    this connection
+    """
     hasNextPage: Boolean!
+    """
+      Indicate whether more edges exist prior to the set defined by the clients
+    arguments
+    """
+    hasPreviousPage: Boolean!
   }
 `;

@@ -9,6 +9,7 @@ import * as ScalarsSchema from './scalars';
 import { CategorySchema, TopicSchema, ReplySchema } from '../../topics';
 import { UserSchema } from '../../users';
 import { StatsSchema } from '../../stats';
+import connectionSchema from './connection.schema';
 
 const baseTypeDefs = gql`
   type Mutation {
@@ -40,7 +41,7 @@ const baseTypeDefs = gql`
 export default makeExecutableSchema({
   typeDefs: [
     baseTypeDefs,
-    // ConnectionSchema,
+    connectionSchema,
     ScalarsSchema.typeDefs,
     CategorySchema.typeDefs,
     TopicSchema.typeDefs,
