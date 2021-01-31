@@ -2,14 +2,17 @@
  * Graphql Apollo server
  */
 
-import { ApolloServer, ApolloServerExpressConfig } from 'apollo-server-express';
 import { Router } from 'express';
+import { ApolloServer, ApolloServerExpressConfig } from 'apollo-server-express';
 import schema from './schema';
+import mocks from './__mocks__/schema';
 
-const path = '/api';
+export const path = '/api';
 
 const OPTIONS: ApolloServerExpressConfig = {
   schema,
+  mocks,
+  // mockEntireSchema: false,
   engine: {
     reportSchema: true,
     graphVariant: 'current',
