@@ -12,10 +12,9 @@
   "scripts": {
     "start": "npm run build && dist/main.js",
     "start:live": "ts-node-dev --respawn --transpile-only src/main.ts",
-    "build": "npm run lint && npm run cp-statics && tsc --build && chmod u+x dist/main.js",
+    "build": "npm run lint && tsc --build && chmod u+x dist/main.js",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "lint:fix": "npm run lint --fix",
-    "cp-statics": "./copy-files.js",
     "prettier:check": "prettier --check .",
     "prettier:fix": "prettier --write .",
     "test": "jest"
