@@ -49,24 +49,26 @@ const DATABASE_URI: string =
  *
  * @returns mongoose connection
  */
-export async function connect(): Promise<typeof mongoose> {
-  mongoose.connection.on('open', () => {
-    console.info('✅ MondoDB connected to', DATABASE_URI);
-  });
+export async function connect(report = true): Promise<typeof mongoose> {
+  if (report) {
+    mongoose.connection.on('open', () => {
+      console.info('✅  MondoDB connected to', DATABASE_URI);
+    });
 
-  mongoose.connection.on('error', (error) => {
-    console.error(error);
-  });
+    mongoose.connection.on('error', (error) => {
+      console.error(error);
+    });
 
-  mongoose.connection.on('close', () => {
-    console.info('❗️MongoDB disconnected');
-  });
+    mongoose.connection.on('close', () => {
+      console.info('❗ MongoDB disconnected');
+    });
+  }
 
   return mongoose
     .connect(DATABASE_URI, { useNewUrlParser: true })
     .catch((error) => {
       console.error('❌ MongoDB failed in connect to ', DATABASE_URI);
-      console.error('Given the following error ', error);
+      console.error('📝 Given the following error ', error);
       throw error;
     });
 }
@@ -79,11 +81,11 @@ export async function connect(): Promise<typeof mongoose> {
  *
  * @throws logs and rethrows the error sent by mongoose close connection
  */
-export async function disconnect(): Promise<void> {
+export async function disconnect(report = true): Promise<void> {
   try {
     return mongoose.connection.close();
   } catch (error) {
-    console.error('❌ Mongoose close connection error: ', error);
+    if (report) console.error('❌ Mongoose close connection error: ', error);
     throw error;
   }
 }
