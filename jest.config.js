@@ -16,6 +16,6 @@ module.exports = {
   },
   setupFilesAfterEnv: [
     'jest-extended',
-    '<rootDir>/test/utils/matchers/index.ts',
+    '<rootDir>/test/helpers/matchers/index.ts',
   ],
 };
