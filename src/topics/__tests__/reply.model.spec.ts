@@ -1,7 +1,7 @@
 import { ReplyModel, ReplyDocument } from 'src/topics/reply.model';
 import { UserModel } from 'src/users';
 import ReplyFactory from 'test/factories/reply';
-import databaseSetup from 'test/utils/database';
+import databaseSetup from 'test/helpers/database';
 
 describe('Reply', () => {
   databaseSetup();

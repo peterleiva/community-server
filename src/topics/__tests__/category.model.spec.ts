@@ -1,6 +1,6 @@
 import CategoryFactory from 'factories/category';
 import { CategoryModel, Category, CategoryDocument } from 'src/topics';
-import databaseSetup from 'test/utils/database';
+import databaseSetup from 'test/helpers/database';
 
 describe('Category', () => {
   let category: Category;

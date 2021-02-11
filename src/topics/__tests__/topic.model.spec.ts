@@ -1,9 +1,8 @@
-import { TopicDocument, TopicModel } from 'src/topics';
-import { ReplyDocument } from 'src/topics';
+import { TopicDocument, TopicModel, ReplyDocument } from 'src/topics';
+import ReplyModel from 'src/topics/reply.model';
 import TopicFactory from 'test/factories/topic';
 import ReplyFactory from 'test/factories/reply';
-import databaseSetup from 'test/utils/database';
-import ReplyModel from 'src/topics/reply.model';
+import databaseSetup from 'test/helpers/database';
 import { random } from 'faker';
 
 describe('Topic', () => {

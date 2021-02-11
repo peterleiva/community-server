@@ -5,7 +5,7 @@
 
 import mongoose from 'mongoose';
 import logger from 'loglevel';
-import { connect, disconnect } from '../../src/config/database/setup';
+import { connect, disconnect } from 'src/config/database/setup';
 
 /**
  * Startup database process using app setup which uses mongoose
@@ -16,7 +16,7 @@ import { connect, disconnect } from '../../src/config/database/setup';
  */
 export async function setup(): Promise<typeof mongoose> {
   try {
-    return await connect();
+    return await connect(false);
   } catch (error) {
     logger.error('Error trying setup test database', error);
     process.exit(0);
@@ -50,7 +50,7 @@ async function dropAll(): Promise<void> {
  */
 export async function teardown(): Promise<void> {
   try {
-    return await disconnect();
+    return await disconnect(false);
   } catch (error) {
     logger.error('Error trying cleanup test database', error);
     process.exit(0);

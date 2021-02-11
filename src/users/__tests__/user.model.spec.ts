@@ -1,6 +1,6 @@
 import UserFactory from 'test/factories/user';
 import { UserModel } from 'src/users';
-import databaseSetup from 'test/utils/database';
+import databaseSetup from 'test/helpers/database';
 
 describe('User', () => {
   databaseSetup();
