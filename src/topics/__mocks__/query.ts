@@ -7,7 +7,7 @@ const inc = incrementer();
 
 export default {
   Query: () => ({
-    topics: (_, { pagination }: { pagination: TopicsConnection }) => ({
+    topics: (_: never, { pagination }: { pagination: TopicsConnection }) => ({
       edges: () =>
         new MockList(pagination.first, () => ({
           cursor: () => {
