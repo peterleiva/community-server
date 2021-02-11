@@ -1,0 +1,10 @@
+{
+  "extends": "@tsconfig/node12/tsconfig.json",
+  "compilerOptions": {
+    "outDir": "./dist",
+    "composite": true,
+    "noImplicitAny": true,
+    "resolveJsonModule": true,
+    "esModuleInterop": true
+  }
+}
