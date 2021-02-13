@@ -1,3 +1,6 @@
+const { pathsToModuleNameMapper } = require('ts-jest/utils');
+const { compilerOptions } = require('./tsconfig.test.json');
+
 module.exports = {
   preset: 'ts-jest',
   globals: {
@@ -9,11 +12,9 @@ module.exports = {
   testEnvironment: 'node',
   moduleDirectories: ['node_modules', 'src', 'test'],
   coveragePathIgnorePatterns: ['/node_modules/', '/test/', '/(.*).d.ts/'],
-  moduleNameMapper: {
-    '^test/(.*)$': ['<rootDir>/test/$1'],
-    '^@factories/(.*)$': ['<rootDir>/test/factories/$1'],
-    '^@helpers/(.*)$': ['<rootDir>/test/helpers/$1'],
-  },
+  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, {
+    prefix: '<rootDir>/',
+  }),
   setupFilesAfterEnv: [
     'jest-extended',
     '<rootDir>/test/helpers/matchers/index.ts',
