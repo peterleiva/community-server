@@ -12,7 +12,7 @@
   "scripts": {
     "start": "npm run build && dist/main.js",
     "dev": "ts-node-dev --project tsconfig.build.json  --respawn --transpile-only src/main.ts",
-    "build": "npm run lint && tsc -b && chmod u+x dist/main.js",
+    "build": "npm run lint && tsc -b && chmod 500 dist/main.js",
     "lint": "eslint \"**/*.{ts,tsx}\"",
     "format": "prettier --write .",
     "test": "jest"
