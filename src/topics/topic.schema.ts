@@ -58,21 +58,27 @@ export const typeDefs = gql`
   }
 
   """
-  TopicsConnection aglomera metainformações sobre o relacionamento tópicos com a consulta topics, neste caso possui informações sobre a paginação e nós retornados como resultado do input ConnectionInput.
+   TopicsConnection has metadata about topics relationships, whenever want to
+  paginate or have meta info about topics relationships has to use this node
   """
   type TopicsConnection implements Connection {
-    "Conexões retornadas pela paginação"
+    "Connection metadata. Each edge represents a relationship"
     edges: [TopicEdge!]!
-    "Informações sobre a página"
+    "Pagination information"
     pageInfo: PageInfo!
-    "Tamanho da página retornada, caso não seja a última página ele deve retornar o número do conjunto de resultado especificado pelo argumento first no input pagination. Caso seja a última página retornar um número inferior ao especificado em first"
+    """
+       Page size is the number of result set in edges. If is not the last page
+    the number is the same first for ConnectionInput, else it is less
+    """
     pageSize: PositiveInt!
     "Número total de em todas de resultados em todas as páginas"
     totalCount: PositiveInt!
   }
 
   """
-  TopicEdge representa uma aresta de conexão, ou seja, cada nó possui um tópico que por sua vez possui um cursor que pode ser usado para realizar um offset a partir do input SortTopicsInput
+   TopicEdge is a single relationship with topic node. Each topic edge has a
+  a node which have topic date, and its cursor which can be used as a offset in
+  further queries
   """
   type TopicEdge implements Edge {
     "Um nó é o resultado em si, um topico representa um nó de conexão"
