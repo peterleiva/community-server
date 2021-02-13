@@ -11,5 +11,5 @@ export default {
   UnsignedInt: (): number => casual.integer(0),
   DateTime: (): string => new Date().toISOString(),
   ObjectID: (): Types.ObjectId => new Types.ObjectId(),
-  Cursor: (): number => casual.integer(0),
+  Cursor: (): Types.ObjectId => new Types.ObjectId(),
 };
