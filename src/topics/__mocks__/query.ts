@@ -1,6 +1,6 @@
 import { MockList } from 'apollo-server-express';
-import { TopicsConnection } from '../topic.schema';
 import { Buffer } from 'buffer';
+import { TopicsConnection } from '../topic.schema';
 import incrementer from '../../lib/incrementer';
 
 const inc = incrementer();

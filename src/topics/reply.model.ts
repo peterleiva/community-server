@@ -1,7 +1,7 @@
 import { Document, model, Schema } from 'mongoose';
+import autopopulate from 'mongoose-autopopulate';
 import { User, UserDocument, UserModel } from '../users';
 import { Topic, TopicDocument } from './topic.model';
-import autopopulate from 'mongoose-autopopulate';
 
 /**
  * Represents a comment from a user to a specific topic.

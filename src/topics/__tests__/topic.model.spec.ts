@@ -1,9 +1,9 @@
-import { TopicDocument, TopicModel, ReplyDocument } from 'src/topics';
-import ReplyModel from 'src/topics/reply.model';
-import TopicFactory from 'test/factories/topic';
-import ReplyFactory from 'test/factories/reply';
-import databaseSetup from 'test/helpers/database';
 import { random } from 'faker';
+import { TopicDocument, TopicModel, ReplyDocument } from '@/topics';
+import ReplyModel from '@/topics/reply.model';
+import TopicFactory from '../__mocks__/topic';
+import ReplyFactory from '../__mocks__/reply';
+import databaseSetup from 'helpers/database';
 
 describe('Topic', () => {
   let topic: TopicDocument;

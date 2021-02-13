@@ -1,10 +1,10 @@
 import { lorem, random } from 'faker';
 import { Types } from 'mongoose';
-import { Factory } from 'rosie';
-import UserFactory from './user';
+import { UserModel } from '@/users';
+import { CategoryModel } from '@/topics';
+import UserFactory from '../../users/__mocks__/user';
 import CategoryFactory from './category';
-import { UserModel } from 'src/users';
-import { CategoryModel } from 'src/topics';
+import { Factory } from 'rosie';
 
 export default Factory.define('topic')
   .sequence('_id', () => new Types.ObjectId())

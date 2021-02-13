@@ -3,7 +3,7 @@
  */
 
 import mongoose from 'mongoose';
-import DatabaseConfig from './database-config.interface';
+import type DatabaseConfig from './database-config.interface';
 import config from './database.json';
 
 type ConfigurationFile = Record<string, Partial<DatabaseConfig>>;

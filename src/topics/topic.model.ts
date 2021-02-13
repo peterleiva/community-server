@@ -1,4 +1,4 @@
-import { Schema, Document, model, Aggregate } from 'mongoose';
+import { Schema, Document, model, Aggregate, Types } from 'mongoose';
 import { User, UserDocument, UserModel } from '../users';
 import CategoryModel, { Category, CategoryDocument } from './category.model';
 import { Reply, ReplyDocument } from './reply.model';
@@ -10,8 +10,8 @@ import { Reply, ReplyDocument } from './reply.model';
  * can be categorized or have some aditional statitical informations
  */
 export class Topic {
-  id?: any;
-  _id?: any;
+  id?: Types.ObjectId;
+  _id?: Types.ObjectId;
   title!: string;
   author!: User;
   category?: Category;

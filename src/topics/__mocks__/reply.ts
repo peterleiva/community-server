@@ -1,8 +1,8 @@
 import { Types } from 'mongoose';
 import { Factory } from 'rosie';
-import { TopicModel } from 'src/topics';
-import { UserModel } from 'src/users';
-import UserFactory from './user';
+import { TopicModel } from '@/topics';
+import { UserModel } from '@/users';
+import UserFactory from '../../users/__mocks__/user';
 import TopicFactory from './topic';
 
 export default Factory.define('reply')

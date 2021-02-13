@@ -1,6 +1,6 @@
-import CategoryFactory from 'factories/category';
-import { CategoryModel, Category, CategoryDocument } from 'src/topics';
-import databaseSetup from 'test/helpers/database';
+import CategoryFactory from '../__mocks__/category';
+import { CategoryModel, Category, CategoryDocument } from '@/topics';
+import databaseSetup from 'helpers/database';
 
 describe('Category', () => {
   let category: Category;

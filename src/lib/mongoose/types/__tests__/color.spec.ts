@@ -1,4 +1,4 @@
-import Color, { ColorOutOfRange } from 'src/lib/mongoose/types/color';
+import Color, { ColorOutOfRange } from '@/lib/mongoose/types/color';
 
 describe('Color Type', () => {
   let type: Color;

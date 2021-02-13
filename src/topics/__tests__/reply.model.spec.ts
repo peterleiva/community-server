@@ -1,7 +1,7 @@
-import { ReplyModel, ReplyDocument } from 'src/topics/reply.model';
-import { UserModel } from 'src/users';
-import ReplyFactory from 'test/factories/reply';
-import databaseSetup from 'test/helpers/database';
+import { ReplyModel, ReplyDocument } from '@/topics/reply.model';
+import { UserModel } from '@/users';
+import ReplyFactory from '../__mocks__/reply';
+import databaseSetup from 'helpers/database';
 
 describe('Reply', () => {
   databaseSetup();

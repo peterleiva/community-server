@@ -1,14 +1,14 @@
 {
   "extends": "./tsconfig.base.json",
+
   "compilerOptions": {
-    "rootDir": ".",
     "baseUrl": ".",
+    "noEmit": true,
     "paths": {
-      "src/*": ["src/*"],
-      "test/*": ["test/*"],
-      "factories/*": ["test/factories/*"]
-    },
-    "types": ["jest"]
+      "@/*": ["src/*"],
+      "helpers/*": ["test/helpers/*"]
+    }
   },
-  "include": ["test/**/*", "src/**/*"]
+
+  "include": ["test/**/*", "src/**/*.ts", "src/**/*.json"]
 }
