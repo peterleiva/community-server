@@ -28,7 +28,7 @@
     "faker": "^5.1.0",
     "graphql-scalars": "^1.2.7",
     "lodash": "^4.17.20",
-    "mongoose": "^5.10.5",
+    "mongoose": "^5.11.16",
     "mongoose-autopopulate": "^0.12.2",
     "morgan": "~1.9.1",
     "rosie": "^2.0.1"
@@ -43,7 +43,7 @@
     "@types/faker": "^5.1.0",
     "@types/jest": "^26.0.13",
     "@types/lodash": "^4.14.161",
-    "@types/mongoose": "^5.7.36",
+    "@types/mongoose": "^5.10.3",
     "@types/morgan": "^1.9.1",
     "@types/rosie": "0.0.38",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
