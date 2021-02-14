@@ -29,23 +29,6 @@ export default gql`
   }
 
   """
-    Defines a way for paginating, slicing, providing metadata about the
-   connection and page information about relationship between types. Every
-  type which implements Connection, ends with Connection on its type
-  """
-  interface Connection {
-    edges: [Edge!]!
-    pageInfo: PageInfo!
-    """
-      Count of relationships to this particular connection. Consist of sliceing
-    size, defined by first argument from ConnectionInput, but it can be less
-    when the last page do not fit in this size
-    """
-    pageSize: PositiveInt!
-    totalCount: PositiveInt!
-  }
-
-  """
    Each edge in the connection, we asked for a cursor. This cursor is an opaque
   string, and is precisely what we would pass to the after arg to paginate
   starting after this edge.
@@ -85,5 +68,22 @@ export default gql`
     arguments
     """
     hasPreviousPage: Boolean!
+  }
+
+  """
+    Defines a way for paginating, slicing, providing metadata about the
+   connection and page information about relationship between types. Every
+  type which implements Connection, ends with Connection on its type
+  """
+  interface Connection {
+    edges: [Edge!]!
+    pageInfo: PageInfo!
+    """
+      Count of relationships to this particular connection. Consist of sliceing
+    size, defined by first argument from ConnectionInput, but it can be less
+    when the last page do not fit in this size
+    """
+    pageSize: PositiveInt!
+    totalCount: PositiveInt!
   }
 `;
