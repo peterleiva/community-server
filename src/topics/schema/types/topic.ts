@@ -65,9 +65,9 @@ const TopicTypeDefs = gql`
   further queries
   """
   type TopicEdge implements Edge {
-    "Um nó é o resultado em si, um topico representa um nó de conexão"
+    "Node is the actual result, it represents a node between relationships"
     node: Topic
-    "Cursor onde o nó vive"
+    "Cursor pointing to edge in the result set"
     cursor: Cursor!
   }
 
