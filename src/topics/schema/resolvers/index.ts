@@ -1,5 +1,5 @@
 import _ from 'lodash';
 import Queries from './queries';
-import topic from './topic';
+import Topic from './topic';
 
-export default _.merge(Queries, topic);
+export default _.merge(Queries, Topic);
