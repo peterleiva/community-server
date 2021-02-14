@@ -1,10 +1,10 @@
-import { Document, model, Schema } from 'mongoose';
+import { Document, model, Schema, Types } from 'mongoose';
 
 /**
  * Application user which can post topics and interact with each other
  */
 export class User {
-  id!: string;
+  id!: Types.ObjectId;
   name!: string;
   email!: string;
   picture?: Buffer;
