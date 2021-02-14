@@ -1,10 +1,6 @@
 import { gql } from 'apollo-server-express';
-import { UserDocument } from '../users';
-import { CategoryDocument } from './category.model';
-import { ReplyDocument } from './reply.model';
-import TopicModel, { TopicDocument } from './topic.model';
 
-export const typeDefs = gql`
+const TopicTypeDefs = gql`
   """
    Topic represents a single point which users would like to discuss with others
   some specific subject. A topic represents this subject which can be comments
@@ -34,18 +30,6 @@ export const typeDefs = gql`
     createdAt: DateTime!
     "Last update date"
     updatedAt: DateTime!
-  }
-
-  extend type Query {
-    """
-    Get all topics stored by users. The result is paginated by default, so that
-    securely can use pagination on client side to retrieve subjects worth of
-    discussion. Topics can be ordered according to certain fields
-    """
-    topics(
-      sortBy: SortTopicsInput
-      pagination: ConnectionInput = { first: 20 }
-    ): TopicsConnection
   }
 
   """
@@ -86,39 +70,18 @@ export const typeDefs = gql`
     "Cursor onde o nó vive"
     cursor: Cursor!
   }
+
+  extend type Query {
+    """
+    Get all topics stored by users. The result is paginated by default, so that
+    securely can use pagination on client side to retrieve subjects worth of
+    discussion. Topics can be ordered according to certain fields
+    """
+    topics(
+      sortBy: SortTopicsInput
+      pagination: ConnectionInput = { first: 20 }
+    ): TopicsConnection
+  }
 `;
-export interface TopicsConnection {
-  first: number;
-  cursor: string;
-}
 
-export const resolvers = {
-  Topic: {
-    async numReplies(topic: TopicDocument): Promise<number> {
-      await topic.populate('numReplies').execPopulate();
-      return topic.numReplies;
-    },
-
-    async participants(topic: TopicDocument): Promise<UserDocument[]> {
-      return topic.participants.exec();
-    },
-
-    async replies(topic: TopicDocument): Promise<ReplyDocument[]> {
-      await topic.populate('replies').execPopulate();
-      return topic.replies ?? [];
-    },
-
-    async category(
-      topic: TopicDocument
-    ): Promise<CategoryDocument | undefined> {
-      await topic.populate('category').execPopulate();
-      return topic.category;
-    },
-  },
-
-  Query: {
-    async topics(): Promise<TopicDocument[]> {
-      return TopicModel.find({}).exec();
-    },
-  },
-};
+export default TopicTypeDefs;
