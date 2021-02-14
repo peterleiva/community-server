@@ -10,6 +10,7 @@ import { CategorySchema, TopicSchema, ReplySchema } from '../../topics';
 import { UserSchema } from '../../users';
 import { StatsSchema } from '../../stats';
 import { ConnectionSchema, CursorResolve } from './connection';
+import * as SortSchema from './sort';
 
 const baseTypeDefs = gql`
   type Mutation {
@@ -18,23 +19,6 @@ const baseTypeDefs = gql`
 
   type Query {
     _empty: Void
-  }
-
-  """
-   Sort enumerates all possible ways to sort a attribute type. Any field can be
-  ordered in ascending or descending orders.
-  """
-  enum Sort {
-    ASC
-    DESC
-  }
-  """
-  Sort input is used by queries to order a list of results by some of its field.
-  The query can even include a list of sort input to order they after other.
-  """
-  input SortInput {
-    field: String!
-    order: Sort!
   }
 `;
 
@@ -48,6 +32,7 @@ export default makeExecutableSchema({
     UserSchema.typeDefs,
     ReplySchema.typeDefs,
     StatsSchema.typeDefs,
+    SortSchema.typeDefs,
   ]),
   resolvers: merge(
     ScalarsSchema.resolvers,
@@ -55,7 +40,8 @@ export default makeExecutableSchema({
     TopicSchema.resolvers,
     UserSchema.resolvers,
     ReplySchema.resolvers,
-    CursorResolve
+    CursorResolve,
+    SortSchema.resolver
   ),
   logger: {
     log: log.error,
