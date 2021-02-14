@@ -4,7 +4,7 @@
 
 import log from 'loglevel';
 import { gql, makeExecutableSchema } from 'apollo-server-express';
-import { merge } from 'lodash';
+import { merge, flatten } from 'lodash';
 import * as ScalarsSchema from './scalars';
 import { CategorySchema, TopicSchema, ReplySchema } from '../../topics';
 import { UserSchema } from '../../users';
@@ -39,7 +39,7 @@ const baseTypeDefs = gql`
 `;
 
 export default makeExecutableSchema({
-  typeDefs: [
+  typeDefs: flatten([
     baseTypeDefs,
     ConnectionSchema,
     ScalarsSchema.typeDefs,
@@ -48,7 +48,7 @@ export default makeExecutableSchema({
     UserSchema.typeDefs,
     ReplySchema.typeDefs,
     StatsSchema.typeDefs,
-  ],
+  ]),
   resolvers: merge(
     ScalarsSchema.resolvers,
     CategorySchema.resolvers,
