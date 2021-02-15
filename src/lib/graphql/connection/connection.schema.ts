@@ -83,7 +83,7 @@ export default gql`
     size, defined by first argument from ConnectionInput, but it can be less
     when the last page do not fit in this size
     """
-    pageSize: PositiveInt!
-    totalCount: PositiveInt!
+    pageSize: UnsignedInt!
+    totalCount: UnsignedInt!
   }
 `;

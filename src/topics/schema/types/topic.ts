@@ -54,9 +54,9 @@ const TopicTypeDefs = gql`
        Page size is the number of result set in edges. If is not the last page
     the number is the same first for ConnectionInput, else it is less
     """
-    pageSize: PositiveInt!
+    pageSize: UnsignedInt!
     "Número total de em todas de resultados em todas as páginas"
-    totalCount: PositiveInt!
+    totalCount: UnsignedInt!
   }
 
   """
