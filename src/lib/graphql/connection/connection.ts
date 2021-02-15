@@ -6,7 +6,7 @@ export default class Connection<TNode> {
     private _edges: Edge<TNode>[],
     private _pageInfo: NonNullable<PageInfo>,
     private _pageSize: number,
-    private _totalCount: number
+    private _resultsCount: number
   ) {}
 
   addEdge(edge: Edge<TNode>): this {
@@ -31,7 +31,7 @@ export default class Connection<TNode> {
     return this._pageSize;
   }
 
-  get totalCount(): number {
-    return this._totalCount;
+  get resultsCount(): number {
+    return this._resultsCount;
   }
 }

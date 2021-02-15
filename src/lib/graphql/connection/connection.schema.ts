@@ -84,6 +84,6 @@ export default gql`
     when the last page do not fit in this size
     """
     pageSize: UnsignedInt!
-    totalCount: UnsignedInt!
+    resultsCount: UnsignedInt!
   }
 `;

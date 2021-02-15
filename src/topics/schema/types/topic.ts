@@ -55,8 +55,8 @@ const TopicTypeDefs = gql`
     the number is the same first for ConnectionInput, else it is less
     """
     pageSize: UnsignedInt!
-    "Número total de em todas de resultados em todas as páginas"
-    totalCount: UnsignedInt!
+    "Total number of results, counting all pages"
+    resultsCount: UnsignedInt!
   }
 
   """
