@@ -3,7 +3,7 @@ import PageInfo from './page-info';
 
 export default class Connection<TNode> {
   constructor(
-    private _edges: [Edge<TNode>],
+    private _edges: Edge<TNode>[],
     private _pageInfo: NonNullable<PageInfo>,
     private _pageSize: number,
     private _totalCount: number
@@ -15,7 +15,7 @@ export default class Connection<TNode> {
     return this;
   }
 
-  get edge(): [Edge<TNode>] {
+  get edges(): Edge<TNode>[] {
     return this._edges;
   }
 
