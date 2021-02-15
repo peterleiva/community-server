@@ -14,15 +14,17 @@ const CursorType = new GraphQLScalarType({
   },
 
   parseValue(value: string | null): Cursor | null {
-    if (!value || !Types.ObjectId.isValid(value)) return null;
+    if (!value) return null;
+
+    value = Buffer.from(value, 'base64').toString('utf-8');
+
+    if (!Types.ObjectId.isValid(value)) return null;
 
     return Types.ObjectId.createFromHexString(value);
   },
 
   parseLiteral(ast): string | null {
-    return ast.kind === Kind.STRING
-      ? Buffer.from(ast.value, 'base64').toString('utf-8')
-      : null;
+    return ast.kind === Kind.STRING ? ast.value : null;
   },
 });
 
