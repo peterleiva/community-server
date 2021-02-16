@@ -5,16 +5,12 @@
 import log from 'loglevel';
 import { gql, makeExecutableSchema } from 'apollo-server-express';
 import { merge, flatten } from 'lodash';
-import * as ScalarsSchema from './scalars';
+import * as Scalars from 'graphql-scalars';
 import { CategorySchema, TopicSchema, ReplySchema } from '../../topics';
 import { UserSchema } from '../../users';
 import { StatsSchema } from '../../stats';
-import { ConnectionSchema, CursorResolve } from './connection';
+import { ConnectionSchema, CursorResolver } from './connection';
 import * as SortSchema from './sort';
-import {
-  typeDefs as ScalarsTypeDefs,
-  resolvers as ScalarsResolvers,
-} from 'graphql-scalars';
 
 const baseTypeDefs = gql`
   type Mutation {
@@ -36,16 +32,16 @@ export default makeExecutableSchema({
     ReplySchema.typeDefs,
     StatsSchema.typeDefs,
     SortSchema.typeDefs,
-    ...ScalarsTypeDefs,
+    ...Scalars.typeDefs,
   ]),
   resolvers: merge(
     CategorySchema.resolvers,
     TopicSchema.resolvers,
     UserSchema.resolvers,
     ReplySchema.resolvers,
-    CursorResolve,
+    CursorResolver,
     SortSchema.resolver,
-    ScalarsResolvers
+    Scalars.resolvers
   ),
   logger: {
     log: log.error,
