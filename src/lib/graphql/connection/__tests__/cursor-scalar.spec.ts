@@ -1,4 +1,4 @@
-import { StringValueNode, Kind } from 'graphql';
+import { Kind } from 'graphql';
 import CursorType from '../cursor-scalar';
 import { Types } from 'mongoose';
 

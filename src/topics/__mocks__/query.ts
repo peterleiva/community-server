@@ -1,9 +1,13 @@
-import { MockList } from 'apollo-server-express';
-import { TopicsConnection } from '../topic.schema';
+import { IResolverObject, MockList } from 'apollo-server-express';
+import { ConnectionInput } from '../../lib/graphql/connection/connection-input.interface';
 
 export default {
-  Query: () => ({
-    topics: (_: never, { pagination }: { pagination: TopicsConnection }) => ({
+  Query: (): IResolverObject<
+    never,
+    never,
+    { pagination: ConnectionInput }
+  > => ({
+    topics: (_: never, { pagination }: { pagination: ConnectionInput }) => ({
       edges: () => new MockList(pagination.first),
     }),
   }),

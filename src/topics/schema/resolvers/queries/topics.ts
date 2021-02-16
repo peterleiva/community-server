@@ -8,7 +8,7 @@ const topics: IFieldResolver<
   never,
   never,
   PaginationArgs<TopicDocument>
-> = async (_: never, { sortBy, pagination }): Promise<Connection<Topic>> => {
+> = async (_: never, { pagination }): Promise<Connection<Topic>> => {
   const filter = pagination.after
     ? { _id: { $lt: pagination.after.toHexString() } }
     : {};
