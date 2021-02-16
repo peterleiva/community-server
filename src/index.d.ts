@@ -13,14 +13,14 @@ declare module 'mongoose' {
         static COLOR_MAX = 0xffffff;
         static COLOR_MIN = 0xf;
 
-        constructor(path: string, options?: any);
+        constructor(path: string, options?: [k: string]);
 
         /**
          * Cast a color value consisting of color hex value
          *
          * @param val - value to be cast
          */
-        cast(val: any): number;
+        cast(val: string | number): number;
       }
     }
   }

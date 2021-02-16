@@ -18,7 +18,6 @@
     "test": "jest"
   },
   "dependencies": {
-    "@types/mongoose-autopopulate": "^0.10.1",
     "apollo-server-express": "^2.17.0",
     "casual": "^1.6.2",
     "cookie-parser": "^1.4.5",
@@ -43,7 +42,7 @@
     "@types/faker": "^5.1.0",
     "@types/jest": "^26.0.13",
     "@types/lodash": "^4.14.161",
-    "@types/mongoose": "^5.10.3",
+    "@types/mongoose-autopopulate": "^0.10.1",
     "@types/morgan": "^1.9.1",
     "@types/rosie": "0.0.38",
     "@typescript-eslint/eslint-plugin": "^4.1.1",

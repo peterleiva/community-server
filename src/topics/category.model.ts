@@ -1,5 +1,5 @@
 import { Document, model, Schema, Types } from 'mongoose';
-import Color from '../lib/mongoose/types/color';
+// import Color from '../lib/mongoose/types/color';
 
 /**
  * Classifies topics by named categories
@@ -20,11 +20,11 @@ const CategorySchema = new Schema({
     maxlength: 144,
   },
 
-  backgroundColor: {
-    type: Color,
-    default: 0x0,
-    get: (color: number) => '#' + color.toString(16).padStart(6, '0'),
-  },
+  // backgroundColor: {
+  //   type: Color,
+  //   default: 0x0,
+  //   get: (color: number) => '#' + color.toString(16).padStart(6, '0'),
+  // },
 });
 
 export type CategoryDocument = Category & Document;
