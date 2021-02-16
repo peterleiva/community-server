@@ -55,9 +55,8 @@
     "jest-extended": "^0.11.5",
     "loglevel": "^1.7.0",
     "prettier": "2.1.1",
-    "shelljs": "^0.8.4",
     "ts-jest": "^26.5.1",
-    "ts-node-dev": "^1.0.0-pre.62",
+    "ts-node-dev": "^1.1.1",
     "typescript": "^4.0.2"
   }
 }
