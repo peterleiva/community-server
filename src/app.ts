@@ -2,7 +2,7 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
 import { connect as databaseSetup } from './config/database/setup';
-import cors from './lib/middlewares/cors';
+import cors from './middlewares/cors';
 import { middleware as graphQLMiddleware } from './lib/graphql/server';
 import './config/env';
 
