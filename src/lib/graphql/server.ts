@@ -15,7 +15,7 @@ const OPTIONS: ApolloServerExpressConfig = {
   mockEntireSchema: false,
   tracing: true,
   engine: {
-    reportSchema: true,
+    // reportSchema: true,
     graphVariant: 'current',
   },
 };
