@@ -2,6 +2,7 @@ import { ReplyModel, ReplyDocument } from '@/topics/reply.model';
 import { UserModel } from '@/users';
 import ReplyFactory from '../__mocks__/reply';
 import databaseSetup from 'helpers/database';
+import mongoose, { Error } from 'mongoose';
 
 describe('Reply', () => {
   databaseSetup();
@@ -51,9 +52,11 @@ describe('Reply', () => {
           reply.replies?.push(await response);
 
           reply.save((error) => {
-            expect(error?.errors?.['replies.0']?.message).toEqual(
-              'Replies topic must be the same as repliedTo'
-            );
+            // TODO melhorar esse pedaço de validação
+            if (error instanceof Error.ValidationError)
+              expect(error?.errors?.['replies.0']?.message).toEqual(
+                'Replies topic must be the same as repliedTo'
+              );
 
             done();
           });
@@ -67,10 +70,12 @@ describe('Reply', () => {
 
           reply.replies?.push(await response);
 
+          // TODO melhorar isso
           reply.save((error) => {
-            expect(error?.errors['replies.0']?.message).toEqual(
-              `replies.0' repliedTo must set id to its own parent`
-            );
+            if (error instanceof Error.ValidationError)
+              expect(error?.errors['replies.0']?.message).toEqual(
+                `replies.0' repliedTo must set id to its own parent`
+              );
 
             done();
           });
