@@ -17,6 +17,12 @@ module.exports = env => ({
   plugins: [
     new ForkTsCheckerWebpackPlugin({
       eslint: { files: './src/**/*' },
+      typescript: {
+        diagnosticOptions: {
+          semantic: true,
+          syntactic: true,
+        },
+      },
     }),
     new ForkTsCheckerNotifierWebpackPlugin({
       title: 'Community Server build',
@@ -39,6 +45,7 @@ module.exports = env => ({
           options: {
             configFile,
             transpileOnly: true,
+            happyPackMode: true,
           },
         },
       },
