@@ -2,10 +2,9 @@
   "extends": "./tsconfig.base.json",
 
   "compilerOptions": {
-    "baseUrl": ".",
+    "baseUrl": "./src",
     "noEmit": true,
     "paths": {
-      "@/*": ["src/*"],
       "helpers/*": ["test/helpers/*"]
     }
   },

@@ -1,13 +1,12 @@
 {
   "extends": "@tsconfig/node14/tsconfig.json",
-
+  // TODO: evitar usar CommonJS para opção module devido ao tree shaking
   "compilerOptions": {
     "outDir": "./dist",
     "composite": true,
     "moduleResolution": "node",
     "incremental": true,
     "noImplicitAny": true,
-    "declaration": true,
     "resolveJsonModule": true
   }
 }

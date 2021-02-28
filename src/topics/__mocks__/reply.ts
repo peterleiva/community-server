@@ -1,7 +1,7 @@
 import { Types } from 'mongoose';
 import { Factory } from 'rosie';
-import { TopicModel } from '@/topics';
-import { UserModel } from '@/users';
+import { TopicModel } from 'topics';
+import { UserModel } from 'users';
 import UserFactory from '../../users/__mocks__/user';
 import TopicFactory from './topic';
 

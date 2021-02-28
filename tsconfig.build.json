@@ -3,9 +3,9 @@
 
   "compilerOptions": {
     "rootDir": "./src",
-    "baseUrl": "src",
+    "baseUrl": "./src/",
     "paths": {
-      "@/*": ["*"]
+      "database/*": ["config/database/*"]
     }
   },
   "include": ["src/**/*.ts", "src/**/*.json"],
