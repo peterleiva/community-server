@@ -63,3 +63,6 @@ typings/
 # builds
 dist/
 *.tsbuildinfo
+
+# MacOS folder attributes
+.DS_Store
