@@ -7,7 +7,7 @@
   "private": false,
   "scripts": {
     "prestart": "npm run build && chmod 500 ./dist/index.bundle.js",
-    "start": "node ./dist/index.bundle.js",
+    "start": "dist/index.bundle.js",
     "build": "webpack --env mode=production",
     "dev": "webpack serve --env mode=development",
     "format": "prettier --write .",
