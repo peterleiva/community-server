@@ -1,6 +1,6 @@
 import { Kind } from 'graphql';
-import CursorType from '../cursor-scalar';
 import { Types } from 'mongoose';
+import CursorType from '../cursor-scalar';
 
 describe('Cursor Scalar', () => {
   const objectId = new Types.ObjectId();

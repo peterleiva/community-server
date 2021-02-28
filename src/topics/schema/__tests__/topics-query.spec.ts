@@ -1,6 +1,6 @@
-import TopicFactory from '../../__mocks__/topic';
-import { Topic } from '../..';
-import databaseSetup from 'helpers/database';
+import TopicFactory from '@app/topics/__mocks__/topic';
+import { Topic } from '@app/topics';
+import databaseSetup from 'test/helpers/database';
 
 describe('Topics GraphQL Query', () => {
   databaseSetup();

@@ -1,6 +1,6 @@
 import UserFactory from '../__mocks__/user';
-import databaseSetup from 'helpers/database';
-import { UserModel } from '@/users';
+import databaseSetup from 'test/helpers/database';
+import { UserModel } from '@app/users';
 
 describe('User', () => {
   databaseSetup();

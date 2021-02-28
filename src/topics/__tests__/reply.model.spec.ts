@@ -1,8 +1,7 @@
-import { ReplyModel, ReplyDocument } from '@/topics/reply.model';
-import { UserModel } from '@/users';
-import ReplyFactory from '../__mocks__/reply';
-import databaseSetup from 'helpers/database';
-import mongoose, { Error } from 'mongoose';
+import { ReplyModel, ReplyDocument } from '@app/topics/reply.model';
+import { UserModel } from '@app/users';
+import ReplyFactory from '@app/topics/__mocks__/reply';
+import databaseSetup from 'test/helpers/database';
 
 describe('Reply', () => {
   databaseSetup();
@@ -29,14 +28,14 @@ describe('Reply', () => {
       reply.replies.push(response);
       reply = await reply.save();
 
-      expect(reply.replies.map((r) => r.repliedTo)).toContain(reply._id);
+      expect(reply.replies.map(r => r.repliedTo)).toContain(reply._id);
     });
 
     it('Change topic to the top-level topic', async () => {
       reply.replies.push(await response$());
       reply = await reply.save();
 
-      const topics = reply.replies.map((r) => r.topic);
+      const topics = reply.replies.map(r => r.topic);
       expect(topics).toContain(reply.topic);
     });
   });
@@ -44,14 +43,14 @@ describe('Reply', () => {
   describe('validations', () => {
     describe('.replies', () => {
       describe('Validating Topic', () => {
-        it("Is invalid when replies doens't have same topic", async (done) => {
+        it("Is invalid when replies doens't have same topic", async done => {
           const response = ReplyModel.create(
             await ReplyFactory.build({ repliedTo: reply._id })
           );
 
           reply.replies?.push(await response);
 
-          reply.save((error) => {
+          reply.save(error => {
             // TODO melhorar esse pedaço de validação
             if (error instanceof Error.ValidationError)
               expect(error?.errors?.['replies.0']?.message).toEqual(
@@ -62,7 +61,7 @@ describe('Reply', () => {
           });
         });
 
-        it("Is invalid when replies' repliedTo isn't id", async (done) => {
+        it("Is invalid when replies' repliedTo isn't id", async done => {
           const repliedTo = await ReplyModel.create(await ReplyFactory.build());
           const response = ReplyModel.create(
             await ReplyFactory.build({ repliedTo: repliedTo._id })
@@ -71,7 +70,7 @@ describe('Reply', () => {
           reply.replies?.push(await response);
 
           // TODO melhorar isso
-          reply.save((error) => {
+          reply.save(error => {
             if (error instanceof Error.ValidationError)
               expect(error?.errors['replies.0']?.message).toEqual(
                 `replies.0' repliedTo must set id to its own parent`
@@ -81,7 +80,7 @@ describe('Reply', () => {
           });
         });
 
-        it('Is valid when have the same topic', async (done) => {
+        it('Is valid when have the same topic', async done => {
           const response = await ReplyModel.create(
             await ReplyFactory.build({
               repliedTo: reply.id,
@@ -91,7 +90,7 @@ describe('Reply', () => {
 
           reply.replies?.push(response);
 
-          reply.save((error) => {
+          reply.save(error => {
             expect(error).toBeNull();
             done();
           });

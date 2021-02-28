@@ -5,7 +5,7 @@
 
 import mongoose from 'mongoose';
 import logger from 'loglevel';
-import { connect, disconnect } from 'config/database/setup';
+import { connect, disconnect } from '@app/config/database/setup';
 
 /**
  * Startup database process using app setup which uses mongoose

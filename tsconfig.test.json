@@ -2,10 +2,17 @@
   "extends": "./tsconfig.base.json",
 
   "compilerOptions": {
-    "baseUrl": "./src",
     "noEmit": true,
+    "baseUrl": "./",
     "paths": {
-      "helpers/*": ["test/helpers/*"]
+      "@app/*": ["./src/*"],
+      "test/*": ["./test/*"],
+      "users/*": ["./src/users/*"],
+      "topics/*": ["./src/topics/*"],
+      "stats/*": ["./src/stats/*"],
+      "middlewares/*": ["./src/middlewares/*"],
+      "lib/*": ["./src/lib/*"],
+      "config/*": ["./src/config/*"]
     }
   },
 

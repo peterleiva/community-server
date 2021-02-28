@@ -1,5 +1,5 @@
-import { CategoryDocument, TopicDocument, ReplyDocument } from 'topics';
-import { UserDocument } from 'users';
+import { CategoryDocument, TopicDocument, ReplyDocument } from '@app/topics';
+import { UserDocument } from '@app/users';
 
 const TopicResolver = {
   Topic: {
