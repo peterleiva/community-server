@@ -45,7 +45,6 @@
     "@types/rosie": "0.0.38",
     "@typescript-eslint/eslint-plugin": "^4.1.1",
     "@typescript-eslint/parser": "^4.1.1",
-    "clean-webpack-plugin": "^3.0.0",
     "eslint": "^7.9.0",
     "eslint-config-prettier": "^6.11.0",
     "fork-ts-checker-notifier-webpack-plugin": "^3.0.0",

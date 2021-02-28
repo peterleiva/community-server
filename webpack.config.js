@@ -3,7 +3,6 @@ const webpack = require('webpack');
 const { merge } = require('webpack-merge');
 const nodeExternals = require('webpack-node-externals');
 const { loadEnvironment, applyPresets } = require('./build-tools');
-const { CleanWebpackPlugin } = require('clean-webpack-plugin');
 
 /**
  * Webpack configuration
@@ -17,7 +16,7 @@ module.exports = env =>
       externalsPresets: { node: true },
       externals: [nodeExternals()],
       mode: env.mode,
-      plugins: [new webpack.ProgressPlugin(), new CleanWebpackPlugin()],
+      plugins: [new webpack.ProgressPlugin()],
 
       entry: path.resolve(__dirname, 'src', 'main.ts'),
       output: {
