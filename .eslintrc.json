@@ -15,9 +15,8 @@
     "ecmaVersion": 2021,
     "sourceType": "module"
   },
-  "plugins": ["@typescript-eslint", "eslint-plugin-tsdoc"],
+  "plugins": ["@typescript-eslint"],
   "rules": {
-    "tsdoc/syntax": "warn",
-    "max-len": ["warn", { "code": 80 }]
+    "max-len": ["warn", { "code": 80, "ignorePattern": "^import\\W.*" }]
   }
 }
