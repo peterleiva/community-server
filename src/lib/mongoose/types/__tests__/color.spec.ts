@@ -44,7 +44,8 @@
 //       });
 
 //       it('decimal number is 2^24', () => {
-//         expect(() => type.cast((2 ** 24).toString())).toThrow(ColorOutOfRange);
+//         expect(() => type.cast((2 ** 24).toString()))
+// 						.toThrow(ColorOutOfRange);
 //       });
 
 //       it('decimal number is negative', () => {

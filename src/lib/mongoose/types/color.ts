@@ -1,4 +1,4 @@
-import mongoose from 'mongoose';
+// import mongoose from 'mongoose';
 
 // export class ColorOutOfRange extends mongoose.Error.CastError {
 //   constructor(value: number, path: string) {
@@ -57,7 +57,8 @@ import mongoose from 'mongoose';
 //   /**
 //    * Transform a color hexadecimal string to a number
 //    *
-//    * Get a color value, and transforms to number. Using regex pattern, test two
+//    * Get a color value, and transforms to number. Using regex pattern,
+//    * 	testtwo
 //    * possible color hex format, with 3 values (#)
 //    * @param hex - color hex string
 //    */
