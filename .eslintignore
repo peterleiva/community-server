@@ -6,3 +6,6 @@ node_modules
 dist/
 *.tsbuildinfo
 build-tools/
+
+# coverage reports
+coverage/
