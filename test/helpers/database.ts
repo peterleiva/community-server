@@ -16,7 +16,7 @@ import { connect, disconnect } from 'config/database/setup';
  */
 export async function setup(): Promise<typeof mongoose> {
   try {
-    return await connect(false);
+    return await connect(process.env.MONGO_URL);
   } catch (error) {
     logger.error('Error trying setup test database', error);
     process.exit(0);
@@ -29,14 +29,10 @@ export async function setup(): Promise<typeof mongoose> {
  */
 async function dropAll(): Promise<void> {
   try {
-    for (const collectionName of Object.getOwnPropertyNames(
-      mongoose.connection.collections
-    )) {
-      const collection = mongoose.connection.collection(collectionName);
-      await collection.deleteMany({});
-    }
+    await mongoose.connection.dropDatabase();
   } catch (error) {
-    logger.error('Error trying dropping the test database', error);
+    logger.warn(`⛔️ Couldn't drop test database`);
+    logger.warn(error);
   }
 }
 
@@ -50,7 +46,7 @@ async function dropAll(): Promise<void> {
  */
 export async function teardown(): Promise<void> {
   try {
-    return await disconnect(false);
+    return await disconnect();
   } catch (error) {
     logger.error('Error trying cleanup test database', error);
     process.exit(0);

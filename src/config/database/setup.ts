@@ -2,7 +2,8 @@
  * Uses mongoose to open a database connection with mongodb
  */
 
-import mongoose from 'mongoose';
+import mongoose, { Mongoose } from 'mongoose';
+import loglevel from 'loglevel';
 import type DatabaseConfig from './database-config.interface';
 import config from './database.json';
 
@@ -49,26 +50,27 @@ const DATABASE_URI: string =
  *
  * @returns mongoose connection
  */
-export async function connect(report = true): Promise<typeof mongoose> {
-  if (report) {
-    mongoose.connection.on('open', () => {
-      console.info('✅  MondoDB connected to', DATABASE_URI);
-    });
+export async function connect(databaseUri = DATABASE_URI): Promise<Mongoose> {
+  mongoose.connection.on('open', () => {
+    loglevel.info(`🔗 MongoDB connected to ${databaseUri}`);
+  });
 
-    mongoose.connection.on('error', (error) => {
-      console.error(error);
-    });
+  mongoose.connection.on('error', error => {
+    loglevel.error(`⛔️ MongoDB couldn't connect to ${databaseUri}`);
+    loglevel.error(error);
+  });
 
-    mongoose.connection.on('close', () => {
-      console.info('❗ MongoDB disconnected');
-    });
-  }
+  mongoose.connection.on('close', () => {
+    loglevel.info(`🔌 MongoDB disconnected from ${databaseUri}`);
+  });
 
   return mongoose
-    .connect(DATABASE_URI, { useNewUrlParser: true })
-    .catch((error) => {
-      console.error('❌ MongoDB failed in connect to ', DATABASE_URI);
-      console.error('📝 Given the following error ', error);
+    .connect(databaseUri, { useNewUrlParser: true })
+    .catch(error => {
+      loglevel.error(
+        `⛔️ MongoDB failed in connect to ${databaseUri}. Given the following` +
+          `error: `
+      );
       throw error;
     });
 }
@@ -81,11 +83,13 @@ export async function connect(report = true): Promise<typeof mongoose> {
  *
  * @throws logs and rethrows the error sent by mongoose close connection
  */
-export async function disconnect(report = true): Promise<void> {
+export async function disconnect(): Promise<void> {
   try {
     return mongoose.connection.close();
   } catch (error) {
-    if (report) console.error('❌ Mongoose close connection error: ', error);
+    loglevel.error(`❌ MongoDB couldn't close connection`);
+    loglevel.error(error);
+
     throw error;
   }
 }
