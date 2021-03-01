@@ -13,6 +13,7 @@ const { loadEnvironment, applyPresets } = require('./build-tools');
 module.exports = env =>
   merge(
     {
+      target: 'node',
       externalsPresets: { node: true },
       externals: [nodeExternals()],
       mode: env.mode,
