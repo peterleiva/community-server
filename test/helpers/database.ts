@@ -3,9 +3,9 @@
  * from database between tests
  */
 
-import mongoose from 'mongoose';
+import { Mongoose } from 'mongoose';
 import logger from 'loglevel';
-import { connect, disconnect } from 'config/database/setup';
+import { connect } from 'config/database/setup';
 
 /**
  * Startup database process using app setup which uses mongoose
@@ -14,22 +14,17 @@ import { connect, disconnect } from 'config/database/setup';
  * if there's any error. Also return a promise with mongoose object
  *
  */
-export async function setup(): Promise<typeof mongoose> {
-  try {
-    return await connect(process.env.MONGO_URL);
-  } catch (error) {
-    logger.error('Error trying setup test database', error);
-    process.exit(0);
-  }
+export async function setup(): Promise<Mongoose> {
+  return await connect(process.env.MONGO_URL);
 }
 
 /**
  * Cleanup the database removing all collections
  *
  */
-async function dropAll(): Promise<void> {
+async function dropAll(connectionSetup: Mongoose): Promise<void> {
   try {
-    await mongoose.connection.dropDatabase();
+    return await connectionSetup.connection.dropDatabase();
   } catch (error) {
     logger.warn(`⛔️ Couldn't drop test database`);
     logger.warn(error);
@@ -44,12 +39,13 @@ async function dropAll(): Promise<void> {
  * request
  *
  */
-export async function teardown(): Promise<void> {
+export async function teardown(connectionSetup: Mongoose): Promise<void> {
   try {
-    return await disconnect();
+    return await connectionSetup.disconnect();
   } catch (error) {
-    logger.error('Error trying cleanup test database', error);
-    process.exit(0);
+    logger.error('Error trying teardown database');
+    logger.error(error);
+    throw error;
   }
 }
 
@@ -61,7 +57,9 @@ export async function teardown(): Promise<void> {
  *
  **/
 export default function databaseSetup(): void {
-  beforeAll(setup);
-  afterEach(dropAll);
-  afterAll(teardown);
+  let connectionSetup: Mongoose;
+
+  beforeAll(async () => (connectionSetup = await setup()));
+  afterAll(async () => await teardown(connectionSetup));
+  afterEach(async () => await dropAll(connectionSetup));
 }
