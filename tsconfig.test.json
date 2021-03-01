@@ -3,16 +3,9 @@
 
   "compilerOptions": {
     "noEmit": true,
-    "baseUrl": "./",
+    "baseUrl": "./src",
     "paths": {
-      "@app/*": ["./src/*"],
-      "test/*": ["./test/*"],
-      "users/*": ["./src/users/*"],
-      "topics/*": ["./src/topics/*"],
-      "stats/*": ["./src/stats/*"],
-      "middlewares/*": ["./src/middlewares/*"],
-      "lib/*": ["./src/lib/*"],
-      "config/*": ["./src/config/*"]
+      "test/*": ["../test/*"]
     }
   },
 

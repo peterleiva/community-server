@@ -1,6 +1,6 @@
-import { ReplyModel, ReplyDocument } from '@app/topics/reply.model';
-import { UserModel } from '@app/users';
-import ReplyFactory from '@app/topics/__mocks__/reply';
+import { ReplyModel, ReplyDocument } from 'topics/reply.model';
+import { UserModel } from 'users';
+import ReplyFactory from 'topics/__mocks__/reply';
 import databaseSetup from 'test/helpers/database';
 
 describe('Reply', () => {

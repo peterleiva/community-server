@@ -1,6 +1,5 @@
 import { random } from 'faker';
-import { TopicDocument, TopicModel, ReplyDocument } from '@app/topics';
-import ReplyModel from '@app/topics/reply.model';
+import { TopicDocument, TopicModel, ReplyDocument, ReplyModel } from 'topics';
 import TopicFactory from '../__mocks__/topic';
 import ReplyFactory from '../__mocks__/reply';
 import databaseSetup from 'test/helpers/database';

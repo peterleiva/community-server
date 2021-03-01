@@ -1,8 +1,8 @@
 import { lorem, random } from 'faker';
 import { Types } from 'mongoose';
-import { UserModel } from '@app/users';
-import { CategoryModel } from '@app/topics';
-import UserFactory from '@app/users/__mocks__/user';
+import { UserModel } from 'users';
+import { CategoryModel } from 'topics';
+import UserFactory from 'users/__mocks__/user';
 import CategoryFactory from './category';
 import { Factory } from 'rosie';
 

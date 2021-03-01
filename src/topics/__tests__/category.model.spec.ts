@@ -1,5 +1,5 @@
-import CategoryFactory from '@app/topics/__mocks__/category';
-import { CategoryModel, Category, CategoryDocument } from '@app/topics';
+import CategoryFactory from 'topics/__mocks__/category';
+import { CategoryModel, Category, CategoryDocument } from 'topics';
 import databaseSetup from 'test/helpers/database';
 
 describe('Category', () => {
