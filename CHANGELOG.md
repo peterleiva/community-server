@@ -13,9 +13,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Setup a GraphQL server to `/api` endpoint
 - Add npm scripts
+
   - `npm run open:coverage-report` to open the coverage report in the browser
   - `npm test` to test the codebase with **[jest](http://jestjs.io/docs)**
   - `npm run format` to format the codebase using [prettier](http://prettier.io/docs/)
+
+- Query a list of paginated topics
 
 ## Webpack
 
