@@ -1,14 +1,19 @@
 const path = require('path');
+const { defaults: tsjPreset } = require('ts-jest/presets');
 
 module.exports = {
-  preset: 'ts-jest',
+  preset: '@shelf/jest-mongodb',
   globals: {
     'ts-jest': {
       tsconfig: 'tsconfig.test.json',
     },
   },
 
-  testEnvironment: 'node',
+  transform: {
+    ...tsjPreset.transform,
+  },
+
+  watchPathIgnorePatterns: ['globalConfig'],
   moduleDirectories: ['node_modules', 'src', 'test'],
   collectCoverage: true,
   coverageReporters: ['text', 'clover', 'text-summary', 'html'],
