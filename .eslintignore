@@ -9,3 +9,4 @@ build-tools/
 
 # coverage reports
 coverage/
+jest-mongodb-config.js
