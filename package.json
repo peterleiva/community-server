@@ -1,6 +1,6 @@
 {
-  "name": "community",
-  "description": "Forum application server",
+  "name": "community-server",
+  "description": "Forum application api with GraphQL server",
   "version": "0.3.0-canary.1",
   "author": "Peter Leiva <pleiva@id.uff.br>",
   "license": "MIT",
