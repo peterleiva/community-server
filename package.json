@@ -13,7 +13,8 @@
     "watch:webpack": "webpack --watch --env mode=development",
     "watch:nodemon": "nodemon dist/index.bundle.js",
     "format": "prettier --write .",
-    "test": "jest"
+    "test": "jest",
+    "open:coverage-report": "open coverage/index.html"
   },
   "dependencies": {
     "apollo-server-express": "^2.17.0",
@@ -55,6 +56,7 @@
     "jest": "^26.4.2",
     "jest-extended": "^0.11.5",
     "nodemon": "^2.0.7",
+    "open": "^7.4.2",
     "prettier": "2.1.1",
     "ts-jest": "^26.5.1",
     "ts-loader": "^8.0.17",
