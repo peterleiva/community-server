@@ -6,11 +6,13 @@ import mongoose, { Mongoose } from 'mongoose';
 import loglevel from 'loglevel';
 import type DatabaseConfig from './database-config.interface';
 import config from './database.json';
+import package from '../../../package.json';
 
 type ConfigurationFile = Record<string, Partial<DatabaseConfig>>;
 
+// TODO: Colocar um nome genérico que remete ao nome da aplicação
 const DEFAULTS: DatabaseConfig = {
-  database: 'my-project-database',
+  database: package.name,
   host: 'localhost',
   port: '27017',
   password: '',
