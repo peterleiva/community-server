@@ -6,9 +6,9 @@
   "license": "MIT",
   "private": false,
   "scripts": {
-    "prestart": "npm run build && chmod 600 ./dist/index.bundle.js",
     "start": "dist/index.bundle.js",
     "build": "webpack --env mode=production",
+    "docker:build": "./build-tools/docker/build.sh",
     "dev": "concurrently \"npm:watch:*\"",
     "watch:webpack": "webpack --watch --env mode=development",
     "watch:nodemon": "nodemon dist/index.bundle.js",
