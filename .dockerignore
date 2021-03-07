@@ -1,1 +1,8 @@
-/dist
+dist
+README.md
+CHANGELOG.md
+node_modules
+
+# testes assets
+coverage
+globalConfig.json
