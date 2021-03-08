@@ -15,6 +15,7 @@
     "test": "jest",
     "open:coverage-report": "open coverage/index.html",
     "docker:build": "./build-tools/docker/build.sh",
+    "docker:run": "./build-tools/docker/run.sh",
     "docker:interactive": "./build-tools/docker/shell.sh"
   },
   "dependencies": {

@@ -19,6 +19,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
   - `npm run format` to format the codebase using [prettier](http://prettier.io/docs/)
 
 - Query a list of paginated topics
+- Add [Docker](https://docs.docker.com/) [image](/build-tools/docker/Dockerfile) and [tools](/build-tools/docker) to **build** (`npm run docker:build`) and **run** (`npm run docker:run`). Also:
+  - Run in **interative** mode - `npm run docker:interactive`
+  - Run in **debug** debug mode - `npm run docker:debug`
 
 ## Webpack
 
