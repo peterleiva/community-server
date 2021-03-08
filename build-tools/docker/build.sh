@@ -8,6 +8,9 @@
 # options when building the app image
 ##
 
+##
+# Get the absolute path of a given argument ($1)
+#
 getAbsolutePath() {
 	echo "$(
 		cd -- "$(dirname "$1")" >/dev/null 2>&1
@@ -15,20 +18,32 @@ getAbsolutePath() {
 	)"
 }
 
-# take build script directory which is where Dockerfile lives to build them
+# Take build script directory which is where Dockerfile lives to build them
 basedir=$(getAbsolutePath $0)
+# Project root folder
 rootdir=$(getAbsolutePath "$basedir/../../.")
 
-# Docker build variables
-APP_NAME="community-server"
-Dockerfile="$basedir/Dockerfile"
-tag=$APP_NAME
+##
+# Checks the existance of docker command and if it's running
+#
+if ! command -v docker &>/dev/null; then
+	echo "Docker is not installed."
+	echo "Please install docker at https://docs.docker.com/get-started/"
+elif ! command docker info &>/dev/null 2>&1; then
+	echo "Docker is not running"
+else
+	# Docker build variables
+	Dockerfile="$basedir/Dockerfile"
+	APP_NAME="community-server"
+	tag=$APP_NAME
 
-# Information about docker building folders
-printf "\n\n"
-echo "Bulding Dockerfile at $Dockerfile"
-echo "Project at $rootdir"
-printf "\n\n"
+	# Information about docker building folders
+	echo "Project found at $rootdir"
+	echo "Bulding Dockerfile at $Dockerfile"
 
-# uses rootdir as the docker context
-docker build $@ --tag $tag -f $Dockerfile $rootdir
+	# uses rootdir as the docker context
+	docker build $@ --tag $tag -f $Dockerfile $rootdir
+fi
+
+# print a new line
+echo
