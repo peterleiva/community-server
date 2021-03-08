@@ -10,4 +10,4 @@ IMAGE="community-server:$TAG"
 SHELL="/bin/bash"
 
 # Remove the container with --rm when exists the iteratictive environment
-docker run --interactive --tty --rm --name $CONTAINER_NAME $IMAGE $SHELL
+docker run $@ -u root --interactive --tty --rm --name $CONTAINER_NAME $IMAGE $SHELL

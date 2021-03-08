@@ -7,7 +7,7 @@
 if ! command "$(dirname "$0")/check-docker.sh" 2>&1; then exit 1; fi
 
 CONTAINER_NAME="community-server"
-PORT="3000"
+PORT="5000"
 TAG="community-server"
 
-docker run --rm --name=$CONTAINER_NAME -p $PORT:3000 $TAG
+docker run $@ --rm --name=$CONTAINER_NAME -p $PORT:3000 $TAG
