@@ -23,27 +23,19 @@ basedir=$(getAbsolutePath $0)
 # Project root folder
 rootdir=$(getAbsolutePath "$basedir/../../.")
 
-##
-# Checks the existance of docker command and if it's running
-#
-if ! command -v docker &>/dev/null; then
-	echo "Docker is not installed."
-	echo "Please install docker at https://docs.docker.com/get-started/"
-elif ! command docker info &>/dev/null 2>&1; then
-	echo "Docker is not running"
-else
-	# Docker build variables
-	Dockerfile="$basedir/Dockerfile"
-	APP_NAME="community-server"
-	tag=$APP_NAME
+if ! command "$basedir/check-docker.sh" 2>&1; then exit 1; fi
 
-	# Information about docker building folders
-	echo "Project found at $rootdir"
-	echo "Bulding Dockerfile at $Dockerfile"
+# Docker build variables
+Dockerfile="$basedir/Dockerfile"
+APP_NAME="community-server"
+tag=$APP_NAME
 
-	# uses rootdir as the docker context
-	docker build $@ --tag $tag -f $Dockerfile $rootdir
-fi
+# Information about docker building folders
+echo "Project found at $rootdir"
+echo "Bulding Dockerfile at $Dockerfile"
+
+# uses rootdir as the docker context
+docker build $@ --tag $tag -f $Dockerfile $rootdir
 
 # print a new line
 echo
