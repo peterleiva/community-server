@@ -1,0 +1,15 @@
+{
+	"references": [
+		{
+			"path": "src"
+		},
+		{
+			"path": "test"
+		},
+		{
+			"path": "e2e"
+		}
+	],
+
+	"files": []
+}
