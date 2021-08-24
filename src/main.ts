@@ -1,8 +1,9 @@
 import { createHttpServer, ServerControl } from "server";
-import app from "app";
 import config from "config";
+import createApp from "app";
 
-export function main(): void {
+export async function main(): Promise<void> {
+	const app = await createApp();
 	const controller: ServerControl = createHttpServer(app, config);
 	controller.on("started", () => app.set("port", controller.port));
 	controller.start({ port: config.port });

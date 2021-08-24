@@ -1,27 +1,33 @@
-import express from "express";
-import createError from "http-errors";
+import express, { Application } from "express";
+// import createError from "http-errors";
 import type { Request, Response } from "express";
 import config from "config";
 import compression from "compression";
 import cors from "cors";
 import helmet from "helmet";
+import { createGraphQL } from "loaders";
 
-const app = express();
+export default async function createApp(): Promise<Application> {
+	const app = express();
 
-app.use(helmet());
-app.set(
-	"env",
-	config.env("prod") || config.env("staging") ? "production" : "development"
-);
-app.use(compression());
-app.use(cors());
+	app.use(helmet());
+	app.set(
+		"env",
+		config.env("prod") || config.env("staging") ? "production" : "development"
+	);
+	app.use(compression());
+	app.use(cors());
 
-app.get("/", (req: Request, res: Response) => {
-	res.send("Olá, mundo");
-});
+	// setup GraphQL
+	const graphql = await createGraphQL({
+		path: "/api",
+		disableHealthCheck: config.env("production") as boolean,
+	});
+	app.use(graphql);
 
-app.use((req, res, next) => {
-	next(createError(404));
-});
+	app.get("/", (req: Request, res: Response) => {
+		res.send("Olá, mundo");
+	});
 
-export default app;
+	return app;
+}
