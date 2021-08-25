@@ -5,7 +5,7 @@ import config from "config";
 import compression from "compression";
 import cors from "cors";
 import helmet from "helmet";
-import { createGraphQL } from "loaders";
+import { createGraphQL, DatabaseService } from "loaders";
 
 export default async function createApp(): Promise<Application> {
 	const app = express();
@@ -17,6 +17,9 @@ export default async function createApp(): Promise<Application> {
 	);
 	app.use(compression());
 	app.use(cors());
+
+	const database = new DatabaseService();
+	database.start();
 
 	// setup GraphQL
 	const graphql = await createGraphQL({
