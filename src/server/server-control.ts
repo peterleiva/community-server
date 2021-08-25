@@ -1,15 +1,15 @@
 import type { Server } from "http";
-import { ServiceControl, ServiceControlEvents } from "lib";
-import { EventEmitter } from "events";
 import { AddressInfo } from "net";
+import { ServiceControl } from "lib";
+import ServiceControlEvents from "./events.interface";
 
 type ControlOptions = {
 	port: number;
 };
 
 export default class ServerControl
-	extends EventEmitter
-	implements ServiceControl<ControlOptions>, ServiceControlEvents
+	extends ServiceControl<ControlOptions>
+	implements ServiceControlEvents
 {
 	readonly #server: Server;
 	#port: number | null;
@@ -39,35 +39,32 @@ export default class ServerControl
 		return this.#port;
 	}
 
-	start({ port }: ControlOptions): this {
+	async start({ port }: ControlOptions): Promise<this> {
 		this.emit("starting", this.#server);
-		this.#server.listen(port);
 
-		this.#port =
-			port === 0 ? (this.#server.address() as AddressInfo).port : port;
-
-		return this;
-	}
-
-	stop(): this {
-		if (this.running) {
-			this.#server.close(err => {
-				if (err) {
-					console.error(`Error closing the http server`);
-					throw err;
-				}
-				this.emit("stopped");
-				console.warn(`❌ Http server closed`);
+		return new Promise(resolve => {
+			this.#server.listen(port, () => {
+				resolve(this);
 			});
-		}
 
-		return this;
+			this.#port =
+				port === 0 ? (this.#server.address() as AddressInfo).port : port;
+		});
 	}
 
-	restart(options: ControlOptions): this {
-		this.stop();
-		this.start(options);
-
-		return this;
+	async stop(): Promise<this> {
+		return new Promise((resolve, reject) => {
+			if (this.running) {
+				this.#server.close(err => {
+					if (err) {
+						console.error(`Error closing the http server`);
+						reject(err);
+					}
+					this.emit("stopped");
+					console.warn(`❌ Http server closed`);
+					resolve(this);
+				});
+			}
+		});
 	}
 }

@@ -6,7 +6,7 @@ export async function main(): Promise<void> {
 	const app = await createApp();
 	const controller: ServerControl = createHttpServer(app, config);
 	controller.on("started", () => app.set("port", controller.port));
-	controller.start({ port: config.port });
+	await controller.start({ port: config.port });
 }
 
 main();
