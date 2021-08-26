@@ -16,6 +16,7 @@ jobs:
         with:
           node-version: ${{matrix.node}}
           cache: "npm"
+          cache-dependency-path: "node_modules/.cache/mongodb-memory-server/mongodb-binaries"
 
       - run: npm ci
       - run: npm run lint

@@ -1,7 +1,5 @@
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
-	preset: "ts-jest",
-	testEnvironment: "node",
 	projects: ["<rootDir>/test", "<rootDir>/e2e"],
 
 	watchPlugins: [
@@ -9,4 +7,5 @@ module.exports = {
 		"jest-watch-typeahead/filename",
 		"jest-watch-typeahead/testname",
 	],
+	watchPathIgnorePatterns: ["globalConfig"],
 };
