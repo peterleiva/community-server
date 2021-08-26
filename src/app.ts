@@ -5,11 +5,12 @@ import config from "config";
 import compression from "compression";
 import cors from "cors";
 import helmet from "helmet";
-import { createGraphQL } from "loaders";
+import { createGraphQL, httpLogger } from "loaders";
 
 export default async function createApp(): Promise<Application> {
 	const app = express();
 
+	app.use(httpLogger());
 	app.use(helmet());
 	app.set(
 		"env",
