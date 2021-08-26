@@ -10,6 +10,7 @@ export function createHttpServer(
 	const server = createServer(app);
 	const httpController = new ServerControl(server);
 
+	// TODO: tirar comportamento de logger e error da criação do servidor
 	httpController.on("started", runningLogger(httpController, config));
 	httpController.on("error", errorListener(httpController));
 

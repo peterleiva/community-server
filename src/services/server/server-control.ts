@@ -1,6 +1,6 @@
 import type { Server } from "http";
 import { AddressInfo } from "net";
-import { ServiceControl } from "lib";
+import ServiceControl from "services/service-control";
 import ServiceControlEvents from "./events.interface";
 
 type ControlOptions = {

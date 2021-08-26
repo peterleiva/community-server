@@ -4,7 +4,9 @@ export default abstract class ServiceControl<
 	TOptions = undefined
 > extends EventEmitter {
 	abstract running: boolean;
+
 	abstract start(options: TOptions): Promise<this>;
+
 	abstract stop(options: TOptions): Promise<this>;
 
 	async restart(options: TOptions): Promise<this> {
