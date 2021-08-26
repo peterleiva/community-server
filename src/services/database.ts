@@ -18,6 +18,10 @@ export default class DatabaseControl extends ServiceControl<Options> {
 		return !!this.#mongoose;
 	}
 
+	get connection(): Connection | undefined {
+		return this.#mongoose?.connection;
+	}
+
 	constructor() {
 		super();
 
@@ -28,7 +32,7 @@ export default class DatabaseControl extends ServiceControl<Options> {
 		});
 
 		mongoose.connection.on("disconnected", () => {
-			console.error(`🆘 Database lost connection`);
+			console.info(`🆘 Database lost connection`);
 		});
 	}
 
