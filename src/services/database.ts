@@ -1,5 +1,5 @@
 import mongoose, { Connection, Mongoose } from "mongoose";
-import { ServiceControl } from "lib";
+import ServiceControl from "./service-control";
 import config from "config";
 import chalk from "chalk";
 
