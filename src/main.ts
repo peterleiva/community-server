@@ -1,12 +1,15 @@
-import { createHttpServer, ServerControl } from "server";
 import config from "config";
 import createApp from "app";
+import { createHttpServer, DatabaseService } from "services";
 
 export async function main(): Promise<void> {
 	const app = await createApp();
-	const controller: ServerControl = createHttpServer(app, config);
-	controller.on("started", () => app.set("port", controller.port));
-	await controller.start({ port: config.port });
+	const http = createHttpServer(app, config);
+	const database = new DatabaseService();
+
+	http.on("started", () => app.set("port", http.port));
+
+	Promise.all([http.start({ port: config.port }), database.start()]);
 }
 
-main();
+main().catch(console.error);
