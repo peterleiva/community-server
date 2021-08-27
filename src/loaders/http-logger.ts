@@ -1,5 +1,5 @@
 import pino, { HttpLogger } from "pino-http";
-import { logger } from "lib";
+import { log as logger } from "lib";
 
 export default function createHttpLogger(): HttpLogger {
 	return pino({
