@@ -11,6 +11,7 @@ const config = {
 	logLevel: process.env.LOG_LEVEL ?? "info",
 	databaseUrl: process.env.DATABASE_URL,
 	env,
+	noLog: ["true", "1"].some(v => v === process.env.NO_LOG?.toLowerCase()),
 };
 
 export type Config = typeof config;
