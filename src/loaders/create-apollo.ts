@@ -14,8 +14,7 @@ export default async function createApollo(
 ): Promise<Router> {
 	const server = new ApolloServer({
 		typeDefs,
-		mocks: !(config.env("production") || config.env("staging")),
-		logger,
+		mocks: !config.env("production", "staging"),
 	});
 
 	await server.start();

@@ -12,17 +12,14 @@ export default async function createApp(): Promise<Application> {
 
 	app.use(httpLogger());
 	app.use(helmet());
-	app.set(
-		"env",
-		config.env("prod") || config.env("staging") ? "production" : "development"
-	);
+	app.set("env", config.env("prod", "staging") ? "production" : "development");
 	app.use(compression());
 	app.use(cors());
 
 	// setup GraphQL
 	const graphql = await createGraphQL({
 		path: "/api",
-		disableHealthCheck: config.env("production") as boolean,
+		disableHealthCheck: config.env("production"),
 	});
 	app.use(graphql);
 

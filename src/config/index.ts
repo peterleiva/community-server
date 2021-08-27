@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { env } from "node.env-inspector";
+import { env } from "node-environment";
 
 const result = dotenv.config();
 if (result.error && !env("production")) {
@@ -9,7 +9,7 @@ if (result.error && !env("production")) {
 const config = {
 	port: +(process.env.PORT ?? "3000"),
 	logLevel: process.env.LOG_LEVEL ?? "info",
-	databaseURL: process.env.DATABASE_URL,
+	databaseUrl: process.env.DATABASE_URL,
 	env,
 };
 

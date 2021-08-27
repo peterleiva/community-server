@@ -105,3 +105,6 @@ dist
 
 # MacOS Files
 .DS_Store
+
+# @shelf/jest-mongodb
+globalConfig.json

@@ -3,7 +3,7 @@ const { resolve } = require("path");
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
 module.exports = {
 	rootDir: "../",
-	testEnvironment: "node",
+	preset: "@shelf/jest-mongodb",
 	roots: ["<rootDir>/test", "<rootDir>/src"],
 	moduleDirectories: [
 		"node_modules",
