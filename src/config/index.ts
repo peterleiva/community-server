@@ -1,5 +1,5 @@
 import dotenv from "dotenv";
-import { env } from "node.env-inspector";
+import { env } from "node-environment";
 
 const result = dotenv.config();
 if (result.error && !env("production")) {
