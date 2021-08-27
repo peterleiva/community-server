@@ -1,13 +1,13 @@
 import mongoose, { Connection, Mongoose } from "mongoose";
-import ServiceControl from "./service-control";
 import config from "config";
 import chalk from "chalk";
+import ServiceControl from "./service-control";
 
 type Options = Partial<{
 	url: string;
 }>;
 
-const isProduction = config.env("production") || config.env("staging");
+const isProd = config.env("production", "staging");
 
 export default class DatabaseControl extends ServiceControl<Options> {
 	private static DEV_URI_FALLBACK = "mongodb://localhost/community";
@@ -39,7 +39,7 @@ export default class DatabaseControl extends ServiceControl<Options> {
 	async start({ url }: Options = {}): Promise<this> {
 		url ??= config.databaseUrl;
 
-		if (!(url || isProduction)) url = DatabaseControl.DEV_URI_FALLBACK;
+		if (!(url || isProd)) url = DatabaseControl.DEV_URI_FALLBACK;
 
 		if (!url) {
 			throw "Database not set. Please, set environment variable DATABASE_URL";
@@ -47,12 +47,12 @@ export default class DatabaseControl extends ServiceControl<Options> {
 
 		this.#mongoose = await mongoose.connect(url, {
 			appName: "Community",
-			wtimeoutMS: isProduction ? 25_000 : 0,
+			wtimeoutMS: isProd ? 25_000 : 0,
 			socketTimeoutMS: 30_000 * 3,
 			maxPoolSize: 200,
 			keepAlive: true,
 			keepAliveInitialDelay: 300_000,
-			serverSelectionTimeoutMS: isProduction ? 45_000 : 7_000,
+			serverSelectionTimeoutMS: isProd ? 45_000 : 7_000,
 		});
 
 		return this;
