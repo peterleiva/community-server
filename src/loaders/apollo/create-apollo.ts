@@ -3,6 +3,10 @@ import type { Router } from "express";
 import config from "config";
 import { log as logger } from "lib";
 import { LoggingPlugin } from "./plugins";
+import {
+	ApolloServerPluginLandingPageDisabled,
+	ApolloServerPluginLandingPageLocalDefault,
+} from "apollo-server-core";
 
 const typeDefs = gql`
 	type Query {
@@ -10,7 +14,15 @@ const typeDefs = gql`
 	}
 `;
 
-const plugins = [LoggingPlugin];
+const landingPagePlugin = function () {
+	if (config.env("development")) {
+		return ApolloServerPluginLandingPageLocalDefault();
+	} else {
+		return ApolloServerPluginLandingPageDisabled();
+	}
+};
+
+const plugins = [LoggingPlugin, landingPagePlugin()];
 
 export default async function createApollo(
 	options: GetMiddlewareOptions = {}
