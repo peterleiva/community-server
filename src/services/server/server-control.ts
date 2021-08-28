@@ -2,6 +2,7 @@ import type { Server } from "http";
 import { AddressInfo } from "net";
 import ServiceControl from "services/service-control";
 import ServiceControlEvents from "./events.interface";
+import { log } from "lib";
 
 type ControlOptions = {
 	port: number;
@@ -57,11 +58,11 @@ export default class ServerControl
 			if (this.running) {
 				this.#server.close(err => {
 					if (err) {
-						console.error(`Error closing the http server`);
+						log.error(`Error closing the http server`);
 						reject(err);
 					}
 					this.emit("stopped");
-					console.warn(`❌ Http server closed`);
+					log.info(`❌ Http server closed`);
 					resolve(this);
 				});
 			}

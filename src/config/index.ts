@@ -3,7 +3,7 @@ import { env } from "node-environment";
 
 const result = dotenv.config();
 if (result.error && !env("production")) {
-	console.error("🚨 Failed to parser /.env file");
+	console.debug("🚨 Failed to parser /.env file");
 }
 
 const config = {

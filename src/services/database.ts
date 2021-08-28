@@ -2,6 +2,7 @@ import mongoose, { Connection, Mongoose } from "mongoose";
 import config from "config";
 import chalk from "chalk";
 import ServiceControl from "./service-control";
+import { log } from "lib";
 
 type Options = Partial<{
 	url: string;
@@ -28,11 +29,11 @@ export default class DatabaseControl extends ServiceControl<Options> {
 		mongoose.connection.on("connected", function (this: Connection) {
 			const { host, port, name: db } = this;
 			const connectionUri = chalk.blue(`${host}:${port}/${db}`);
-			console.info(`\nDatabase connected at ${connectionUri}\n`);
+			log.info(`Database connected at ${connectionUri}`);
 		});
 
 		mongoose.connection.on("disconnected", () => {
-			console.info(`🆘 Database lost connection`);
+			log.warn(`🆘 Database lost connection`);
 		});
 	}
 

@@ -1,9 +1,9 @@
 import type { Config } from "config";
-import { sprintf } from "sprintf-js";
 import address from "address";
 import chalk from "chalk";
 import styleAddress from "./style-address";
 import type ServerControl from "../server-control";
+import { log } from "lib";
 
 /**
  * Inform to the user that the server is running. print the message to shell
@@ -19,36 +19,27 @@ export default function runningLogger(
 		const port = service.port;
 
 		if (!port) {
-			console.error(`Server is not running`);
+			log.error(`Server is not running`);
 			return;
 		}
 
-		console.info(
-			sprintf(
-				"%5s %s %s",
-				"🚀",
-				`Server is ${chalk.green("running").toLowerCase()}`,
-				`on 📦 ${chalk.magenta(config.env())} environment`
-			)
+		log.info(
+			"%s %s on 📦 %s environment",
+			"🚀",
+			chalk.green("running"),
+			chalk.magenta(config.env())
 		);
 
-		if (config.env("dev")) {
-			console.info(
-				sprintf(
-					"%5s %-18s%20s",
-					"🔈",
-					"Listening on",
-					styleAddress({ hostname: "localhost", port })
-				)
-			);
-			console.info(
-				sprintf(
-					"%5s  %-18s%20s",
-					"🕸",
-					"On your network",
-					styleAddress({ hostname: address.ip(), port })
-				)
-			);
-		}
+		log.info(
+			"%s Listening on %s",
+			"🔈",
+			styleAddress({ hostname: "localhost", port })
+		);
+
+		log.info(
+			"%s On your Network %s",
+			"🏠",
+			styleAddress({ hostname: address.ip(), port })
+		);
 	};
 }

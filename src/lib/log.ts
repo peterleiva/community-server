@@ -30,7 +30,7 @@ const log = pino(
 		name: "Community",
 		enabled: !config.noLog,
 		prettyPrint: config.env("dev") && {
-			translateTime: true,
+			translateTime: "SYS:standard",
 		},
 		redact,
 		level: config.logLevel,

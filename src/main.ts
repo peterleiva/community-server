@@ -12,4 +12,4 @@ export async function main(): Promise<void> {
 	Promise.all([http.start({ port: config.port }), database.start()]);
 }
 
-main().catch(console.error);
+main();
