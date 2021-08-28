@@ -27,7 +27,6 @@ const redact = config.env("production", "staging")
 
 const log = pino(
 	{
-		name: "Community",
 		enabled: !config.noLog,
 		prettyPrint: config.env("dev") && {
 			translateTime: "SYS:standard",
