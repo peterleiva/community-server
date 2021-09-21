@@ -84,7 +84,7 @@
 		"webpack": "^5.38.1",
 		"webpack-bundle-analyzer": "^4.4.2",
 		"webpack-cli": "^4.7.0",
-		"webpack-config-organizer": "^0.2.2",
+		"webpack-config-organizer": "^0.3.1",
 		"webpack-node-externals": "^3.0.0"
 	},
 	"dependencies": {
