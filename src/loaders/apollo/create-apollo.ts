@@ -1,18 +1,14 @@
-import { ApolloServer, GetMiddlewareOptions, gql } from "apollo-server-express";
+import { ApolloServer, GetMiddlewareOptions } from "apollo-server-express";
 import type { Router } from "express";
-import config from "config";
-import { log as logger } from "lib";
-import { LoggingPlugin } from "./plugins";
 import {
 	ApolloServerPluginLandingPageDisabled,
 	ApolloServerPluginLandingPageLocalDefault,
 } from "apollo-server-core";
-
-const typeDefs = gql`
-	type Query {
-		noop: Int
-	}
-`;
+import config from "config";
+import { log as logger } from "lib";
+import { LoggingPlugin } from "./plugins";
+import { schema } from "./schema";
+import { mocks as scalarMocks } from "graphql-scalars";
 
 const landingPagePlugin = function () {
 	if (config.env("development")) {
@@ -28,8 +24,10 @@ export default async function createApollo(
 	options: GetMiddlewareOptions = {}
 ): Promise<Router> {
 	const server = new ApolloServer({
-		typeDefs,
-		mocks: !config.env("production", "staging"),
+		schema,
+		mocks: !config.env("production", "staging") && {
+			...scalarMocks,
+		},
 		logger,
 		plugins,
 	});
