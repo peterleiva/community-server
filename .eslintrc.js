@@ -16,6 +16,10 @@ module.exports = {
 		},
 	},
 
+	rules: {
+		"max-len": ["warn", { tabWidth: 2 }],
+	},
+
 	overrides: [
 		{
 			files: "**/*.ts",
