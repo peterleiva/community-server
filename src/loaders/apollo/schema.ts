@@ -4,14 +4,17 @@ import {
 	typeDefs as scalarTypeDefs,
 	resolvers as scalarResolvers,
 } from "graphql-scalars";
+import typeDefs from "./typedefs";
 
-const typeDefs = gql`
-	type Query {
-		noop: DateTime
+const root = gql`
+	schema {
+		query: Query
 	}
+
+	type Query
 `;
 
 export const schema = makeExecutableSchema({
-	typeDefs: [typeDefs, ...scalarTypeDefs],
+	typeDefs: [root, typeDefs, ...scalarTypeDefs],
 	resolvers: [scalarResolvers],
 });
