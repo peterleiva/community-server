@@ -59,6 +59,7 @@
 		"@typescript-eslint/eslint-plugin": "^4.29.0",
 		"@typescript-eslint/parser": "^4.29.0",
 		"babel-loader": "^8.2.2",
+		"casual": "^1.6.2",
 		"concurrently": "^6.2.0",
 		"core-js": "^3.16.0",
 		"eslint": "^7.27.0",
