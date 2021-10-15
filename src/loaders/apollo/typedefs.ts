@@ -104,9 +104,9 @@ const typedef = gql`
 	"""
 	interface Timestamps {
 		"create date and time"
-		createdAt: Date!
+		createdAt: DateTime!
 		"last update date and time"
-		updatedAt: Date!
+		updatedAt: DateTime!
 	}
 
 	"""
@@ -119,7 +119,7 @@ const typedef = gql`
 		"page information"
 		pageInfo: PageInfo!
 		"total number of connection using User type as a endpoint"
-		totalCount: Int!
+		totalCount: NonNegativeInt!
 	}
 
 	"""
@@ -147,9 +147,9 @@ const typedef = gql`
 		"user avatar, a image representing its persona"
 		avatar: Avatar
 		"creation date and time"
-		createdAt: Date!
+		createdAt: DateTime!
 		"last update date and time"
-		updatedAt: Date!
+		updatedAt: DateTime!
 	}
 
 	"""
@@ -185,9 +185,9 @@ const typedef = gql`
 		"users who liked the post"
 		likedBy(page: ForwardPaginationInput): UserConnection!
 		"post' creation time"
-		createdAt: Date!
+		createdAt: DateTime!
 		"post' last update time"
-		updatedAt: Date!
+		updatedAt: DateTime!
 	}
 
 	"Implements Connection pattern defining an post edge's endpoint"
@@ -241,9 +241,9 @@ const typedef = gql`
 		"""
 		participants(page: ForwardPaginationInput): UserConnection!
 		"creation time"
-		createdAt: Date!
+		createdAt: DateTime!
 		"last update time"
-		updatedAt: Date!
+		updatedAt: DateTime!
 	}
 
 	"""
