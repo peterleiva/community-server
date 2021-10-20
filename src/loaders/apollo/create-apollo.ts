@@ -9,6 +9,8 @@ import { log as logger } from "lib";
 import { LoggingPlugin } from "./plugins";
 import { schema } from "./schema";
 import { mocks as scalarMocks } from "graphql-scalars";
+import { addMocksToSchema } from "@graphql-tools/mock";
+import { mocks, resolvers } from "./mocks";
 
 const landingPagePlugin = function () {
 	if (config.env("development")) {
@@ -24,10 +26,17 @@ export default async function createApollo(
 	options: GetMiddlewareOptions = {}
 ): Promise<Router> {
 	const server = new ApolloServer({
-		schema,
-		mocks: !config.env("production", "staging") && {
-			...scalarMocks,
-		},
+		schema: config.env("production", "staging")
+			? schema
+			: addMocksToSchema({
+					schema,
+					preserveResolvers: true,
+					mocks: {
+						...scalarMocks,
+						...mocks,
+					},
+					resolvers,
+			  }),
 		logger,
 		plugins,
 	});
