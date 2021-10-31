@@ -32,3 +32,9 @@ export type BackwardPagination = {
 	last: number;
 	before: Cursor;
 };
+
+export type PageArgs<
+	T extends ForwardPagination | BackwardPagination = ForwardPagination
+> = {
+	page: T;
+};
