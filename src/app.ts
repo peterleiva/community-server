@@ -14,13 +14,23 @@ export default async function createApp(): Promise<Application> {
 	app.use(helmet());
 	app.set("env", config.env("prod", "staging") ? "production" : "development");
 	app.use(compression());
-	app.use(cors());
+	app.use(
+		cors({
+			origin: [
+				/https?:\/\/localhost:(3000|4000)$/,
+				"https://studio.apollographql.com",
+			],
+			methods: ["GET", "POST"],
+			maxAge: 600,
+		})
+	);
 
 	// setup GraphQL
 	const graphql = await createGraphQL({
 		path: "/api",
 		disableHealthCheck: config.env("production"),
 	});
+
 	app.use(graphql);
 
 	app.get("/", (req: Request, res: Response) => {
