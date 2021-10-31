@@ -1,7 +1,7 @@
 import { EventEmitter } from "stream";
 
 export default abstract class ServiceControl<
-	TOptions = undefined
+	TOptions = unknown
 > extends EventEmitter {
 	abstract running: boolean;
 

@@ -92,7 +92,7 @@ const typedef = gql`
 	"""
 	input BackwardPaginationInput {
 		"at most last edges"
-		last: NonNegativeInt!
+		last: NonNegativeInt
 		"number of the page or last edges before this cursor"
 		before: Cursor
 	}
