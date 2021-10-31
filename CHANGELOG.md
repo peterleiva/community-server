@@ -1,30 +1,35 @@
 # Changelog
 
-All notable changes to this project will be documented in this file.
+All **notable changes** to this project will be documented in this file.
 
-The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
-and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
+The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/), and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
 
 ### Added
 
-- Configuration module
-- HTTP express server factory with reconnect feature
-- Application bootstrap
-- HTTP body compression
-- Cors
-- Build script
+#### CI
+
 - Github action for Build & Test
+- Build and Push github action
+
+#### Server
+
+- HTTP express server factory with reconnect feature
+- HTTP body compression
+- Cors with origins `https?://localhost:3000|4000` and `https://studio.apollographql.com` with methods: `GET` and `POST`: 0f69c483c792b297bb1b2c2cc2c73b5ccf44c737
+- Build script
+
+#### Deployment
+
 - Docker integration
-  - Add Dockerfile
-  - Use docker-compose to start the application in several environments
-  - Add scripts to help start those actions
-  - Build and Push github action
+- Add Dockerfile
+- Use docker-compose to start the application in several environments
+- Add scripts to help start those actions
 
 ### Changed
 
-- Project structure include 3 tsconfig sub-project [e2e](/e2e), [test](/test) and [src](/src/)
+- Project structure include 3 `tsconfig.json` sub-project [e2e](e2e/tsconfig.json), [test](test/tsconfig.json) and [src](src/tsconfig.json)
 
 ## [0.2.0] - 2021-06-24
 
