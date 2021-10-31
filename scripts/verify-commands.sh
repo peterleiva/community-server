@@ -1,4 +1,11 @@
 #!/usr/bin/env sh
+##
+# Auxilar script to check when CLI is installed
+#
+# Check arguments if each on of them is executable and return error (1) when
+# they don't exists
+#
+##
 
 failed=FALSE
 
