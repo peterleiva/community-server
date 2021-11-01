@@ -18,11 +18,6 @@ export type Edge<T> = {
 	node: T;
 };
 
-export type Timestamps = {
-	createdAt: Date;
-	updatedAt: Date;
-};
-
 export type ForwardPagination = {
 	first: number;
 	after: Cursor;
