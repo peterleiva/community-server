@@ -1,18 +1,19 @@
 {
-	"name": "create-graphql-server",
+	"name": "community-server",
 	"version": "0.2.0",
-	"description": "CLI for creating GraphQL Server with Node.js",
+	"description": "Community is a forum application, also known as community, which connects people around a discussion topic to help each other, this is the server module, which bootstrap the GraphQL API",
+	"private": true,
 	"main": "dist/main.js",
 	"repository": {
 		"type": "git",
-		"url": "git+https://github.com/pherval/create-graphql-server.git"
+		"url": "git+https://github.com/pherval/community-server.git"
 	},
 	"keywords": [
-		"boilerplate",
-		"graphql",
-		"apollo-server",
-		"express.js",
-		"CLI",
+		"community",
+		"forum",
+		"GraphQL",
+		"web-server",
+		"api",
 		"typescript"
 	],
 	"author": "Peter <npmjs@peter.dev.br>",
@@ -38,9 +39,9 @@
 		"clean": "rimraf dist tmp"
 	},
 	"bugs": {
-		"url": "https://github.com/pherval/graphql-server-boilerplate/issues"
+		"url": "https://github.com/pherval/community-server/issues"
 	},
-	"homepage": "https://github.com/pherval/graphql-server-boilerplate#readme",
+	"homepage": "https://github.com/pherval/community-server#readme",
 	"devDependencies": {
 		"@babel/core": "^7.14.8",
 		"@babel/preset-env": "^7.14.9",
