@@ -1,5 +1,3 @@
-import bootstrap from "./bootstrap";
+import { builder, buildDatabase, buildServer } from "./builder";
 
-bootstrap({
-	services: { database: true },
-});
+builder(buildDatabase(), buildServer());

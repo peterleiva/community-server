@@ -1,6 +1,7 @@
-import bootstrap from "bootstrap";
+import { buildServer } from "builder";
 import { ServerControl } from "services";
 
 export async function createServer(): Promise<ServerControl> {
-	return bootstrap({ services: { database: false } });
+	const server = buildServer();
+	return server;
 }
