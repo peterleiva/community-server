@@ -6,7 +6,7 @@ export interface Thread extends Timestamps {
 	op: Types.ObjectId;
 }
 
-const ThreadSchema = new Schema<Thread>(
+const threadSchema = new Schema<Thread>(
 	{
 		title: {
 			type: String,
@@ -28,4 +28,4 @@ const ThreadSchema = new Schema<Thread>(
 	{ timestamps: true }
 );
 
-export const ThreadModel = model("Thread", ThreadSchema);
+export const ThreadModel = model("Thread", threadSchema);
