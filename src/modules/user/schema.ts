@@ -1,15 +1,10 @@
-import { Schema, model } from "mongoose";
-import type { Timestamps } from "./types";
+import { Schema } from "mongoose";
+import type { Timestamps } from "modules/types";
 
 interface Naming {
 	first?: string;
 	last?: string;
 	nick: string;
-}
-
-export interface User extends Timestamps {
-	name: Naming;
-	avatar?: Buffer;
 }
 
 const namingSchema = new Schema<Naming>({
@@ -36,15 +31,41 @@ const namingSchema = new Schema<Naming>({
 	},
 });
 
-const schema = new Schema<User>(
+interface Avatar {
+	digest: string;
+	binImage: Buffer;
+}
+
+const avatarSchema = new Schema({
+	digest: {
+		type: String,
+		required: true,
+		unique: true,
+	},
+
+	binImage: {
+		type: Buffer,
+		required: true,
+	},
+});
+
+export interface User extends Timestamps {
+	name: Naming;
+	avatar: Avatar;
+}
+
+export const schema = new Schema<User>(
 	{
 		name: {
 			type: namingSchema,
 			required: true,
 		},
-		avatar: Buffer,
+
+		avatar: {
+			type: avatarSchema,
+			required: true,
+		},
 	},
+
 	{ timestamps: true }
 );
-
-export const UserModel = model<User>("User", schema);
