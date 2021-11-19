@@ -10,7 +10,8 @@ import { LoggingPlugin } from "./plugins";
 import { schema } from "./schema";
 import { mocks as scalarMocks } from "graphql-scalars";
 import { addMocksToSchema } from "@graphql-tools/mock";
-import { mocks, resolvers } from "./mocks";
+import { mocks } from "./mocks";
+import { resolvers } from "modules/resolvers";
 
 const landingPagePlugin = function () {
 	if (config.env("development")) {
@@ -35,8 +36,8 @@ export default async function createApollo(
 						...scalarMocks,
 						...mocks,
 					},
-					resolvers,
 			  }),
+		resolvers,
 		logger,
 		plugins,
 	});
