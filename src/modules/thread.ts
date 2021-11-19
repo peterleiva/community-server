@@ -1,7 +1,11 @@
 import { model, Schema, Types } from "mongoose";
 import { Timestamps } from "./types";
 
+/**
+ * Represents an post starter
+ */
 export interface Thread extends Timestamps {
+	id: string;
 	title: string;
 	op: Types.ObjectId;
 }
