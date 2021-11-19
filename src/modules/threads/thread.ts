@@ -1,5 +1,5 @@
 import { model, Schema, Types } from "mongoose";
-import { Timestamps } from "./types";
+import type { Timestamps } from "../types";
 
 /**
  * Represents an post starter
