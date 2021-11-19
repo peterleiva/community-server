@@ -33,7 +33,7 @@ export default class DatabaseControl extends ServiceControl<Options> {
 		});
 
 		mongoose.connection.on("disconnected", () => {
-			log.warn(`🆘 Database lost connection`);
+			log.info(`🆘 Database lost connection`);
 		});
 	}
 
