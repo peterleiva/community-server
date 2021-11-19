@@ -1,7 +1,7 @@
 import { Schema } from "mongoose";
 import type { Timestamps } from "modules/types";
 
-interface Naming {
+export interface Naming {
 	first?: string;
 	last?: string;
 	nick: string;
@@ -27,11 +27,10 @@ const namingSchema = new Schema<Naming>({
 		trim: true,
 		minLength: 2,
 		maxLength: 25,
-		lowercase: true,
 	},
 });
 
-interface Avatar {
+export interface Avatar {
 	digest: string;
 	binImage: Buffer;
 }
