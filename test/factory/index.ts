@@ -1,2 +1,3 @@
-export { default as buildUser } from "./build-user";
-export { default as buildAvatar } from "./build-avatar";
+export { default as UserFactory } from "./user";
+export { default as AvatarFactory } from "./avatar";
+export { default as PostFactory } from "./post";
