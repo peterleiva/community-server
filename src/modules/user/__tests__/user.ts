@@ -1,26 +1,23 @@
-import UserModel from "../user";
-import { buildUser } from "factory";
+import { UserFactory } from "factory";
 import { databaseSetup } from "utils";
 import { Error } from "mongoose";
+import UserModel from "../user";
 
 databaseSetup();
 
 describe("User", () => {
-	it("creates user", async () => {
-		const user = buildUser();
-		const doc = new UserModel(user);
-
-		await expect(doc.save()).resolves.toMatchObject(user);
-	});
+	it("creates user", async () =>
+		await expect(UserFactory.create()).toResolve());
 
 	describe("Validations", () => {
 		it("invalid when nickname has different cases", async () => {
 			const nickname = "Some_Nickname";
 
-			const user1 = buildUser({ name: { nick: nickname } });
-			const user2 = buildUser({ name: { nick: nickname.toUpperCase() } });
+			await UserFactory.create({ name: { nick: nickname } });
 
-			await UserModel.create(user1);
+			const user2 = UserFactory.build({
+				name: { nick: nickname.toUpperCase() },
+			});
 
 			await expect(UserModel.validate(user2)).rejects.toBeInstanceOf(
 				Error.ValidationError

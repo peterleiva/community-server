@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import { Schema, Types } from "mongoose";
 import type { Timestamps } from "modules/types";
 
 export interface Naming {
@@ -49,6 +49,7 @@ const avatarSchema = new Schema({
 });
 
 export interface User extends Timestamps {
+	_id: Types.ObjectId;
 	name: Naming;
 	avatar: Avatar;
 }
