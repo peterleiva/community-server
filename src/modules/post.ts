@@ -1,4 +1,5 @@
 import { model, Schema, Types } from "mongoose";
+import mongooseAutoPopulate from "mongoose-autopopulate";
 import type { Timestamps } from "./types";
 
 export interface Post extends Timestamps {
@@ -22,9 +23,10 @@ const postSchema = new Schema<Post>(
 			ref: "User",
 			required: true,
 			immutable: true,
+			autopopulate: true,
 		},
 
-		likedBy: [{ type: "ObjectId", ref: "User" }],
+		likedBy: [{ type: "ObjectId", ref: "User", unique: true }],
 		children: [{ type: "ObjectId", ref: "Post" }],
 	},
 	{ timestamps: true }
@@ -33,5 +35,7 @@ const postSchema = new Schema<Post>(
 postSchema.virtual("likes", function (this: Post) {
 	return this.likedBy.length;
 });
+
+postSchema.plugin(mongooseAutoPopulate);
 
 export const PostModel = model<Post>("Post", postSchema);
