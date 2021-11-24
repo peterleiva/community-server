@@ -1,4 +1,4 @@
-import { model, Schema, Types } from "mongoose";
+import { model, Schema, Types, HydratedDocument } from "mongoose";
 import mongooseAutoPopulate from "mongoose-autopopulate";
 import type { Timestamps } from "./types";
 
@@ -26,7 +26,7 @@ const postSchema = new Schema<Post>(
 			autopopulate: true,
 		},
 
-		likedBy: [{ type: "ObjectId", ref: "User", unique: true }],
+		likedBy: [{ type: "ObjectId", ref: "User" }],
 		children: [{ type: "ObjectId", ref: "Post" }],
 	},
 	{ timestamps: true }
@@ -37,5 +37,7 @@ postSchema.virtual("likes", function (this: Post) {
 });
 
 postSchema.plugin(mongooseAutoPopulate);
+
+export type PostDocument = HydratedDocument<Post>;
 
 export const PostModel = model<Post>("Post", postSchema);

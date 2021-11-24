@@ -1,4 +1,4 @@
-import { Schema, Types } from "mongoose";
+import { HydratedDocument, Schema, Types } from "mongoose";
 import type { Timestamps } from "modules/types";
 
 export interface Naming {
@@ -69,3 +69,5 @@ export const schema = new Schema<User>(
 
 	{ timestamps: true }
 );
+
+export type UserDocument = HydratedDocument<User>;

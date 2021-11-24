@@ -1,11 +1,11 @@
-import { Post, PostModel } from "modules/post";
+import { Post, PostModel, PostDocument } from "modules/post";
 import casual from "casual";
 import { Factory } from "fishery";
 import UserFactory from "./user";
 
 type PostData = Partial<Post>;
 
-export default Factory.define<PostData, never, Post>(
+export default Factory.define<PostData, never, PostDocument>(
 	({ onCreate, associations }) => {
 		onCreate(async post => {
 			const postDoc = new PostModel(post);

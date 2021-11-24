@@ -1,2 +1,2 @@
 export { default as UserModel } from "./user";
-export { User } from "./schema";
+export { User, UserDocument } from "./schema";

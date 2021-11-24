@@ -1,12 +1,11 @@
 import casual from "casual";
-import { User } from "modules/user/schema";
 import { Factory } from "fishery";
 import AvatarFactory from "./avatar";
-import { UserModel } from "modules/user";
+import { UserModel, UserDocument, User } from "modules/user";
 
 type UserData = Partial<User>;
 
-export default Factory.define<UserData, never, User>(({ onCreate }) => {
+export default Factory.define<UserData, never, UserDocument>(({ onCreate }) => {
 	onCreate(async user => {
 		const userDoc = new UserModel(user);
 		await userDoc.save();
