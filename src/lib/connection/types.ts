@@ -2,7 +2,7 @@ export type Avatar = string;
 export type Cursor = string;
 
 export type Connection<T> = {
-	edges: Edge<T>[];
+	edges: EdgeConnection<T>;
 	pageInfo: PageInfo;
 };
 
@@ -13,14 +13,11 @@ export type PageInfo = {
 	hasPreviousPage: boolean;
 };
 
+export type EdgeConnection<T> = Edge<T>[];
+
 export type Edge<T> = {
 	cursor: Cursor;
 	node: T;
-};
-
-export type Timestamps = {
-	createdAt: Date;
-	updatedAt: Date;
 };
 
 export type ForwardPagination = {
@@ -36,5 +33,5 @@ export type BackwardPagination = {
 export type PageArgs<
 	T extends ForwardPagination | BackwardPagination = ForwardPagination
 > = {
-	page: T;
+	page?: T;
 };
