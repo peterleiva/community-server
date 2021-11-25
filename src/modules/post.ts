@@ -1,6 +1,7 @@
 import { model, Schema, Types, HydratedDocument } from "mongoose";
 import mongooseAutoPopulate from "mongoose-autopopulate";
 import type { Timestamps } from "./types";
+import { validate as validateUniquess } from "./array-uniqueness-validator";
 
 export interface Post extends Timestamps {
 	message?: string;
@@ -26,13 +27,16 @@ const postSchema = new Schema<Post>(
 			autopopulate: true,
 		},
 
-		likedBy: [{ type: "ObjectId", ref: "User" }],
+		likedBy: {
+			type: [{ type: "ObjectId", ref: "User" }],
+			validate: validateUniquess,
+		},
 		children: [{ type: "ObjectId", ref: "Post" }],
 	},
 	{ timestamps: true }
 );
 
-postSchema.virtual("likes", function (this: Post) {
+postSchema.virtual("likes").get(function (this: Post) {
 	return this.likedBy.length;
 });
 
