@@ -1,4 +1,3 @@
-// import { Error } from "mongoose";
 import { PostFactory, UserFactory } from "factory";
 import { databaseSetup } from "utils";
 import type { PostDocument } from "../post";
@@ -62,6 +61,11 @@ describe("Post", () => {
 			expect(post.likes).toBe(0);
 		});
 
-		it.todo("gives the number of users who liked");
+		it("gives the number of users who liked", async () => {
+			const likes = 10;
+			const post = await PostFactory.withLikes(likes);
+
+			expect(post.likes).toBe(likes);
+		});
 	});
 });
