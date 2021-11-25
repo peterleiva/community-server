@@ -1,4 +1,4 @@
-import { validator } from "../array-uniqueness-validator";
+import { validator } from "../array-uniqueness";
 
 describe("Array Uniqueness validator", () => {
 	const valids: [string, unknown[]][] = [
