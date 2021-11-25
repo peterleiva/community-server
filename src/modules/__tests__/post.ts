@@ -51,9 +51,6 @@ describe("Post", () => {
 		await expect(post2.save()).not.toReject();
 	});
 
-	it.todo("message can have at most 10.000 characters");
-	it.todo("message can have at least 10 characters");
-
 	it.todo("children can't have cyclic dependency");
 
 	describe("#likes", () => {
