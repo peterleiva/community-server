@@ -1,14 +1,15 @@
-import { model, Schema, Types } from "mongoose";
+import { HydratedDocument, model, Schema, Types } from "mongoose";
 import type { Timestamps } from "../types";
 
 /**
  * Represents an post starter
  */
 export interface Thread extends Timestamps {
-	id: string;
 	title: string;
 	op: Types.ObjectId;
 }
+
+export type ThreadDocument = HydratedDocument<Thread>;
 
 const threadSchema = new Schema<Thread>(
 	{
@@ -16,6 +17,7 @@ const threadSchema = new Schema<Thread>(
 			type: String,
 			required: true,
 			unique: true,
+			lowercase: true,
 			trim: true,
 			minLength: 2,
 			maxLength: 150,
@@ -31,5 +33,7 @@ const threadSchema = new Schema<Thread>(
 	},
 	{ timestamps: true }
 );
+
+threadSchema.index({ createdAt: -1 });
 
 export const ThreadModel = model("Thread", threadSchema);
