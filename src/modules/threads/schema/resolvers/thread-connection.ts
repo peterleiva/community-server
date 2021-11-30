@@ -38,12 +38,7 @@ const pageInfo: IFieldResolver<
 	};
 };
 
-const total: IFieldResolver<
-	never,
-	never,
-	never,
-	Promise<number>
-> = (): Promise<number> => {
+const total: IFieldResolver<never, never, never, Promise<number>> = () => {
 	return ThreadModel.estimatedDocumentCount().exec();
 };
 

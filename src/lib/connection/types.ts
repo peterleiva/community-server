@@ -1,5 +1,5 @@
 export type Avatar = string;
-export type Cursor = string;
+export type Cursor = Date;
 
 export type Connection<T> = {
 	edges: EdgeConnection<T>;

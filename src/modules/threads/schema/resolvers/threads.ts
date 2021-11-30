@@ -1,20 +1,20 @@
-import type { PageArgs } from "lib/connection/types";
 import type { IFieldResolver } from "@graphql-tools/utils";
-import { ThreadModel, Thread } from "../../thread";
-import Paginator from "../../../paginator";
+import type { PageArgs } from "lib/connection/types";
+import { ThreadModel, ThreadDocument } from "../../thread";
+import Paginator from "modules/paginator";
 
 const threads: IFieldResolver<
-	never,
-	never,
+	null,
+	null,
 	PageArgs,
-	Promise<Thread[]>
-> = async (_, args): Promise<Thread[]> => {
+	Promise<ThreadDocument[]>
+> = async (_, args) => {
 	const page = new Paginator(args);
 
 	const query = ThreadModel.find({
 		createdAt: { $lt: page.after },
 	})
-		.sort({ createdAt: 1 })
+		.sort({ createdAt: -1 })
 		.limit(page.limit);
 
 	return query.exec();
