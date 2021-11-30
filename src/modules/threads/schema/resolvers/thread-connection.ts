@@ -1,11 +1,14 @@
 import type { EdgeConnection, PageInfo } from "lib/connection/types";
 import type { IFieldResolver } from "@graphql-tools/utils";
-import { Thread, ThreadModel } from "../../thread";
+import { ThreadDocument, ThreadModel } from "../../thread";
 
-const edges: IFieldResolver<Thread[], never, never, EdgeConnection<Thread>> = (
-	parent
-): EdgeConnection<Thread> => {
-	const edges: EdgeConnection<Thread> = parent.map(doc => ({
+const edges: IFieldResolver<
+	ThreadDocument[],
+	never,
+	never,
+	EdgeConnection<ThreadDocument>
+> = parent => {
+	const edges: EdgeConnection<ThreadDocument> = parent.map(doc => ({
 		cursor: doc.createdAt,
 		node: doc,
 	}));
@@ -14,7 +17,7 @@ const edges: IFieldResolver<Thread[], never, never, EdgeConnection<Thread>> = (
 };
 
 const pageInfo: IFieldResolver<
-	Thread[],
+	ThreadDocument[],
 	never,
 	never,
 	Promise<PageInfo>
