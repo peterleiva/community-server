@@ -14,9 +14,14 @@ export default Factory.define<Partial<Thread>, never, ThreadDocument>(
 			return threadDoc;
 		});
 
-		return {
+		const thread: Partial<Thread> = {
 			title: casual.title,
-			op: associations?.op,
 		};
+
+		if (associations?.op) {
+			thread.op = associations.op;
+		}
+
+		return thread;
 	}
 );

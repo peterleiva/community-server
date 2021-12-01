@@ -32,10 +32,13 @@ export default PostFactory.define(
 			return postDoc;
 		});
 
-		const post = {
-			author: associations?.author,
+		const post: PostData = {
 			message: casual.text,
 		};
+
+		if (associations?.author) {
+			post.author = associations.author;
+		}
 
 		return post;
 	}
