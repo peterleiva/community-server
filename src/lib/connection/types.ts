@@ -33,5 +33,5 @@ export type BackwardPagination = {
 export type PageArgs<
 	T extends ForwardPagination | BackwardPagination = ForwardPagination
 > = {
-	page?: T;
+	page?: Partial<T>;
 };

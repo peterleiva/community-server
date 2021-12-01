@@ -8,7 +8,7 @@ const threads: IFieldResolver<
 	null,
 	PageArgs,
 	Promise<ThreadDocument[]>
-> = async (_, args) => {
+> = async function threads(_, args) {
 	const page = new Paginator(args);
 
 	const query = ThreadModel.find({
