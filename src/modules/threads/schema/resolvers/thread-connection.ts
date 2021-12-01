@@ -2,12 +2,12 @@ import type { EdgeConnection, PageInfo } from "lib/connection/types";
 import type { IFieldResolver } from "@graphql-tools/utils";
 import { ThreadDocument, ThreadModel } from "../../thread";
 
-const edges: IFieldResolver<
+export const edges: IFieldResolver<
 	ThreadDocument[],
-	never,
-	never,
+	unknown,
+	unknown,
 	EdgeConnection<ThreadDocument>
-> = parent => {
+> = function edges(parent) {
 	const edges: EdgeConnection<ThreadDocument> = parent.map(doc => ({
 		cursor: doc.createdAt,
 		node: doc,
@@ -16,12 +16,12 @@ const edges: IFieldResolver<
 	return edges;
 };
 
-const pageInfo: IFieldResolver<
+export const pageInfo: IFieldResolver<
 	ThreadDocument[],
-	never,
-	never,
+	unknown,
+	unknown,
 	Promise<PageInfo>
-> = async (source): Promise<PageInfo> => {
+> = async function pageInfo(source) {
 	const startCursor = source[0]?.createdAt ?? new Date();
 	const endCursor = source?.[source.length - 1]?.createdAt ?? new Date();
 
@@ -41,12 +41,11 @@ const pageInfo: IFieldResolver<
 	};
 };
 
-const total: IFieldResolver<never, never, never, Promise<number>> = () => {
+export const total: IFieldResolver<
+	unknown,
+	unknown,
+	unknown,
+	Promise<number>
+> = function total() {
 	return ThreadModel.estimatedDocumentCount().exec();
-};
-
-export default {
-	edges,
-	pageInfo,
-	total,
 };
