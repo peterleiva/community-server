@@ -110,30 +110,6 @@ const typedef = gql`
 	}
 
 	"""
-	The **UserConnection** represents an endpoint of an edge. It defines
-	**totalCount** metadata to count the number of distinct users
-	"""
-	type UserConnection implements Connection {
-		"user' edges"
-		edges: [UserEdge!]!
-		"page information"
-		pageInfo: PageInfo!
-		"total number of connection using User type as a endpoint"
-		totalCount: NonNegativeInt!
-	}
-
-	"""
-	The **UserEdge** is a connection between two nodes, each user edge endpoint
-	doens't have any metadata and returns simple User node
-	"""
-	type UserEdge implements Edge {
-		"node is a plain User type"
-		node: User!
-		"user's edge cursor"
-		cursor: Cursor!
-	}
-
-	"""
 	Refers to utilizers of the system. At first people can initiate an
 	*original post (OP)*, beginning a topic or just join a conversation through
 	posting in the threads. Users in this system are used to provide customized
