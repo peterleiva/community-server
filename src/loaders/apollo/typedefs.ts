@@ -61,13 +61,13 @@ const typedef = gql`
 	"""
 	interface Edge {
 		"Opaque cursor used to navigate through pages"
-		cursor: Cursor
+		cursor: Cursor!
 		"""
 		This field must return either a Scalar, Enum, Object, Interface, Union, or
 		a Non-Null wrapper around one of those types. Notably, this field cannot
 		return a list.
 		"""
-		node: Node
+		node: Node!
 	}
 
 	"Regular node which is returned by Edge type, it must have at least ID type"
@@ -157,23 +157,24 @@ const typedef = gql`
 		"post's author"
 		author: User!
 		"posts which replies to this one"
-		replies(page: ForwardPaginationInput): PostConnection!
-		"users who liked the post"
-		likedBy(page: ForwardPaginationInput): UserConnection!
+		replies(page: ForwardPaginationInput): PostRepliesConnection!
+		"amount of users who liked the post"
+		likes: NonNegativeInt!
 		"post' creation time"
 		createdAt: DateTime!
 		"post' last update time"
 		updatedAt: DateTime!
 	}
 
-	"Implements Connection pattern defining an post edge's endpoint"
-	type PostConnection implements Connection {
+	"""
+	**PostRepliesConnection** represents self relationship between posts
+	indicading a reply. A post can be a reply of another posts
+	"""
+	type PostRepliesConnection implements Connection {
 		"post's edges"
-		edges: [PostEdge!]!
+		edges: [PostReplyEdge!]!
 		"page information"
 		pageInfo: PageInfo!
-		"number of all posts related to this posts"
-		totalCount: NonNegativeInt!
 		"""
 		number of replies, under the post, which means the number of nodes in the
 		whole reply subtree
@@ -182,10 +183,10 @@ const typedef = gql`
 	}
 
 	"""
-	**PostEdge** implements Edge' connection pattern, representing a endpoint
-	from a relationship
+	**PostReplyEdge** implements Edge's connection pattern, representing an
+	endpoint from a relationship in any direction
 	"""
-	type PostEdge implements Edge {
+	type PostReplyEdge implements Edge {
 		"node presents a simple post"
 		node: Post!
 		"post's cursor"
