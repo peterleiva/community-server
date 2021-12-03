@@ -1,23 +1,22 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
-import { Types } from "mongoose";
 import { ThreadDocument } from "../../thread";
 import { PostModel, Post } from "modules/post";
 import type { User } from "modules/user";
+import type { PageArgs } from "lib/connection/types";
+import Paginator from "modules/paginator";
 
-type ThreadNode = {
-	id: Types.ObjectId;
-	title: string;
-	post: Post;
-	participants: User[];
-	createdAt: Date;
-	updatedAt: Date;
-};
+const participants: IFieldResolver<
+	ThreadDocument,
+	unknown,
+	PageArgs,
+	Promise<User[]>
+> = async function participants(source, args) {
+	const paginate = new Paginator(args);
 
-async function participants(post: Types.ObjectId): Promise<User[]> {
 	const pipeline = [
 		{
 			$match: {
-				_id: post,
+				_id: source.op,
 			},
 		},
 		{
@@ -30,20 +29,31 @@ async function participants(post: Types.ObjectId): Promise<User[]> {
 			},
 		},
 		{
+			$unwind: {
+				path: "$replies",
+			},
+		},
+		{
+			$match: {
+				"replies.updatedAt": {
+					$lt: paginate.after,
+				},
+			},
+		},
+		{
+			$sort: { "replies.updatedAt": -1 },
+		},
+		{
+			$limit: paginate.limit,
+		},
+		{
 			$graphLookup: {
 				from: "users",
-				startWith: {
-					$concatArrays: ["$replies.author", ["$author"]],
-				},
+				startWith: "$replies.author",
 				connectFromField: "_id",
 				connectToField: "_id",
 				maxDepth: 1,
 				as: "participants",
-			},
-		},
-		{
-			$project: {
-				participants: 1,
 			},
 		},
 	];
@@ -56,26 +66,19 @@ async function participants(post: Types.ObjectId): Promise<User[]> {
 
 	// todo: keep only distinct participants
 	return participants;
-}
+};
 
-const thread: IFieldResolver<
+const post: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	unknown,
-	Promise<ThreadNode>
-> = async function thread(source) {
-	const { _id, title, op, createdAt, updatedAt } = await source.populate<{
-		op: Post;
-	}>("op");
-
-	return {
-		id: _id,
-		title,
-		post: op,
-		participants: await participants(source.op),
-		createdAt,
-		updatedAt,
-	};
+	Promise<Post>
+> = async function (source) {
+	const { op: post } = await source.populate<{ op: Post }>("op");
+	return post;
 };
 
-export default thread;
+export const Thread = {
+	post,
+	participants,
+};
