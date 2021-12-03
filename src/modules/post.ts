@@ -36,6 +36,8 @@ const postSchema = new Schema<Post>(
 	{ timestamps: true }
 );
 
+postSchema.index({ updatedAt: -1 });
+
 postSchema.virtual("likes").get(function (this: Post) {
 	return this.likedBy.length;
 });
