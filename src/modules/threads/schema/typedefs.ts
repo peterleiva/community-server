@@ -73,8 +73,8 @@ const typedefs = gql`
 		edges: [PostParticipantsEdge!]!
 		"page information"
 		pageInfo: PageInfo!
-		"total number of connection using User type as a endpoint"
-		totalCount: NonNegativeInt!
+		"total number of post's participants edges"
+		interactions: NonNegativeInt!
 	}
 
 	"""
