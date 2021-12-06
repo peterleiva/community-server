@@ -6,7 +6,7 @@ import Paginator from "modules/paginator";
 
 export type PostParticipantResult = {
 	page: Post[];
-	iteractions: Post[];
+	interactions: Post[];
 };
 
 const participants: IFieldResolver<
@@ -16,9 +16,9 @@ const participants: IFieldResolver<
 	Promise<PostParticipantResult>
 > = async function participants(source, args) {
 	const paginate = new Paginator(args);
-	const result = await PostModel.aggregate<{
+	const participantsDoc = await PostModel.aggregate<{
+		metadata: { interactions: Post[] }[];
 		page: Post[];
-		metadata: { interactions: Post[] };
 	}>()
 		.match({ _id: source.op })
 		.graphLookup({
@@ -53,15 +53,14 @@ const participants: IFieldResolver<
 		})
 		.exec();
 
-	const {
-		page,
-		metadata: { interactions },
-	} = result;
+	const result = participantsDoc.map(({ page, metadata }) => {
+		return {
+			page,
+			interactions: metadata.flatMap(m => m.interactions),
+		};
+	});
 
-	return {
-		page,
-		interactions,
-	};
+	return result[0];
 };
 
 const post: IFieldResolver<
