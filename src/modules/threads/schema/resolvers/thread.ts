@@ -9,13 +9,14 @@ export type PostParticipantResult = {
 	interactions: Post[];
 };
 
-const participants: IFieldResolver<
+export const participants: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	PageArgs,
 	Promise<PostParticipantResult>
 > = async function participants(source, args) {
 	const paginate = new Paginator(args);
+
 	const participantsDoc = await PostModel.aggregate<{
 		metadata: { interactions: Post[] }[];
 		page: Post[];
@@ -63,7 +64,7 @@ const participants: IFieldResolver<
 	return result[0];
 };
 
-const post: IFieldResolver<
+export const post: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	unknown,
