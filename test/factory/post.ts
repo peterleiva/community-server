@@ -26,7 +26,9 @@ export default PostFactory.define(
 				postDoc.likedBy = users.map(user => user._id);
 			}
 
+			postDoc.children.push(...(associations.children ?? []));
 			postDoc.author = user;
+
 			await postDoc.save();
 
 			return postDoc;
@@ -34,6 +36,7 @@ export default PostFactory.define(
 
 		const post: PostData = {
 			message: casual.text,
+			children: [],
 		};
 
 		if (associations?.author) {
