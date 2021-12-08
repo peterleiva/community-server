@@ -1,7 +1,7 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
 import type { ThreadDocument } from "../../thread";
 import type { PageArgs } from "lib/connection/types";
-import { PostModel, Post } from "modules/post";
+import { PostModel, Post, PostDocument } from "modules/post";
 import Paginator from "modules/paginator";
 
 export type PostParticipantResult = {
@@ -21,10 +21,10 @@ export const participants: IFieldResolver<
 		metadata: { interactions: Post[] }[];
 		page: Post[];
 	}>()
-		.match({ _id: source.op })
+		.match({ _id: source.op._id })
 		.graphLookup({
 			from: "posts",
-			startWith: "$_id",
+			startWith: "$children",
 			connectFromField: "children",
 			connectToField: "_id",
 			as: "replies",
@@ -40,7 +40,7 @@ export const participants: IFieldResolver<
 				{
 					$match: {
 						"replies.updatedAt": {
-							$gt: paginate.after,
+							$lt: paginate.after,
 						},
 					},
 				},
@@ -68,10 +68,10 @@ export const post: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	unknown,
-	Promise<Post>
+	Promise<PostDocument>
 > = async function (source) {
-	const { op: post } = await source.populate<{ op: Post }>("op");
-	return post;
+	const { op } = await source.populate<{ op: PostDocument }>("op");
+	return op;
 };
 
 export const Thread = {
