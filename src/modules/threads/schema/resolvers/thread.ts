@@ -1,25 +1,29 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
 import type { ThreadDocument } from "../../thread";
-import type { PageArgs } from "lib/connection/types";
-import { PostModel, Post, PostDocument } from "modules/post";
+import type { PageArgs, Connection, Edge } from "lib/connection/types";
+import type { User } from "modules/user";
+import { PostModel, type PostDocument } from "modules/post";
 import Paginator from "modules/paginator";
-
-export type PostParticipantResult = {
-	page: Post[];
-	interactions: Post[];
-};
 
 export const participants: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	PageArgs,
-	Promise<PostParticipantResult>
+	Promise<
+		Connection<User> & {
+			interactions: number[];
+		}
+	>
 > = async function participants(source, args) {
 	const paginate = new Paginator(args);
 
-	const participantsDoc = await PostModel.aggregate<{
-		metadata: { interactions: Post[] }[];
-		page: Post[];
+	const docs = await PostModel.aggregate<{
+		meta: { interactions: number }[];
+		page: {
+			edge: Edge<User>;
+			hasPrevious: boolean;
+			hasNext: boolean;
+		}[];
 	}>()
 		.match({ _id: source.op._id })
 		.graphLookup({
@@ -29,61 +33,66 @@ export const participants: IFieldResolver<
 			connectToField: "_id",
 			as: "replies",
 		})
+		.unwind("replies")
+		.match({ "replies.createdAt": { $gt: paginate.after } })
+		.group({
+			_id: "$author",
+			cursor: { $min: "$replies.createdAt" },
+		})
 		.facet({
-			pageInfo: [
+			meta: [
 				{
-					$project: {
-						// startCursor: "$replies.0.updatedAt",
-						// endCursor: {
-						// 	$getField: { input: { $last: "$replies" }, field: "updatedAt" },
-						// },
-						hasNextCursor: {
-							$not: {
-								$size: {
-									$filter: {
-										input: "$replies",
-										as: "reply",
-										cond: { $gt: ["$$reply.updatedAt", paginate.after] },
-									},
-								},
-							},
-						},
-						hasPreviousCursor: false,
-					},
+					$count: "interactions",
 				},
 			],
-			metadata: [{ $project: { interactions: "$replies" } }],
 			page: [
 				{
-					$unwind: {
-						path: "$replies",
-					},
-				},
-				{
-					$match: {
-						"replies.updatedAt": {
-							$lt: paginate.after,
-						},
-					},
-				},
-				{
-					$sort: { "replies.updatedAt": -1 },
+					$sort: { cursor: 1 },
 				},
 				{
 					$limit: paginate.limit,
+				},
+				{
+					$lookup: {
+						from: "users",
+						localField: "_id",
+						foreignField: "_id",
+						as: "author",
+					},
+				},
+				{
+					$project: {
+						edge: {
+							node: "$author",
+							cursor: "$cursor",
+						},
+						hasPrevious: { $lt: [paginate.after, "$cursor"] },
+						hasNext: { $gt: [paginate.after, "$cursor"] },
+					},
 				},
 			],
 		})
 		.exec();
 
-	const result = participantsDoc.map(({ page, metadata }) => {
+	const postsParticipants = docs.map(async ({ page, meta }) => {
+		const first = page[0];
+		const last = page[page.length - 1];
+
 		return {
-			page,
-			interactions: metadata.flatMap(m => m.interactions),
+			edges: page.map(p => p.edge),
+			interactions: meta.flatMap(meta => meta.interactions),
+			pageInfo: {
+				startCursor: first.edge.cursor,
+				endCursor: last.edge.cursor,
+				hasNextPage: last.hasNext,
+				hasPreviousPage: first.hasPrevious,
+			},
 		};
 	});
 
-	return result[0];
+	const [result] = await Promise.all(postsParticipants);
+
+	return result;
 };
 
 export const post: IFieldResolver<
