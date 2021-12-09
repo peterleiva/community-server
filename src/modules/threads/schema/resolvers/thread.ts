@@ -30,6 +30,28 @@ export const participants: IFieldResolver<
 			as: "replies",
 		})
 		.facet({
+			pageInfo: [
+				{
+					$project: {
+						// startCursor: "$replies.0.updatedAt",
+						// endCursor: {
+						// 	$getField: { input: { $last: "$replies" }, field: "updatedAt" },
+						// },
+						hasNextCursor: {
+							$not: {
+								$size: {
+									$filter: {
+										input: "$replies",
+										as: "reply",
+										cond: { $gt: ["$$reply.updatedAt", paginate.after] },
+									},
+								},
+							},
+						},
+						hasPreviousCursor: false,
+					},
+				},
+			],
 			metadata: [{ $project: { interactions: "$replies" } }],
 			page: [
 				{
