@@ -11,7 +11,7 @@ export const participants: IFieldResolver<
 	PageArgs,
 	Promise<
 		Connection<User> & {
-			interactions: number[];
+			interactions: number;
 		}
 	>
 > = async function participants(source, args) {
@@ -77,10 +77,11 @@ export const participants: IFieldResolver<
 	const postsParticipants = docs.map(async ({ page, meta }) => {
 		const first = page[0];
 		const last = page[page.length - 1];
+		const [interactions] = meta.flatMap(meta => meta.interactions);
 
 		return {
 			edges: page.map(p => p.edge),
-			interactions: meta.flatMap(meta => meta.interactions),
+			interactions,
 			pageInfo: {
 				startCursor: first.edge.cursor,
 				endCursor: last.edge.cursor,
