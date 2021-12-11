@@ -5,26 +5,28 @@ import type { User } from "modules/user";
 import { PostModel, type PostDocument } from "modules/post";
 import Paginator from "modules/paginator";
 
+type AggregationResult = {
+	meta: { interactions: number }[];
+	page: {
+		edge: Edge<User>;
+		hasPrevious: boolean;
+		hasNext: boolean;
+	}[];
+};
+
+interface ParticipantsConnection extends Connection<User> {
+	interactions: number;
+}
+
 export const participants: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	PageArgs,
-	Promise<
-		Connection<User> & {
-			interactions: number;
-		}
-	>
+	Promise<ParticipantsConnection>
 > = async function participants(source, args) {
 	const paginate = new Paginator(args);
 
-	const docs = await PostModel.aggregate<{
-		meta: { interactions: number }[];
-		page: {
-			edge: Edge<User>;
-			hasPrevious: boolean;
-			hasNext: boolean;
-		}[];
-	}>()
+	const docs = await PostModel.aggregate<AggregationResult>()
 		.match({ _id: source.op._id })
 		.graphLookup({
 			from: "posts",
@@ -34,9 +36,8 @@ export const participants: IFieldResolver<
 			as: "replies",
 		})
 		.unwind("replies")
-		.match({ "replies.createdAt": { $gt: paginate.after } })
 		.group({
-			_id: "$author",
+			_id: "$replies.author",
 			cursor: { $min: "$replies.createdAt" },
 		})
 		.facet({
@@ -63,7 +64,7 @@ export const participants: IFieldResolver<
 				{
 					$project: {
 						edge: {
-							node: "$author",
+							node: { $arrayElemAt: ["$author", 0] },
 							cursor: "$cursor",
 						},
 						hasPrevious: { $lt: [paginate.after, "$cursor"] },
@@ -77,16 +78,17 @@ export const participants: IFieldResolver<
 	const postsParticipants = docs.map(async ({ page, meta }) => {
 		const first = page[0];
 		const last = page[page.length - 1];
-		const [interactions] = meta.flatMap(meta => meta.interactions);
+		const [interactions = 0] = meta.flatMap(meta => meta.interactions);
+		const edges = page.map(({ edge }) => edge);
 
 		return {
-			edges: page.map(p => p.edge),
+			edges,
 			interactions,
 			pageInfo: {
-				startCursor: first.edge.cursor,
-				endCursor: last.edge.cursor,
-				hasNextPage: last.hasNext,
-				hasPreviousPage: first.hasPrevious,
+				startCursor: first?.edge?.cursor ?? new Date(),
+				endCursor: last?.edge?.cursor ?? new Date(),
+				hasNextPage: last?.hasNext ?? false,
+				hasPreviousPage: first?.hasPrevious ?? false,
 			},
 		};
 	});
