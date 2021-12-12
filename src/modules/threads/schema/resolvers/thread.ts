@@ -1,4 +1,5 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
+import type { Types, Aggregate } from "mongoose";
 import type { ThreadDocument } from "../../thread";
 import type { PageArgs, Connection, Edge } from "lib/connection/types";
 import type { User } from "modules/user";
@@ -18,6 +19,16 @@ interface ParticipantsConnection extends Connection<User> {
 	interactions: number;
 }
 
+function buildRepliesAggregate<R>(op: Types.ObjectId): Aggregate<Array<R>> {
+	return PostModel.aggregate<R>().match({ _id: op }).graphLookup({
+		from: "posts",
+		startWith: "$children",
+		connectFromField: "children",
+		connectToField: "_id",
+		as: "replies",
+	});
+}
+
 export const participants: IFieldResolver<
 	ThreadDocument,
 	unknown,
@@ -26,15 +37,7 @@ export const participants: IFieldResolver<
 > = async function participants(source, args) {
 	const paginate = new Paginator(args);
 
-	const docs = await PostModel.aggregate<AggregationResult>()
-		.match({ _id: source.op._id })
-		.graphLookup({
-			from: "posts",
-			startWith: "$children",
-			connectFromField: "children",
-			connectToField: "_id",
-			as: "replies",
-		})
+	const docs = await buildRepliesAggregate<AggregationResult>(source.op._id)
 		.unwind("replies")
 		.group({
 			_id: "$replies.author",
@@ -108,7 +111,46 @@ export const post: IFieldResolver<
 	return op;
 };
 
+export const lastActivity: IFieldResolver<
+	ThreadDocument,
+	unknown,
+	unknown,
+	Promise<Date>
+> = async function (source) {
+	const docs = await buildRepliesAggregate<{
+		_id: Types.ObjectId;
+		lastActivity: Date;
+	}>(source.op._id).project({
+		lastActivity: {
+			$max: {
+				$concatArrays: [["$updatedAt"], "$replies.updatedAt"],
+			},
+		},
+	});
+
+	const [{ lastActivity }] = docs;
+
+	return lastActivity;
+};
+
+export const replies: IFieldResolver<
+	ThreadDocument,
+	unknown,
+	unknown,
+	Promise<number>
+> = async function (source) {
+	const docs = await buildRepliesAggregate<{
+		replies: number;
+	}>(source.op._id).project({ replies: { $size: "$replies" } });
+
+	const [{ replies }] = docs;
+
+	return replies;
+};
+
 export const Thread = {
 	post,
 	participants,
+	lastActivity,
+	replies,
 };

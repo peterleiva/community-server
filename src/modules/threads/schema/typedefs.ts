@@ -53,6 +53,10 @@ const typedefs = gql`
 		title: String!
 		"Original post of the thread, also known as thread starter"
 		post: Post!
+		"newest reply"
+		lastActivity: DateTime!
+		"quantity of replies under original post"
+		replies: NonNegativeInt!
 		"""
 		all unique participants of the thread, which means all its op's replies
 		and its entire subtree
