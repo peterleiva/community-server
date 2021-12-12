@@ -2,9 +2,12 @@ import type { GraphQLResolveInfo } from "graphql";
 import { PostFactory, ThreadFactory } from "factory";
 import { PostDocument } from "modules/post";
 import { lastActivity } from "../thread";
+import { databaseSetup } from "utils";
+
+databaseSetup();
 
 describe("lastActivity resolver", () => {
-	test("gives op update date when no reply", async () => {
+	test("activity is op update date when no reply", async () => {
 		const op = await PostFactory.create();
 		const thread = await ThreadFactory.create(
 			{},

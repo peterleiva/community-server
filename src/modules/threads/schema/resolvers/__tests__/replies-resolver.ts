@@ -1,6 +1,9 @@
 import type { GraphQLResolveInfo } from "graphql";
 import { PostFactory, ThreadFactory } from "factory";
 import { replies } from "../thread";
+import { databaseSetup } from "utils";
+
+databaseSetup();
 
 describe("replies resolver", () => {
 	test("number of post's op subtree", async () => {
