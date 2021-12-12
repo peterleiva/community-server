@@ -21,17 +21,8 @@ describe("Thread Type resolvers", () => {
 	});
 
 	describe("participants resolver", () => {
-		test("no interactions when thread has no reply", async () => {
-			const thread = await ThreadFactory.create();
-			const result = await participants(
-				thread,
-				{},
-				null,
-				{} as GraphQLResolveInfo
-			);
-
-			expect(result.interactions).toBeEmpty();
-			expect(result.page).toBeEmpty();
+		describe("pageInfo", () => {
+			test.todo("information about the page");
 		});
 
 		test("original post direct replies", async () => {
@@ -51,7 +42,6 @@ describe("Thread Type resolvers", () => {
 			const posts = doc.op.children;
 
 			expect(result.interactions).toMatchObject(posts);
-			expect(result.page).toMatchObject(posts);
 		});
 
 		test("all deeply nested replies", async () => {
@@ -85,7 +75,6 @@ describe("Thread Type resolvers", () => {
 			const posts = [reply1._id, reply2._id, reply3._id];
 
 			expect(result.interactions).toMatchObject(posts);
-			expect(result.page).toMatchObject(posts);
 		});
 
 		test.todo("paginate participants by post's update date");

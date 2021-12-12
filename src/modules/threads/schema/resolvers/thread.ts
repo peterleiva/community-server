@@ -117,10 +117,9 @@ export const lastActivity: IFieldResolver<
 	unknown,
 	Promise<Date>
 > = async function (source) {
-	const docs = await buildRepliesAggregate<{
-		_id: Types.ObjectId;
-		lastActivity: Date;
-	}>(source.op._id).project({
+	const docs = await buildRepliesAggregate<{ lastActivity: Date }>(
+		source.op._id
+	).project({
 		lastActivity: {
 			$max: {
 				$concatArrays: [["$updatedAt"], "$replies.updatedAt"],
