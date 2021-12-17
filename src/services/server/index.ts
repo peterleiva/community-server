@@ -1,2 +1,5 @@
 export * from "./create-server";
-export type { default as ServerControl } from "./server-control";
+export {
+	default as ServerControl,
+	ServerControlOptions,
+} from "./server-control";

@@ -4,12 +4,12 @@ import ServiceControl from "services/service-control";
 import ServiceControlEvents from "./events.interface";
 import { log } from "lib";
 
-type ControlOptions = {
+export interface ServerControlOptions {
 	port: number;
-};
+}
 
 export default class ServerControl
-	extends ServiceControl<ControlOptions>
+	extends ServiceControl<ServerControlOptions>
 	implements ServiceControlEvents
 {
 	readonly #server: Server;
@@ -40,7 +40,7 @@ export default class ServerControl
 		return this.#port;
 	}
 
-	async start({ port }: ControlOptions): Promise<this> {
+	async start({ port }: ServerControlOptions): Promise<this> {
 		this.emit("starting", this.#server);
 
 		return new Promise(resolve => {

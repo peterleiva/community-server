@@ -4,19 +4,27 @@ import {
 	createHttpServer,
 	DatabaseService,
 	ServerControl,
+	ServerControlOptions,
 	ServiceControl,
 } from "services";
 
-type BootstrapOptions = {
-	services: Record<string, boolean>;
-};
+interface BootstrapReturn {
+	services: ServiceControl<unknown>[];
+	stop(): Promise<void>;
+}
 
-export async function buildServer(): Promise<ServerControl> {
+interface BootstrapOptions {
+	server?: ServerControlOptions;
+}
+
+export async function buildServer(
+	options?: ServerControlOptions
+): Promise<ServerControl> {
 	const app = await createApp();
 	const http = createHttpServer(app, config);
 	http.on("started", () => app.set("port", http.port));
 
-	return http.start({ port: config.port });
+	return http.start({ port: options?.port ?? config.port });
 }
 
 export async function buildDatabase(): Promise<DatabaseService> {
@@ -31,17 +39,19 @@ export async function builder(
 }
 
 export default async function bootstrap({
-	services: { database = true },
-}: BootstrapOptions): Promise<ServerControl> {
+	server,
+}: BootstrapOptions = {}): Promise<BootstrapReturn> {
 	const services: Promise<ServiceControl>[] = [];
 
-	const server = buildServer();
-	services.push(server);
-	if (database) {
-		services.push(buildDatabase());
-	}
+	services.push(buildServer(server));
+	services.push(buildDatabase());
 
-	builder(...services);
+	const running = await builder(...services);
 
-	return server;
+	return {
+		services: running,
+		async stop(): Promise<void> {
+			running.forEach(s => s.stop({}));
+		},
+	};
 }

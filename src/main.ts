@@ -1,3 +1,3 @@
-import { builder, buildDatabase, buildServer } from "./builder";
+import bootstrap from "./bootstrap";
 
-builder(buildDatabase(), buildServer());
+bootstrap();
