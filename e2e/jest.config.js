@@ -13,6 +13,12 @@ module.exports = Object.assign(
 			color: "blue",
 		},
 
+		testMatch: [
+			"**/__tests__/**/*.[jt]s?(x)",
+			"**/?(*.)+(spec|test).[jt]s?(x)",
+			resolve(__dirname, "**/*.ts"),
+		],
+
 		moduleDirectories: [
 			"node_modules",
 			resolve(__dirname),
