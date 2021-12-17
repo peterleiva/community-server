@@ -35,6 +35,7 @@
 		"test:watch": "npm t -- --watch",
 		"test:app": "npm t -- --config src/test/jest.config.js",
 		"test:e2e": "npm t -- --config e2e/jest.config.js",
+		"test:e2e:watch": "npm run test:e2e -- --watch",
 		"prepare": "is-ci || concurrently --raw \"husky install\" \"scripts/build.sh\"",
 		"clean": "rimraf dist tmp"
 	},
@@ -43,6 +44,7 @@
 	},
 	"homepage": "https://github.com/pherval/community-server#readme",
 	"devDependencies": {
+		"@apollo/client": "^3.5.6",
 		"@babel/core": "^7.14.8",
 		"@babel/preset-env": "^7.14.9",
 		"@shelf/jest-mongodb": "^2.0.3",
@@ -103,6 +105,7 @@
 		"chalk": "^4.1.2",
 		"compression": "^1.7.4",
 		"cors": "^2.8.5",
+		"cross-fetch": "^3.1.4",
 		"dotenv": "^10.0.0",
 		"express": "^4.17.1",
 		"graphql": "^15.5.1",
