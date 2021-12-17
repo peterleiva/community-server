@@ -23,6 +23,7 @@ module.exports = Object.assign(
 			"node_modules",
 			resolve(__dirname),
 			resolve(__dirname, "../test"),
+			resolve(__dirname, "../src"),
 		],
 	}
 );

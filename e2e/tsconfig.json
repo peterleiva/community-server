@@ -3,8 +3,8 @@
 	"compilerOptions": {
 		"baseUrl": "..",
 		"paths": {
-			"*": ["./e2e/*", "./test/*"]
+			"*": ["./e2e/*", "./test/*", "./src/*"]
 		}
 	},
-	"include": ["./**/*", "../test/**/*"]
+	"include": ["./**/*", "../test/**/*", "../src/**/*"]
 }
