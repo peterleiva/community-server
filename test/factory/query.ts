@@ -1,4 +1,5 @@
-import { gql } from "@apollo/client/core";
+import { gql, type QueryOptions } from "@apollo/client/core";
+import { Factory } from "fishery";
 
 const timestamps = `
 	createdAt
@@ -56,3 +57,10 @@ export const GET_THREADS = gql`
 		}
 	}
 `;
+
+export const QueryOptionsFactory = Factory.define<QueryOptions>(() => {
+	return {
+		query: GET_THREADS,
+		fetchPolicy: "no-cache",
+	};
+});
