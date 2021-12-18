@@ -1,3 +1,5 @@
+import { Types } from "mongoose";
+
 export type Avatar = string;
 export type Cursor = Date;
 
@@ -18,6 +20,10 @@ export type EdgeConnection<T> = Edge<T>[];
 export type Edge<T> = {
 	cursor: Cursor;
 	node: T;
+};
+
+export type Node<T> = T & {
+	id: Types.ObjectId;
 };
 
 export type ForwardPagination = {
