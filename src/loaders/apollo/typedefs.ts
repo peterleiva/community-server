@@ -2,12 +2,6 @@ import { gql } from "apollo-server-core";
 
 const typedef = gql`
 	"""
-	An __Avatar__ (also known as a profile picture or userpic) is a graphical
-	representation of a user or the user's character or persona.
-	"""
-	scalar Avatar
-
-	"""
 	The __Cursor__ is an opaque string used to navigate between pages,
 	according to [__GraphQL Cursor Connections Specification__
 	](https://relay.dev/graphql/connections.htm#sec-Cursor)
@@ -110,38 +104,6 @@ const typedef = gql`
 	}
 
 	"""
-	Refers to utilizers of the system. At first people can initiate an
-	*original post (OP)*, beginning a topic or just join a conversation through
-	posting in the threads. Users in this system are used to provide customized
-	experience in the application. They aren't tracked in any form
-	"""
-	type User implements Node & Timestamps {
-		"user identifier"
-		id: ID!
-		"user names"
-		name: Naming!
-		"user avatar, a image representing its persona"
-		avatar: Avatar
-		"creation date and time"
-		createdAt: DateTime!
-		"last update date and time"
-		updatedAt: DateTime!
-	}
-
-	"""
-	Naming is a way to calling users. Community users must have a nickname but
-	not necessary it has first or last names specified
-	"""
-	type Naming {
-		"user first name"
-		first: String
-		"user last name"
-		last: String
-		"user nickname"
-		nick: String!
-	}
-
-	"""
 	An *Post* is an user-submitted message enclosed into a block containing the
 	user's details and the date and time it was submitted. Posts are contained in
 	threads, where they appear as blocks one after another. The first post starts
@@ -175,11 +137,6 @@ const typedef = gql`
 		edges: [PostReplyEdge!]!
 		"page information"
 		pageInfo: PageInfo!
-		"""
-		number of replies, under the post, which means the number of nodes in the
-		whole reply subtree
-		"""
-		iteractions: NonNegativeInt!
 	}
 
 	"""
