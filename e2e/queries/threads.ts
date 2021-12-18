@@ -1,8 +1,9 @@
-import { GET_THREADS, ThreadFactory } from "test/factory";
+import { QueryOptionsFactory, ThreadFactory } from "test/factory";
 import { setupGraphQLServer } from "test/utils";
 import { PostDocument } from "modules/post";
 import { ThreadDocument } from "modules/threads";
-import { ThreadType, ThreadConnection } from "modules/threads/schema";
+import { ThreadType } from "modules/threads/schema";
+import { UserType } from "modules/user/graphql";
 
 async function mountResult(
 	thread: ThreadDocument
@@ -13,26 +14,37 @@ async function mountResult(
 		createdAt,
 		updatedAt,
 		op,
-	} = await thread.populate<{ op: PostDocument }>({
+	} = await thread.populate<{
+		op: PostDocument & { author: UserType };
+	}>({
 		path: "op",
+		options: { path: "author" },
 	});
 
 	const post = {
 		id: op.id,
 		message: op.message,
+		likes: op.likedBy.length,
+		author: op.author,
+		createdAt: op.createdAt,
+		updatedAt: op.updatedAt,
 	};
 
 	return {
 		id,
 		title,
+		post,
+		createdAt,
+		updatedAt,
 	};
 }
 
 describe("threads query", () => {
 	const client = setupGraphQLServer();
+	const options = QueryOptionsFactory.build();
 
 	test("empty result when no thread", async () => {
-		const { data } = await client.query({ query: GET_THREADS });
+		const { data } = await client.query(options);
 
 		expect(data).toMatchObject({
 			threads: {
@@ -55,7 +67,7 @@ describe("threads query", () => {
 			})
 		);
 
-		await expect(client.query({ query: GET_THREADS })).resolves.toMatchObject({
+		await expect(client.query(options)).resolves.toMatchObject({
 			data: {
 				threads: {
 					edges,
