@@ -3,7 +3,6 @@
 	"compilerOptions": {
 		"composite": true,
 		"noImplicitAny": true,
-		"noUnusedLocals": true,
 		"noImplicitOverride": true,
 		"rootDir": "./",
 		"outDir": "./dist/"
