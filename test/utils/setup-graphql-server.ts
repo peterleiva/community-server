@@ -22,7 +22,10 @@ function setupGraphQLServer(): ApolloClient<NormalizedCacheObject> {
 	});
 
 	beforeAll(async () => {
-		app = await bootstrap({ server: { port } });
+		app = await bootstrap({
+			server: { port },
+			database: { url: process.env.MONGO_URL },
+		});
 	});
 
 	afterAll(async () => {

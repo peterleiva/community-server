@@ -4,13 +4,13 @@ import chalk from "chalk";
 import ServiceControl from "./service-control";
 import { log } from "lib";
 
-type Options = Partial<{
+export type DatabaseOptions = Partial<{
 	url: string;
 }>;
 
 const isProd = config.env("production", "staging");
 
-export default class DatabaseControl extends ServiceControl<Options> {
+export default class DatabaseControl extends ServiceControl<DatabaseOptions> {
 	private static DEV_URI_FALLBACK = "mongodb://localhost/community";
 
 	#mongoose: Mongoose | null = null;
@@ -37,7 +37,7 @@ export default class DatabaseControl extends ServiceControl<Options> {
 		});
 	}
 
-	async start({ url }: Options = {}): Promise<this> {
+	async start({ url }: DatabaseOptions = {}): Promise<this> {
 		url ??= config.databaseUrl;
 
 		if (!(url || isProd)) url = DatabaseControl.DEV_URI_FALLBACK;

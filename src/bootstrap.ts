@@ -2,6 +2,7 @@ import config from "config";
 import createApp from "app";
 import {
 	createHttpServer,
+	DatabaseOptions,
 	DatabaseService,
 	ServerControl,
 	ServerControlOptions,
@@ -15,6 +16,7 @@ interface BootstrapReturn {
 
 interface BootstrapOptions {
 	server?: ServerControlOptions;
+	database?: DatabaseOptions;
 }
 
 export async function buildServer(
@@ -27,9 +29,11 @@ export async function buildServer(
 	return http.start({ port: options?.port ?? config.port });
 }
 
-export async function buildDatabase(): Promise<DatabaseService> {
+export async function buildDatabase(
+	options?: DatabaseOptions
+): Promise<DatabaseService> {
 	const database = new DatabaseService();
-	return database.start();
+	return database.start({ url: options?.url });
 }
 
 export async function builder(
@@ -40,11 +44,12 @@ export async function builder(
 
 export default async function bootstrap({
 	server,
+	database,
 }: BootstrapOptions = {}): Promise<BootstrapReturn> {
 	const services: Promise<ServiceControl>[] = [];
 
 	services.push(buildServer(server));
-	services.push(buildDatabase());
+	services.push(buildDatabase(database));
 
 	const running = await builder(...services);
 
