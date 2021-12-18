@@ -56,7 +56,7 @@ export default async function bootstrap({
 	return {
 		services: running,
 		async stop(): Promise<void> {
-			running.forEach(s => s.stop({}));
+			await Promise.all(running.map(s => s.stop({})));
 		},
 	};
 }
