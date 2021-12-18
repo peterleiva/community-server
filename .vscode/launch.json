@@ -10,7 +10,9 @@
 			"request": "launch",
 			"env": {
 				"NODE_ENV": "debug",
-				"LOG_LEVEL": "debug"
+				"LOG_LEVEL": "debug",
+				"APOLLO_SCHEMA_REPORTING": "false",
+				"APOLLO_KEY": ""
 			},
 			"cwd": "${workspaceFolder}",
 			"internalConsoleOptions": "neverOpen",
@@ -26,6 +28,39 @@
 					"${workspaceRoot}/node_modules/jest/bin/jest.js",
 					"--runInBand",
 					"--watch"
+				]
+			},
+			"skipFiles": ["<node_internals>/**", "dist/**", "tmp/**"],
+			"console": "integratedTerminal"
+		},
+		{
+			"name": "E2E Tests",
+			"type": "node",
+			"request": "launch",
+			"env": {
+				"NODE_ENV": "debug",
+				"LOG_LEVEL": "debug",
+				"APOLLO_SCHEMA_REPORTING": "false",
+				"APOLLO_KEY": ""
+			},
+			"cwd": "${workspaceFolder}",
+			"internalConsoleOptions": "neverOpen",
+			"runtimeArgs": [
+				"--inspect-brk",
+				"${workspaceRoot}/node_modules/.bin/jest",
+				"--runInBand",
+				"--watch",
+				"--config",
+				"e2e/jest.config.js"
+			],
+			"windows": {
+				"runtimeArgs": [
+					"--inspect-brk",
+					"${workspaceRoot}/node_modules/jest/bin/jest.js",
+					"--runInBand",
+					"--watch",
+					"--config",
+					"e2e/jest.config.js"
 				]
 			},
 			"skipFiles": ["<node_internals>/**", "dist/**", "tmp/**"],
