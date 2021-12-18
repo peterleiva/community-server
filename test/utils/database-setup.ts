@@ -4,7 +4,7 @@ export default function databaseSetup(): DatabaseService {
 	const service = new DatabaseService();
 
 	beforeAll(async () => {
-		const url = process.env.MONGO_URL;
+		const url = global.__MONGO_URI__;
 		await service.start({ url });
 	});
 

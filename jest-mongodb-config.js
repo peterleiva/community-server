@@ -5,6 +5,7 @@ module.exports = {
 		},
 		autoStart: false,
 		instance: {},
+		useSharedDBForAllJestWorkers: false,
 		mongoURLEnvName: "DATABASE_URL",
 	},
 };
