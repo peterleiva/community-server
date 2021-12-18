@@ -5,5 +5,6 @@ module.exports = {
 		},
 		autoStart: false,
 		instance: {},
+		mongoURLEnvName: "DATABASE_URL",
 	},
 };
