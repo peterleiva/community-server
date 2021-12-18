@@ -25,5 +25,5 @@ export const schema = makeExecutableSchema({
 		users.typeDefs,
 		...scalarTypeDefs,
 	],
-	resolvers: [scalarResolvers, users.resolvers, threads.resolvers],
+	resolvers: [resolvers, scalarResolvers, users.resolvers, threads.resolvers],
 });
