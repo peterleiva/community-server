@@ -1,6 +1,24 @@
 import { gql } from "apollo-server-core";
+import type { Connection, Node } from "lib/connection/types";
+import type { PostType } from "modules/resolvers";
+import type { UserType } from "modules/user/graphql";
+import type { Thread } from "../thread";
 
-const typedefs = gql`
+export interface ThreadConnection extends Connection<ThreadType> {
+	total: number;
+}
+export interface ThreadType extends Node<Omit<Thread, "op">> {
+	post: PostType;
+	lastActivity: Date;
+	replies: number;
+	participants: ParticipantsConnection;
+}
+
+export interface ParticipantsConnection extends Connection<UserType> {
+	interactions: number;
+}
+
+export const typeDefs = gql`
 	extend type Query {
 		"""
 		Get a list of all threads (also known as original posts), that's a thread
@@ -92,5 +110,3 @@ const typedefs = gql`
 		cursor: Cursor!
 	}
 `;
-
-export default typedefs;

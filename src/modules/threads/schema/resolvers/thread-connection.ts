@@ -1,6 +1,7 @@
-import type { EdgeConnection, PageInfo } from "lib/connection/types";
+import type { EdgeConnection } from "lib/connection/types";
 import type { IFieldResolver } from "@graphql-tools/utils";
-import { ThreadDocument, ThreadModel } from "../../thread";
+import type { ThreadConnection } from "../typedefs";
+import { type ThreadDocument, ThreadModel } from "../../thread";
 
 export const edges: IFieldResolver<
 	ThreadDocument[],
@@ -20,7 +21,7 @@ export const pageInfo: IFieldResolver<
 	ThreadDocument[],
 	unknown,
 	unknown,
-	Promise<PageInfo>
+	Promise<ThreadConnection["pageInfo"]>
 > = async function pageInfo(source) {
 	const startCursor = source[0]?.createdAt ?? new Date();
 	const endCursor = source?.[source.length - 1]?.createdAt ?? new Date();
@@ -45,7 +46,7 @@ export const total: IFieldResolver<
 	unknown,
 	unknown,
 	unknown,
-	Promise<number>
+	Promise<ThreadConnection["total"]>
 > = function total() {
 	return ThreadModel.estimatedDocumentCount().exec();
 };

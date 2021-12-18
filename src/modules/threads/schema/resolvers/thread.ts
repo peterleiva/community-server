@@ -1,23 +1,20 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
 import type { Types, Aggregate } from "mongoose";
-import type { ThreadDocument } from "../../thread";
-import type { PageArgs, Connection, Edge } from "lib/connection/types";
-import type { User } from "modules/user";
+import type { PageArgs, Edge } from "lib/connection/types";
+import type { ThreadDocument } from "modules/threads";
+import type { UserType } from "modules/user/graphql";
 import { PostModel, type PostDocument } from "modules/post";
 import Paginator from "modules/paginator";
+import type { ThreadType } from "../typedefs";
 
 type AggregationResult = {
 	meta: { interactions: number }[];
 	page: {
-		edge: Edge<User>;
+		edge: Edge<UserType>;
 		hasPrevious: boolean;
 		hasNext: boolean;
 	}[];
 };
-
-interface ParticipantsConnection extends Connection<User> {
-	interactions: number;
-}
 
 function buildRepliesAggregate<R>(op: Types.ObjectId): Aggregate<Array<R>> {
 	return PostModel.aggregate<R>().match({ _id: op }).graphLookup({
@@ -33,7 +30,7 @@ export const participants: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	PageArgs,
-	Promise<ParticipantsConnection>
+	Promise<ThreadType["participants"]>
 > = async function participants(source, args) {
 	const paginate = new Paginator(args);
 
@@ -106,7 +103,7 @@ export const post: IFieldResolver<
 	unknown,
 	unknown,
 	Promise<PostDocument>
-> = async function (source) {
+> = async function post(source) {
 	const { op } = await source.populate<{ op: PostDocument }>("op");
 	return op;
 };
@@ -115,29 +112,29 @@ export const lastActivity: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	unknown,
-	Promise<Date>
-> = async function (source) {
-	const docs = await buildRepliesAggregate<{ lastActivity: Date }>(
+	Promise<ThreadType["lastActivity"]>
+> = async function lastActivity(source) {
+	const docs = await buildRepliesAggregate<{ activity: Date }>(
 		source.op._id
 	).project({
-		lastActivity: {
+		activity: {
 			$max: {
 				$concatArrays: [["$updatedAt"], "$replies.updatedAt"],
 			},
 		},
 	});
 
-	const [{ lastActivity }] = docs;
+	const [{ activity }] = docs;
 
-	return lastActivity;
+	return activity;
 };
 
 export const replies: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	unknown,
-	Promise<number>
-> = async function (source) {
+	Promise<ThreadType["replies"]>
+> = async function replies(source) {
 	const docs = await buildRepliesAggregate<{
 		replies: number;
 	}>(source.op._id).project({ replies: { $size: "$replies" } });
@@ -145,11 +142,4 @@ export const replies: IFieldResolver<
 	const [{ replies }] = docs;
 
 	return replies;
-};
-
-export const Thread = {
-	post,
-	participants,
-	lastActivity,
-	replies,
 };

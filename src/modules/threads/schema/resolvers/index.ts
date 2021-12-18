@@ -1,6 +1,19 @@
 import threads from "./threads";
-import * as ThreadConnection from "./thread-connection";
-import { Thread } from "./thread";
+import { edges, pageInfo, total } from "./thread-connection";
+import { participants, post, lastActivity, replies } from "./thread";
+
+const ThreadConnection = {
+	edges,
+	pageInfo,
+	total,
+};
+
+const Thread = {
+	post,
+	lastActivity,
+	replies,
+	participants,
+};
 
 export const resolvers = {
 	Query: {

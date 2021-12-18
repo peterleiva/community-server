@@ -76,7 +76,5 @@ describe("Thread Type resolvers", () => {
 
 			expect(result.interactions).toMatchObject(posts);
 		});
-
-		test.todo("paginate participants by post's update date");
 	});
 });
