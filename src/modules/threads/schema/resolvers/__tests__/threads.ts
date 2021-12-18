@@ -1,8 +1,8 @@
 import type { GraphQLResolveInfo } from "graphql";
 import type { PageArgs } from "lib/connection/types";
-import { ThreadFactory } from "factory";
+import { ThreadFactory } from "test/factory";
+import { databaseSetup } from "test/utils";
 import { NonNegativeArgument } from "lib";
-import { databaseSetup } from "utils";
 import threads from "../threads";
 
 databaseSetup();

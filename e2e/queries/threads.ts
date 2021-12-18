@@ -1,5 +1,5 @@
-import { GET_THREADS } from "factory";
-import { setupGraphQLServer } from "utils";
+import { GET_THREADS } from "test/factory";
+import { setupGraphQLServer } from "test/utils";
 
 describe("threads query", () => {
 	const client = setupGraphQLServer();

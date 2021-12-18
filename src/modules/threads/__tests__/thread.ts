@@ -1,5 +1,5 @@
-import { PostFactory, ThreadFactory } from "factory";
-import { databaseSetup } from "utils";
+import { PostFactory, ThreadFactory } from "test/factory";
+import { databaseSetup } from "test/utils";
 import { ThreadDocument } from "../thread";
 
 databaseSetup();

@@ -1,6 +1,6 @@
 import type { GraphQLResolveInfo } from "graphql";
-import { ThreadFactory, PostFactory } from "factory";
-import { databaseSetup } from "utils";
+import { ThreadFactory, PostFactory } from "test/factory";
+import { databaseSetup } from "test/utils";
 import { PostModel, PostDocument } from "modules/post";
 import { post, participants } from "../thread";
 

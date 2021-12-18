@@ -1,7 +1,7 @@
 import type { GraphQLResolveInfo } from "graphql";
-import { PostFactory, ThreadFactory } from "factory";
+import { PostFactory, ThreadFactory } from "test/factory";
+import { databaseSetup } from "test/utils";
 import { replies } from "../thread";
-import { databaseSetup } from "utils";
 
 databaseSetup();
 

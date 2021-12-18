@@ -1,6 +1,6 @@
-import { ThreadFactory } from "factory";
 import { GraphQLResolveInfo } from "graphql";
-import { databaseSetup } from "utils";
+import { ThreadFactory } from "test/factory";
+import { databaseSetup } from "test/utils";
 import { total, edges, pageInfo } from "../thread-connection";
 import { ThreadDocument } from "modules/threads";
 

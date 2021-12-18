@@ -2,9 +2,7 @@ const { resolve } = require("path");
 const { defaults: tsjPreset } = require("ts-jest/presets");
 
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-module.exports = function (
-	tsconfig = resolve(__dirname, "../src/tsconfig.test.json")
-) {
+module.exports = function (tsconfig = resolve(__dirname, "../tsconfig.json")) {
 	return {
 		transform: {
 			...tsjPreset.transform,
@@ -14,5 +12,11 @@ module.exports = function (
 				tsconfig,
 			},
 		},
+
+		moduleDirectories: [
+			"node_modules",
+			resolve(__dirname, ".."),
+			resolve(__dirname, "../src"),
+		],
 	};
 };

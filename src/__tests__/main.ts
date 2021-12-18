@@ -1,5 +1,5 @@
 import type { Connection } from "mongoose";
-import { databaseSetup } from "utils";
+import { databaseSetup } from "test/utils";
 
 const service = databaseSetup();
 

@@ -1,5 +1,5 @@
-import { UserFactory } from "factory";
-import { databaseSetup } from "utils";
+import { UserFactory } from "test/factory";
+import { databaseSetup } from "test/utils";
 
 databaseSetup();
 

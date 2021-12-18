@@ -1,5 +1,5 @@
-import { PostFactory, UserFactory } from "factory";
-import { databaseSetup } from "utils";
+import { PostFactory, UserFactory } from "test/factory";
+import { databaseSetup } from "test/utils";
 import type { PostDocument } from "../post";
 import { UserModel } from "modules/user";
 

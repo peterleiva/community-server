@@ -4,12 +4,12 @@ const { resolve } = require("path");
 module.exports = Object.assign(
 	{},
 	require("../test/jest-common"),
-	require("../test/jest-typescript")(resolve(__dirname, "./tsconfig.json")),
+	require("../test/jest-typescript")(),
 	{
 		roots: ["<rootDir>/e2e", "<rootDir>/test"],
 		name: "e2e",
 		displayName: {
-			name: "E2E Tests",
+			name: "E2E",
 			color: "blue",
 		},
 
@@ -17,13 +17,6 @@ module.exports = Object.assign(
 			"**/__tests__/**/*.[jt]s?(x)",
 			"**/?(*.)+(spec|test).[jt]s?(x)",
 			resolve(__dirname, "**/*.ts"),
-		],
-
-		moduleDirectories: [
-			"node_modules",
-			resolve(__dirname),
-			resolve(__dirname, "../test"),
-			resolve(__dirname, "../src"),
 		],
 	}
 );

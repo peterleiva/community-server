@@ -1,11 +1,7 @@
 const path = require("path");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 
-const configFile = path.resolve(
-	__dirname,
-	"../../../",
-	"src/tsconfig.app.json"
-);
+const configFile = path.resolve(__dirname, "../../../", "tsconfig.json");
 
 /**
  * webpack typescript configuration
