@@ -1,6 +1,6 @@
 import request from "supertest";
 import type { Server } from "http";
-import { createServer } from "factory/server";
+import { createServer } from "test/factory/server";
 import { ServerControl } from "services";
 
 let server: Server;

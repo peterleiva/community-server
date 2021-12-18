@@ -1,4 +1,4 @@
-import { buildServer } from "builder";
+import { buildServer } from "bootstrap";
 import { ServerControl } from "services";
 
 export async function createServer(): Promise<ServerControl> {
