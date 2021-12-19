@@ -1,7 +1,7 @@
+import type { IResolvers } from "@graphql-tools/utils";
 import casual from "casual";
 import { URL } from "url";
 import { Connection } from "lib";
-import type { IResolvers } from "@graphql-tools/utils";
 
 export const mocks: IResolvers = {
 	Cursor: (): Connection.Cursor => new Date(),

@@ -1,6 +1,4 @@
-import express, { Application } from "express";
-// import createError from "http-errors";
-import type { Request, Response } from "express";
+import express, { Application, type Request, type Response } from "express";
 import config from "config";
 import compression from "compression";
 import cors from "cors";
