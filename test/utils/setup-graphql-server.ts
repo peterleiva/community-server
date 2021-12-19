@@ -1,40 +1,36 @@
-import {
-	ApolloClient,
-	InMemoryCache,
-	HttpLink,
-	type NormalizedCacheObject,
-} from "@apollo/client/core";
-import fetch from "cross-fetch";
-import bootstrap from "bootstrap";
+import type { ApolloClient, NormalizedCacheObject } from "@apollo/client";
+import { buildServer } from "bootstrap";
+import { ServerControl } from "services";
+import databaseSetup from "./database-setup";
+import graphqlClient from "./graphql-client";
 
-function setupGraphQLServer(): ApolloClient<NormalizedCacheObject> {
-	let app: { stop(): Promise<void> };
-	const port = 4500;
+interface BeforeHook {
+	(client: ApolloClient<NormalizedCacheObject>, server: ServerControl): void;
+}
 
-	const link = new HttpLink({
-		uri: `http://localhost:${port}/api`,
-		fetch,
-	});
+interface AfterHook {
+	(server: ServerControl): void;
+}
 
-	const client = new ApolloClient({
-		cache: new InMemoryCache(),
-		link: link,
-	});
+type Hooks = {
+	before: BeforeHook;
+	after: AfterHook;
+};
+
+function setupGraphQLServer({ before, after }: Partial<Hooks> = {}): void {
+	databaseSetup();
+
+	let server: ServerControl;
 
 	beforeAll(async () => {
-		app = await bootstrap({
-			server: { port },
-			database: {
-				url: global.__MONGO_URI__,
-			},
-		});
+		server = await buildServer();
+		before?.(graphqlClient(server.port as number), server);
 	});
 
 	afterAll(async () => {
-		await app.stop();
+		await server.stop();
+		after?.(server);
 	});
-
-	return client;
 }
 
 export default setupGraphQLServer;

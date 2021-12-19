@@ -1,11 +1,18 @@
+import type { ApolloClient, NormalizedCacheObject } from "@apollo/client";
 import { QueryOptionsFactory, ThreadFactory, PostFactory } from "test/factory";
 import { setupGraphQLServer } from "test/utils";
 import { PostDocument } from "modules/post";
 import { UserDocument } from "modules/user";
 
 describe("threads query", () => {
-	const client = setupGraphQLServer();
 	const options = QueryOptionsFactory.build();
+	let client: ApolloClient<NormalizedCacheObject>;
+
+	setupGraphQLServer({
+		before: graphql => {
+			client = graphql;
+		},
+	});
 
 	test("empty result when no thread", async () => {
 		const { data } = await client.query(options);

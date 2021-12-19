@@ -2,6 +2,7 @@ import mongoose, { Connection, Mongoose } from "mongoose";
 import config from "config";
 import chalk from "chalk";
 import ServiceControl from "./service-control";
+import { log } from "lib";
 
 export type DatabaseOptions = Partial<{
 	url: string;
