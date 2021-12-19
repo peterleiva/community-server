@@ -24,39 +24,38 @@ export async function buildServer(
 ): Promise<ServerControl> {
 	const app = await createApp();
 	const http = createHttpServer(app, config);
-	http.on("started", () => app.set("port", http.port));
 
-	return http.start({ port: options?.port ?? config.port });
+	return await http.start({ port: options?.port ?? config.port });
 }
 
-export async function buildDatabase(
-	options?: DatabaseOptions
-): Promise<DatabaseService> {
+export async function buildDatabase({
+	url,
+}: DatabaseOptions = {}): Promise<DatabaseService> {
 	const database = new DatabaseService();
-	return database.start({ url: options?.url });
-}
-
-export async function builder(
-	...services: Promise<ServiceControl>[]
-): Promise<ServiceControl[]> {
-	return Promise.all(services);
+	return await database.start({ url });
 }
 
 export default async function bootstrap({
 	server,
 	database,
 }: BootstrapOptions = {}): Promise<BootstrapReturn> {
-	const services: Promise<ServiceControl>[] = [];
+	const services: Promise<ServiceControl>[] = [
+		buildServer(server),
+		buildDatabase(database),
+	];
 
-	services.push(buildServer(server));
-	services.push(buildDatabase(database));
+	try {
+		const running = await Promise.all(services);
 
-	const running = await builder(...services);
+		return {
+			services: running,
 
-	return {
-		services: running,
-		async stop(): Promise<void> {
-			await Promise.all(running.map(s => s.stop({})));
-		},
-	};
+			async stop(): Promise<void> {
+				await Promise.all(running.map(s => s.stop({})));
+			},
+		};
+	} catch (error) {
+		console.log("Cannot bootstrap the application");
+		throw error;
+	}
 }
