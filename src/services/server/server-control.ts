@@ -2,7 +2,7 @@ import type { Server } from "http";
 import { AddressInfo } from "net";
 import ServiceControl from "services/service-control";
 import ServiceControlEvents from "./events.interface";
-
+import { log } from "lib";
 export interface ServerControlOptions {
 	port: number;
 }

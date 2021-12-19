@@ -23,7 +23,6 @@ export default async function createApp(): Promise<Application> {
 		})
 	);
 
-	// setup GraphQL
 	const graphql = await createGraphQL({
 		path: "/api",
 		disableHealthCheck: config.env("production"),
