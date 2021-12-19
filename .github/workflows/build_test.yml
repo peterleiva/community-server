@@ -38,6 +38,8 @@ jobs:
       - run: npm run format:check
 
   test:
+    env:
+      LOG_LEVEL: warn
     runs-on: ${{matrix.os}}
     strategy:
       fail-fast: false
