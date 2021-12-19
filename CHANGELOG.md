@@ -11,17 +11,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 #### GraphQL API
 
 - threads query
+- GraphQL design for paginable `threads` query and its connected types
+-
 
 #### CI
 
 - Github action for Build & Test
 - Build and Push github action
+- CodeQL Analysis
 
 #### Server
 
 - HTTP express server factory with reconnect feature
 - HTTP body compression
-- Cors with origins `https?://localhost:3000|4000` and `https://studio.apollographql.com` with methods: `GET` and `POST`: 0f69c483c792b297bb1b2c2cc2c73b5ccf44c737
+- Cors with origins `https?://localhost:3000|4000` and `https://studio.apollographql.com` with methods: `GET` and `POST`
 - Build script
 
 #### Deployment
@@ -31,9 +34,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Use docker-compose to start the application in several environments
 - Add scripts to help start those actions
 
+- Add VSCode debugger for test environment
+- Pino Logger
+
 ### Changed
 
-- Project structure include 3 `tsconfig.json` sub-project [e2e](e2e/tsconfig.json), [test](test/tsconfig.json) and [src](src/tsconfig.json)
+- Typescript project structure defines only one man `tsconfig.json` and one `tsconfib.build.json` for building purposes
 
 ## [0.2.0] - 2021-06-24
 
