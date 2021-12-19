@@ -1,7 +1,7 @@
 import type { GraphQLResolveInfo } from "graphql";
 import { ThreadFactory, PostFactory } from "test/factory";
 import { databaseSetup } from "test/utils";
-import { PostModel, PostDocument } from "modules/post";
+import { PostModel } from "modules/post";
 import { post, participants } from "../thread";
 
 databaseSetup();
@@ -38,10 +38,7 @@ describe("Thread Type resolvers", () => {
 				{} as GraphQLResolveInfo
 			);
 
-			const doc = await thread.populate<{ op: PostDocument }>("op");
-			const posts = doc.op.children;
-
-			expect(result.interactions).toMatchObject(posts);
+			expect(result.interactions).toBe(5);
 		});
 
 		test("all deeply nested replies", async () => {
@@ -65,16 +62,13 @@ describe("Thread Type resolvers", () => {
 				{ associations: { op: op._id } }
 			);
 
-			const result = await participants(
-				thread,
-				{},
-				null,
-				{} as GraphQLResolveInfo
-			);
-
 			const posts = [reply1._id, reply2._id, reply3._id];
 
-			expect(result.interactions).toMatchObject(posts);
+			await expect(
+				participants(thread, {}, null, {} as GraphQLResolveInfo)
+			).resolves.toMatchObject({
+				interactions: posts.length,
+			});
 		});
 	});
 });
