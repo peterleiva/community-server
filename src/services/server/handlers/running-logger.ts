@@ -3,7 +3,6 @@ import address from "address";
 import chalk from "chalk";
 import styleAddress from "./style-address";
 import type ServerControl from "../server-control";
-import { log } from "lib";
 
 /**
  * Inform to the user that the server is running. print the message to shell
