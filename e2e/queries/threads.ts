@@ -1,43 +1,7 @@
-import { QueryOptionsFactory, ThreadFactory } from "test/factory";
+import { QueryOptionsFactory, ThreadFactory, PostFactory } from "test/factory";
 import { setupGraphQLServer } from "test/utils";
 import { PostDocument } from "modules/post";
-import { ThreadDocument } from "modules/threads";
-import { ThreadType } from "modules/threads/schema";
-import { UserType } from "modules/user/graphql";
-
-async function mountResult(
-	thread: ThreadDocument
-): Promise<Partial<ThreadType>> {
-	const {
-		_id: id,
-		title,
-		createdAt,
-		updatedAt,
-		op,
-	} = await thread.populate<{
-		op: PostDocument & { author: UserType };
-	}>({
-		path: "op",
-		options: { path: "author" },
-	});
-
-	const post = {
-		id: op.id,
-		message: op.message,
-		likes: op.likedBy.length,
-		author: op.author,
-		createdAt: op.createdAt,
-		updatedAt: op.updatedAt,
-	};
-
-	return {
-		id,
-		title,
-		post,
-		createdAt,
-		updatedAt,
-	};
-}
+import { UserDocument } from "modules/user";
 
 describe("threads query", () => {
 	const client = setupGraphQLServer();
@@ -54,23 +18,49 @@ describe("threads query", () => {
 		});
 	});
 
-	test("gives list of threads", async () => {
-		const threads = (await ThreadFactory.createList(2)).sort(
-			(a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+	test("query threads type", async () => {
+		const replies = await PostFactory.createList(2);
+		const op = await PostFactory.create(
+			{},
+			{ associations: { children: replies.map(r => r._id) } }
 		);
 
-		const edges = await Promise.all(
-			threads.map(async thread => {
-				return {
-					node: await mountResult(thread),
-				};
-			})
-		);
+		const thread = await ThreadFactory.create({ op: op._id });
+		const doc = await thread.populate<{ op: PostDocument }>("op");
+		const participants = (
+			await Promise.all(
+				replies.map(r => r.populate<{ author: UserDocument }>("author"))
+			)
+		).map(r => r.author);
 
 		await expect(client.query(options)).resolves.toMatchObject({
 			data: {
 				threads: {
-					edges,
+					edges: [
+						{
+							node: {
+								id: doc._id,
+								title: doc.title,
+								lastActivity: op.updatedAt.toISOString(),
+								replies: replies.length,
+								post: {
+									id: op._id,
+									message: op.message,
+									author: {
+										id: op.author._id,
+									},
+								},
+
+								participants: {
+									edges: participants.map(user => ({
+										node: { id: user._id },
+									})),
+									interactions: replies.length,
+								},
+							},
+						},
+					],
+					total: 1,
 				},
 			},
 		});
