@@ -1,9 +1,4 @@
-import express, {
-	Application,
-	type Request,
-	type Response,
-	type ErrorRequestHandler,
-} from "express";
+import express, { Application, type ErrorRequestHandler } from "express";
 import config from "config";
 import compression from "compression";
 import cors from "cors";
