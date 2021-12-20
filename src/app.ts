@@ -18,6 +18,7 @@ export default async function createApp(): Promise<Application> {
 	app.use(helmet());
 	app.set("env", config.env("prod", "staging") ? "production" : "development");
 	app.use(compression());
+	app.use(express.static("public"));
 	app.use(
 		cors({
 			origin: [
@@ -35,10 +36,6 @@ export default async function createApp(): Promise<Application> {
 	});
 
 	app.use(graphql);
-
-	app.get("/", (req: Request, res: Response) => {
-		res.send("Olá, mundo");
-	});
 
 	sentryErrorHandler?.();
 
