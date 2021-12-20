@@ -31,8 +31,8 @@ export async function buildServer(
 export async function buildDatabase({
 	url,
 }: DatabaseOptions = {}): Promise<DatabaseService> {
-	const database = new DatabaseService();
-	return await database.start({ url });
+	const database = new DatabaseService({ url });
+	return await database.start();
 }
 
 export default async function bootstrap({

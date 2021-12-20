@@ -1,21 +1,15 @@
 import { DatabaseService } from "services";
 
 export default function databaseSetup(): DatabaseService {
-	const service = new DatabaseService();
+	const url = global.__MONGO_URI__;
+	const service = new DatabaseService({ url });
 
 	beforeAll(async () => {
-		const url = global.__MONGO_URI__;
-		await service.start({ url });
+		await service.start();
 	});
 
-	/**
-	 * Clean entire database between tests
-	 */
 	beforeEach(async () => {
-		const connection = service?.connection;
-		if (!connection) throw `There's no connection to cleanup database`;
-
-		await connection.dropDatabase();
+		await service.cleanup();
 	});
 
 	afterAll(async () => {
