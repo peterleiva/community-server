@@ -10,21 +10,24 @@ export type DatabaseOptions = Partial<{
 
 const isProd = config.env("production", "staging");
 
-export default class DatabaseControl extends ServiceControl<DatabaseOptions> {
+export default class DatabaseControl extends ServiceControl {
 	private static DEV_URI_FALLBACK = "mongodb://localhost/community";
 
 	#mongoose: Mongoose | null = null;
+	#url: string;
 
-	get running(): boolean {
-		return !!this.#mongoose;
-	}
-
-	get connection(): Connection | undefined {
-		return this.#mongoose?.connection;
-	}
-
-	constructor() {
+	constructor({ url }: DatabaseOptions = {}) {
 		super();
+
+		url ??= config.databaseUrl;
+
+		if (!(url || isProd)) url = DatabaseControl.DEV_URI_FALLBACK;
+
+		if (!url) {
+			throw "Database not set. Please, set environment variable DATABASE_URL";
+		}
+
+		this.#url = url;
 
 		mongoose.connection.on("connected", function (this: Connection) {
 			const { host, port, name: db } = this;
@@ -37,16 +40,16 @@ export default class DatabaseControl extends ServiceControl<DatabaseOptions> {
 		});
 	}
 
-	async start({ url }: DatabaseOptions = {}): Promise<this> {
-		url ??= config.databaseUrl;
+	get running(): boolean {
+		return !!this.#mongoose;
+	}
 
-		if (!(url || isProd)) url = DatabaseControl.DEV_URI_FALLBACK;
+	get connection(): Connection | undefined {
+		return this.#mongoose?.connection;
+	}
 
-		if (!url) {
-			throw "Database not set. Please, set environment variable DATABASE_URL";
-		}
-
-		this.#mongoose = await mongoose.connect(url, {
+	async start(): Promise<this> {
+		this.#mongoose = await mongoose.connect(this.#url, {
 			appName: "Community",
 			wtimeoutMS: isProd ? 25_000 : 0,
 			socketTimeoutMS: 30_000 * 3,
@@ -62,6 +65,20 @@ export default class DatabaseControl extends ServiceControl<DatabaseOptions> {
 	async stop(): Promise<this> {
 		await this.#mongoose?.disconnect();
 		this.#mongoose = null;
+
+		return this;
+	}
+
+	/**
+	 * Remove all collections from database
+	 */
+	async cleanup(): Promise<this> {
+		try {
+			await this.#mongoose?.connection.dropDatabase();
+		} catch (err) {
+			log.error("Cannot clean the database");
+			log.error("%o", err);
+		}
 
 		return this;
 	}
