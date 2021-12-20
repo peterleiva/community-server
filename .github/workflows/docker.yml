@@ -19,7 +19,7 @@ jobs:
         id: meta
         uses: docker/metadata-action@v3
         with:
-          images: ${{secrets.DOCKERHUB_USERNAME}}/create-graphql-server
+          images: ${{secrets.DOCKERHUB_USERNAME}}/${{secrets.DOCKERHUB_REPO}}
           tags: |
             type=ref,event=branch
             type=ref,event=pr
