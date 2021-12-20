@@ -15,6 +15,13 @@ module.exports = function () {
 			devtoolModuleFilenameTemplate: "/[absolute-resource-path]",
 		},
 
-		plugins: [new NodemonPlugin(), new ProgressPlugin()],
+		plugins: [
+			new NodemonPlugin({
+				env: {
+					LOG_LEVEL: "info",
+				},
+			}),
+			new ProgressPlugin(),
+		],
 	};
 };
