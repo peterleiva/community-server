@@ -8,6 +8,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ### Added
 
+- Add VSCode debugger for test environment
+- Pino Logger
+- Sentry error tracker
+
 #### GraphQL API
 
 - threads query
@@ -33,9 +37,6 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Add Dockerfile
 - Use docker-compose to start the application in several environments
 - Add scripts to help start those actions
-
-- Add VSCode debugger for test environment
-- Pino Logger
 
 ### Changed
 
