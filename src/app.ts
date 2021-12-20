@@ -1,12 +1,18 @@
-import express, { Application, type Request, type Response } from "express";
+import express, {
+	Application,
+	type Request,
+	type Response,
+	type ErrorRequestHandler,
+} from "express";
 import config from "config";
 import compression from "compression";
 import cors from "cors";
 import helmet from "helmet";
-import { createGraphQL, httpLogger } from "loaders";
+import { createGraphQL, httpLogger, createSentry } from "loaders";
 
 export default async function createApp(): Promise<Application> {
 	const app = express();
+	const sentryErrorHandler = createSentry(app);
 
 	app.use(httpLogger());
 	app.use(helmet());
@@ -33,6 +39,15 @@ export default async function createApp(): Promise<Application> {
 	app.get("/", (req: Request, res: Response) => {
 		res.send("Olá, mundo");
 	});
+
+	sentryErrorHandler?.();
+
+	const logErrors: ErrorRequestHandler = (err, req, res, next) => {
+		log.error(err);
+		next(err);
+	};
+
+	app.use(logErrors);
 
 	return app;
 }
