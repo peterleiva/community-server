@@ -19,7 +19,7 @@
 	"author": "Peter <npmjs@peter.dev.br>",
 	"license": "MIT",
 	"engines": {
-		"node": ">=16"
+		"node": "16"
 	},
 	"scripts": {
 		"start": "node .",
