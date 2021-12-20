@@ -26,7 +26,7 @@
 		"build": "scripts/build.sh -e production",
 		"build:analyzer": "npm run build -- analyzer",
 		"dev": "scripts/build.sh -w -e development",
-		"console": "ts-node --project tsconfig.app.json -r tsconfig-paths/register scripts/console.ts",
+		"console": "ts-node --project tsconfig.json -r tsconfig-paths/register scripts/console.ts",
 		"lint": "eslint .",
 		"typecheck": "tsc --noEmit --project src/tsconfig.app.json",
 		"format": "npm run prettier -- --write",
