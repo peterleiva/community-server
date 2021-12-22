@@ -10,7 +10,7 @@ type ErrorHandler = () => void;
 const isProd = config.env("prod") || config.env("staging");
 
 export default function createSentry(app: Application): ErrorHandler | void {
-	const { dsn, tracing } = config.sentry;
+	const { dsn, tracing, serverName } = config.sentry;
 
 	if (!dsn) {
 		const message = "SENTRY_DNS environment variable not set";
@@ -21,6 +21,7 @@ export default function createSentry(app: Application): ErrorHandler | void {
 
 	Sentry.init({
 		dsn,
+		serverName,
 		environment: config.env(),
 		integrations: [
 			new Sentry.Integrations.Http({ tracing }),

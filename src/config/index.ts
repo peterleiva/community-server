@@ -18,6 +18,7 @@ const config = {
 	sentry: {
 		dsn: process.env.SENTRY_DSN,
 		tracing: parseBoolean(process.env.SENTRY_TRACING),
+		serverName: process.env.SENTRY_SERVER_NAME,
 	},
 };
 
