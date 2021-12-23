@@ -10,5 +10,5 @@ module.exports = {
 		resolve(__dirname),
 		resolve(__dirname, "../src"),
 	],
-	setupFilesAfterEnv: ["jest-extended"],
+	setupFilesAfterEnv: ["jest-extended/all"],
 };
