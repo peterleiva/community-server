@@ -63,7 +63,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Setup prettier and scripts for helping formating and checking the code
 - Add [CHANGELOG.md](/CHANGELOG.md) file
 
-[unreleased]: https://github.com/pherval/create-graphql-server/compare/v0.3.0...HEAD
-[0.3.0]: https://github.com/pherval/create-graphql-server/compare/v0.2.0...v0.3.0
-[0.2.0]: https://github.com/pherval/create-graphql-server/compare/v0.1.0...v0.2.0
-[0.1.0]: https://github.com/pherval/create-graphql-server/releases/tag/v0.1.0
+[unreleased]: https://github.com/pherval/community-server/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/pherval/community-server/compare/v0.2.0...v0.3.0
+[0.2.0]: https://github.com/pherval/community-server/compare/v0.1.0...v0.2.0
+[0.1.0]: https://github.com/pherval/community-server/releases/tag/v0.1.0
