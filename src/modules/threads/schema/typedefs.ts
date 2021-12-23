@@ -1,5 +1,5 @@
 import { gql } from "apollo-server-core";
-import type { Connection, Node } from "lib/connection/types";
+import type { Connection, Node } from "modules/connection";
 import type { PostType } from "modules/resolvers";
 import type { UserType } from "modules/user/graphql";
 import type { Thread } from "../thread";

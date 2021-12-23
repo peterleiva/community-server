@@ -1,5 +1,5 @@
 import type { IFieldResolver, IResolvers } from "@graphql-tools/utils";
-import type { Node } from "lib/connection/types";
+import type { Node } from "modules/connection";
 import type { PostDocument, Post as IPost } from "./post";
 import type { UserDocument } from "./user";
 import type { UserType } from "./user/graphql";

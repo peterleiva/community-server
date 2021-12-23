@@ -1,10 +1,20 @@
 import { Types } from "mongoose";
 
-export type Avatar = string;
 export type Cursor = Date;
 
+export type Node<T> = T & {
+	id: Types.ObjectId;
+};
+
+export type Edge<T> = {
+	cursor: Cursor;
+	node: T;
+};
+
+export type EdgeCollection<T> = Edge<T>[];
+
 export type Connection<T> = {
-	edges: EdgeConnection<T>;
+	edges: EdgeCollection<T>;
 	pageInfo: PageInfo;
 };
 
@@ -13,17 +23,6 @@ export type PageInfo = {
 	endCursor: Cursor;
 	hasNextPage: boolean;
 	hasPreviousPage: boolean;
-};
-
-export type EdgeConnection<T> = Edge<T>[];
-
-export type Edge<T> = {
-	cursor: Cursor;
-	node: T;
-};
-
-export type Node<T> = T & {
-	id: Types.ObjectId;
 };
 
 export type ForwardPagination = {

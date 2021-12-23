@@ -1,12 +1,12 @@
 import type { IResolvers } from "@graphql-tools/utils";
 import casual from "casual";
 import { URL } from "url";
-import { Connection } from "lib";
+import { Avatar } from "modules/types";
+import { mocks as connectionMocks } from "modules/connection";
 
 export const mocks: IResolvers = {
-	Cursor: (): Connection.Cursor => new Date(),
-	Avatar: (): Connection.Avatar =>
-		"" + new URL(casual.url + casual.title + ".jpg"),
+	...connectionMocks,
+	Avatar: (): Avatar => "" + new URL(casual.url + casual.title + ".jpg"),
 	User: () => ({
 		name: () => ({
 			first: casual.first_name,

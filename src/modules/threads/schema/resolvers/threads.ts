@@ -1,7 +1,6 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
-import type { PageArgs } from "lib/connection/types";
+import { Page, type PageArgs } from "modules/connection";
 import { ThreadModel, ThreadDocument } from "../../thread";
-import Paginator from "modules/paginator";
 
 const threads: IFieldResolver<
 	null,
@@ -9,7 +8,7 @@ const threads: IFieldResolver<
 	PageArgs,
 	Promise<ThreadDocument[]>
 > = async function threads(_, args) {
-	const page = new Paginator(args);
+	const page = new Page(args);
 
 	const query = ThreadModel.find({
 		createdAt: { $lt: page.after },

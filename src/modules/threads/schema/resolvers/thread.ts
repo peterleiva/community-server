@@ -1,11 +1,10 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
 import type { Types, Aggregate } from "mongoose";
-import type { PageArgs, Edge } from "lib/connection/types";
 import type { ThreadDocument } from "modules/threads";
 import type { UserType } from "modules/user/graphql";
-import { PostModel, type PostDocument } from "modules/post";
-import Paginator from "modules/paginator";
 import type { ThreadType } from "../typedefs";
+import { Page, type PageArgs, type Edge } from "modules/connection";
+import { PostModel, type PostDocument } from "modules/post";
 
 type AggregationResult = {
 	meta: { interactions: number }[];
@@ -32,7 +31,7 @@ export const participants: IFieldResolver<
 	PageArgs,
 	Promise<ThreadType["participants"]>
 > = async function participants(source, args) {
-	const paginate = new Paginator(args);
+	const paginate = new Page(args);
 
 	const docs = await buildRepliesAggregate<AggregationResult>(source.op._id)
 		.unwind("replies")

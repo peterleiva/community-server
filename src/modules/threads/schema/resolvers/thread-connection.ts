@@ -1,5 +1,5 @@
-import type { EdgeConnection } from "lib/connection/types";
 import type { IFieldResolver } from "@graphql-tools/utils";
+import type { EdgeCollection } from "modules/connection";
 import type { ThreadConnection } from "../typedefs";
 import { type ThreadDocument, ThreadModel } from "../../thread";
 
@@ -7,9 +7,9 @@ export const edges: IFieldResolver<
 	ThreadDocument[],
 	unknown,
 	unknown,
-	EdgeConnection<ThreadDocument>
+	EdgeCollection<ThreadDocument>
 > = function edges(parent) {
-	const edges: EdgeConnection<ThreadDocument> = parent.map(doc => ({
+	const edges: EdgeCollection<ThreadDocument> = parent.map(doc => ({
 		cursor: doc.createdAt,
 		node: doc,
 	}));

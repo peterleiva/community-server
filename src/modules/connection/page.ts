@@ -1,7 +1,7 @@
-import type { PageArgs, Cursor } from "lib/connection/types";
+import type { PageArgs, Cursor } from "./types";
 import { NonNegativeArgument } from "lib";
 
-export default class Pagination {
+export default class Page {
 	#first: number;
 	#after: Cursor;
 

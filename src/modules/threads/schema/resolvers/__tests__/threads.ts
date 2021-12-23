@@ -1,5 +1,5 @@
 import type { GraphQLResolveInfo } from "graphql";
-import type { PageArgs } from "lib/connection/types";
+import type { PageArgs } from "modules/connection";
 import { ThreadFactory } from "test/factory";
 import { databaseSetup } from "test/utils";
 import { NonNegativeArgument } from "lib";
