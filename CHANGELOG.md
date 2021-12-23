@@ -6,6 +6,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+## [0.3.0] - 2021-12-23
+
 ### Added
 
 - Add VSCode debugger for test environment
@@ -15,14 +17,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 #### GraphQL API
 
 - threads query
-- GraphQL design for paginable `threads` query and its connected types
--
+- API design for paginable `threads` query and all types under it
 
 #### CI
 
 - Github action for Build & Test
 - Build and Push github action
 - CodeQL Analysis
+- Deploy to Heroku
+- Dockerize to GitHub and Docker hub
 
 #### Server
 
@@ -60,6 +63,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 - Setup prettier and scripts for helping formating and checking the code
 - Add [CHANGELOG.md](/CHANGELOG.md) file
 
-[unreleased]: https://github.com/pherval/create-graphql-server/compare/v0.2.0...HEAD
+[unreleased]: https://github.com/pherval/create-graphql-server/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/pherval/create-graphql-server/compare/v0.2.0...v0.3.0
 [0.2.0]: https://github.com/pherval/create-graphql-server/compare/v0.1.0...v0.2.0
 [0.1.0]: https://github.com/pherval/create-graphql-server/releases/tag/v0.1.0
