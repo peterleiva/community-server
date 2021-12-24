@@ -1,2 +1,2 @@
 export * from "./thread";
-export * as schema from "./schema";
+export * as schema from "./graphql";
