@@ -3,7 +3,7 @@ import type { Types, Aggregate } from "mongoose";
 import type { ThreadDocument } from "modules/threads";
 import type { UserType } from "modules/user/graphql";
 import type { ThreadType } from "../typedefs";
-import { Page, type PageArgs, type Edge } from "modules/connection";
+import { CursorPage, type PageArgs, type Edge } from "modules/connection";
 import { PostModel, type PostDocument } from "modules/post";
 
 type AggregationResult = {
@@ -31,7 +31,7 @@ export const participants: IFieldResolver<
 	PageArgs,
 	Promise<ThreadType["participants"]>
 > = async function participants(source, args) {
-	const paginate = new Page(args);
+	const page = new CursorPage(args);
 
 	const docs = await buildRepliesAggregate<AggregationResult>(source.op._id)
 		.unwind("replies")
@@ -50,7 +50,7 @@ export const participants: IFieldResolver<
 					$sort: { cursor: 1 },
 				},
 				{
-					$limit: paginate.limit,
+					$limit: page.limit,
 				},
 				{
 					$lookup: {
@@ -66,8 +66,8 @@ export const participants: IFieldResolver<
 							node: { $arrayElemAt: ["$author", 0] },
 							cursor: "$cursor",
 						},
-						hasPrevious: { $lt: [paginate.after, "$cursor"] },
-						hasNext: { $gt: [paginate.after, "$cursor"] },
+						hasPrevious: { $lt: [page.current, "$cursor"] },
+						hasNext: { $gt: [page.current, "$cursor"] },
 					},
 				},
 			],

@@ -1,13 +1,11 @@
 import type { PageArgs, Cursor } from "./types";
-import { NonNegativeArgument } from "lib";
+import { NonNegativeArgument } from "lib/errors";
 
-export default class Page {
+export default abstract class Page {
 	#first: number;
-	#after: Cursor;
 
-	constructor({ page }: PageArgs) {
+	constructor({ page }: Omit<PageArgs, "after">) {
 		this.#first = page?.first ?? 20;
-		this.#after = page?.after ?? new Date();
 
 		if (this.#first < 0) {
 			throw new NonNegativeArgument("first", this.#first);
@@ -18,7 +16,5 @@ export default class Page {
 		return this.#first;
 	}
 
-	get after(): Cursor {
-		return this.#after;
-	}
+	abstract get current(): Cursor;
 }
