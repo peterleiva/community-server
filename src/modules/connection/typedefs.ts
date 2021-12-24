@@ -73,7 +73,7 @@ export const typeDefs = gql`
 	Enable forward pagination, slicing can be done with *first*. The *after* is a
 	opaque cursor returned by **pageInfo**'s **endCursor** node
 	"""
-	input ForwardPaginationInput {
+	input ForwardPageInput {
 		"at most first edges"
 		first: NonNegativeInt
 		"number of the page or edges after this cursor"
@@ -84,7 +84,22 @@ export const typeDefs = gql`
 	Enable backward pagination, slicing can be done with *last*. The *before* is a
 	opaque cursor returned by *pageInfo*'s *startCursor* node
 	"""
-	input BackwardPaginationInput {
+	input BackwardPageInput {
+		"at most last edges"
+		last: NonNegativeInt
+		"number of the page or last edges before this cursor"
+		before: Cursor
+	}
+	"""
+	Enable forward and backward pagination, slicing can be done with *first*
+	and *last*. Opaque cursor is defined by *after* and *before* returned by
+	**pageInfo**'s **endCursor** and *startCursor* node respectively.
+	"""
+	input PageInput {
+		"at most first edges"
+		first: NonNegativeInt
+		"number of the page or edges after this cursor"
+		after: Cursor
 		"at most last edges"
 		last: NonNegativeInt
 		"number of the page or last edges before this cursor"

@@ -29,7 +29,7 @@ const typedef = gql`
 		"post's author"
 		author: User!
 		"posts which replies to this one"
-		replies(page: ForwardPaginationInput): PostRepliesConnection!
+		replies(page: ForwardPageInput): PostRepliesConnection!
 		"amount of users who liked the post"
 		likes: NonNegativeInt!
 		"post' creation time"

@@ -25,7 +25,7 @@ export const typeDefs = gql`
 		starter which originates a conversation. That list represents all top-level
 		posts which can be paginated by the user
 		"""
-		threads(page: ForwardPaginationInput): ThreadConnection!
+		threads(page: ForwardPageInput): ThreadConnection!
 	}
 
 	"""
@@ -79,7 +79,7 @@ export const typeDefs = gql`
 		all unique participants of the thread, which means all its op's replies
 		and its entire subtree
 		"""
-		participants(page: ForwardPaginationInput): PostParticipantsConnection!
+		participants(page: ForwardPageInput): PostParticipantsConnection!
 		"creation time"
 		createdAt: DateTime!
 		"last update time"
