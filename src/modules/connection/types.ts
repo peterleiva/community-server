@@ -2,7 +2,7 @@ import { Types } from "mongoose";
 
 export type Cursor = Date;
 
-export type Node<T> = T & {
+export type Node = {
 	id: Types.ObjectId;
 };
 
@@ -24,6 +24,8 @@ export type PageInfo = {
 	hasNextPage: boolean;
 	hasPreviousPage: boolean;
 };
+
+export type EdgeConnection<T> = Edge<T>[];
 
 export type ForwardPagination = {
 	first: number;

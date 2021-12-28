@@ -7,7 +7,7 @@ import type { Thread } from "../thread";
 export interface ThreadConnection extends Connection<ThreadType> {
 	total: number;
 }
-export interface ThreadType extends Node<Omit<Thread, "op">> {
+export interface ThreadType extends Node, Omit<Thread, "op"> {
 	post: PostType;
 	lastActivity: Date;
 	replies: number;

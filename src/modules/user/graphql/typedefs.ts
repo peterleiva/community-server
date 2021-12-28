@@ -2,7 +2,7 @@ import { gql } from "apollo-server-core";
 import type { Node } from "modules/connection";
 import type { User } from "../schema";
 
-export interface UserType extends Node<Omit<User, "avatar">> {
+export interface UserType extends Omit<User, "avatar">, Node {
 	avatar: string;
 }
 
