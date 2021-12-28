@@ -16,10 +16,7 @@ export default async function createApp(): Promise<Application> {
 	app.use(express.static("public"));
 	app.use(
 		cors({
-			origin: [
-				/https?:\/\/localhost:(3000|4000)$/,
-				"https://studio.apollographql.com",
-			],
+			origin: [/https?:\/\/localhost:\d+$/, "https://studio.apollographql.com"],
 			methods: ["GET", "POST"],
 			maxAge: 600,
 		})
