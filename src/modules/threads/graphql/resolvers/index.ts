@@ -1,12 +1,5 @@
-import threads from "./threads";
-import { edges, pageInfo, total } from "./thread-connection";
+import { threads, ThreadConnection } from "./threads";
 import { participants, post, lastActivity, replies } from "./thread";
-
-const ThreadConnection = {
-	edges,
-	pageInfo,
-	total,
-};
 
 const Thread = {
 	post,
