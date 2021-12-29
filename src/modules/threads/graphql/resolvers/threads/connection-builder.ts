@@ -25,9 +25,9 @@ export default class ConnectionBuilder extends Builder<
 	async hasPreviousPage(): Promise<boolean> {
 		const startCursor = await this.startCursor();
 
-		const hasPreviousPage = !(await ThreadModel.findOne({
+		const hasPreviousPage = await ThreadModel.findOne({
 			createdAt: { $gt: startCursor },
-		}).exec());
+		}).exec();
 
 		return !!hasPreviousPage;
 	}
