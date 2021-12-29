@@ -5,7 +5,8 @@ import type { UserDocument } from "./user";
 import type { UserType } from "./user/graphql";
 
 export interface PostType
-	extends Node<Omit<IPost, "likedBy" | "author" | "likedBy" | "children">> {
+	extends Node,
+		Omit<IPost, "likedBy" | "author" | "likedBy" | "children"> {
 	author: UserType;
 	likes: number;
 }
