@@ -1,4 +1,5 @@
 import { Types } from "mongoose";
+import Page from "./page";
 
 export type Cursor = Date;
 
@@ -42,3 +43,7 @@ export type PageArgs<
 > = {
 	page?: Partial<T>;
 };
+
+export interface Paginator<TPaged> {
+	(page: Page): Promise<TPaged[]>;
+}

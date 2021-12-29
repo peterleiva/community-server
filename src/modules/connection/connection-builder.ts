@@ -5,24 +5,26 @@ import type {
 	PageInfo,
 	PageArgs,
 	Cursor,
+	Paginator,
 } from "./types";
-import Paginator from "./paginator";
 import { PaginateError } from "./errors";
 import CursorPage from "./cursor-page";
 import Page from "./page";
 
 export default abstract class ConnectionBuilder<TPaged, TNode> {
 	#paginator: Paginator<TPaged>;
-	#results: TPaged[];
+	#results?: TPaged[];
 	#page: Page;
 
 	constructor(pageArgs: PageArgs, paginator: Paginator<TPaged>) {
 		this.#paginator = paginator;
-		this.#results = [];
+		this.#results;
 		this.#page = new CursorPage(pageArgs);
 	}
 
 	async build(): Promise<Connection<TNode>> {
+		await this.results();
+
 		const [pageInfo, edges] = await Promise.all([
 			this.pageInfo(),
 			this.edges(),
@@ -42,7 +44,7 @@ export default abstract class ConnectionBuilder<TPaged, TNode> {
 	 * Page results, cached
 	 */
 	private async results(): Promise<TPaged[]> {
-		this.#results ??= await this.#paginator.paginate(this.#page);
+		this.#results ??= await this.#paginator(this.#page);
 
 		return this.#results;
 	}
@@ -75,16 +77,23 @@ export default abstract class ConnectionBuilder<TPaged, TNode> {
 
 	protected async startCursor(): Promise<Cursor> {
 		const results = await this.results();
-		const first = await this.edge(results?.[0]);
+		const firstResult = results?.[0];
 
-		return first?.cursor ?? new Date();
+		if (!firstResult) return new Date();
+
+		const first = await this.edge(firstResult);
+		return first.cursor;
 	}
 
 	protected async endCursor(): Promise<Cursor> {
 		const results = await this.results();
-		const last = await this.edge(results?.[results.length - 1]);
+		const lastResult = results?.[results.length - 1];
 
-		return last?.cursor ?? new Date();
+		if (!lastResult) return new Date();
+
+		const last = await this.edge(lastResult);
+
+		return last.cursor;
 	}
 
 	private async edges(): Promise<EdgeCollection<TNode>> {
