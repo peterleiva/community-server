@@ -1,7 +1,7 @@
 import { GraphQLResolveInfo } from "graphql";
 import { ThreadFactory } from "test/factory";
 import { databaseSetup } from "test/utils";
-import { total, edges, pageInfo } from "../thread-connection";
+import { total, threads as resolver } from "../threads";
 import { ThreadDocument } from "modules/threads";
 
 databaseSetup();
@@ -10,7 +10,7 @@ describe("thread connection resolver", () => {
 	describe("total resolver", () => {
 		test("total is 0 when no threads", async () => {
 			await expect(
-				total(null, null, null, {} as GraphQLResolveInfo)
+				total(null, {}, null, {} as GraphQLResolveInfo)
 			).resolves.toBe(0);
 		});
 
@@ -19,7 +19,7 @@ describe("thread connection resolver", () => {
 			await ThreadFactory.createList(length);
 
 			await expect(
-				total(null, null, null, {} as GraphQLResolveInfo)
+				total(null, {}, null, {} as GraphQLResolveInfo)
 			).resolves.toBe(length);
 		});
 	});
@@ -27,10 +27,15 @@ describe("thread connection resolver", () => {
 	describe("edges resolver", () => {
 		test("edges gives node and cursor for each thread", async () => {
 			const threads = await ThreadFactory.createList(4);
+			const sortedThreads = threads.sort(
+				(a, b) => b.createdAt.getTime() - a.createdAt.getTime()
+			);
 
-			expect(
-				edges(threads, null, null, {} as GraphQLResolveInfo)
-			).toStrictEqual(threads.map(t => ({ cursor: t.createdAt, node: t })));
+			await expect(
+				resolver(null, {}, null, {} as GraphQLResolveInfo)
+			).resolves.toMatchObject({
+				edges: sortedThreads.map(t => ({ cursor: t.createdAt, node: t._id })),
+			});
 		});
 	});
 
@@ -46,42 +51,57 @@ describe("thread connection resolver", () => {
 
 			test("hasPreviousPage is false when first page", async () => {
 				await expect(
-					pageInfo(threads, null, null, {} as GraphQLResolveInfo)
+					resolver(null, {}, null, {} as GraphQLResolveInfo)
 				).resolves.toMatchObject({
-					hasPreviousPage: false,
+					pageInfo: {
+						hasPreviousPage: false,
+					},
 				});
 			});
 
 			test("hasPreviousPage is true when has newest thread", async () => {
 				await expect(
-					pageInfo(threads.slice(4), null, null, {} as GraphQLResolveInfo)
+					resolver(
+						null,
+						{ page: { after: threads[2].createdAt } },
+						null,
+						{} as GraphQLResolveInfo
+					)
 				).resolves.toMatchObject({
-					hasPreviousPage: true,
+					pageInfo: {
+						hasPreviousPage: true,
+					},
 				});
 			});
 
 			test("hasNextPage is false when oldest thread", async () => {
 				await expect(
-					pageInfo(threads, null, null, {} as GraphQLResolveInfo)
+					resolver(null, {}, null, {} as GraphQLResolveInfo)
 				).resolves.toMatchObject({
-					hasNextPage: false,
+					pageInfo: {
+						hasNextPage: false,
+					},
 				});
 			});
 
 			test("hasNextPage is true when has next page", async () => {
 				await expect(
-					pageInfo(threads.slice(0, 4), null, null, {} as GraphQLResolveInfo)
+					resolver(null, { page: { first: 4 } }, null, {} as GraphQLResolveInfo)
 				).resolves.toMatchObject({
-					hasNextPage: true,
+					pageInfo: {
+						hasNextPage: true,
+					},
 				});
 			});
 
 			test("cursors is first and last thread from collection", async () => {
 				await expect(
-					pageInfo(threads, null, null, {} as GraphQLResolveInfo)
+					resolver(null, {}, null, {} as GraphQLResolveInfo)
 				).resolves.toMatchObject({
-					startCursor: threads[0].createdAt,
-					endCursor: threads[threads.length - 1].createdAt,
+					pageInfo: {
+						startCursor: threads[0].createdAt,
+						endCursor: threads[threads.length - 1].createdAt,
+					},
 				});
 			});
 		});
@@ -89,10 +109,12 @@ describe("thread connection resolver", () => {
 		describe("threads collection is empty", () => {
 			test("hasPreviousPage and hasNextPage is false", async () => {
 				await expect(
-					pageInfo([], null, null, {} as GraphQLResolveInfo)
+					resolver(null, {}, null, {} as GraphQLResolveInfo)
 				).resolves.toMatchObject({
-					hasPreviousPage: false,
-					hasNextPage: false,
+					pageInfo: {
+						hasPreviousPage: false,
+						hasNextPage: false,
+					},
 				});
 			});
 

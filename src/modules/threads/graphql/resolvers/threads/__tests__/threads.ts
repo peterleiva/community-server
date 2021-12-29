@@ -3,7 +3,7 @@ import type { PageArgs } from "modules/connection";
 import { ThreadFactory } from "test/factory";
 import { databaseSetup } from "test/utils";
 import { NonNegativeArgument } from "lib";
-import threads from "../threads";
+import { threads } from "../threads";
 
 databaseSetup();
 
@@ -19,14 +19,14 @@ describe("threads resolver", () => {
 	test("empty array when no thread is stored", async () => {
 		const result = await threads(...threadsArgs);
 
-		expect(result).toBeEmpty();
+		expect(result.edges).toBeEmpty();
 	});
 
 	test("threads are ordered by creation date", async () => {
 		const docs = await ThreadFactory.createList(5);
 		const result = await threads(...threadsArgs);
 
-		expect(result.map(r => r._id)).toEqual(
+		expect(result.edges.map(edge => edge.node._id)).toEqual(
 			docs
 				.sort((a, b) => {
 					return b.createdAt.getTime() - a.createdAt.getTime();
@@ -39,12 +39,16 @@ describe("threads resolver", () => {
 		describe("no args", () => {
 			test("first page with full 20 threads", async () => {
 				await ThreadFactory.createList(21);
-				await expect(threads(...threadsArgs)).resolves.toHaveLength(20);
+				await expect(threads(...threadsArgs)).resolves.toMatchObject({
+					edges: expect.toBeArrayOfSize(20),
+				});
 			});
 
 			test("all threads when less than 20 threads", async () => {
 				await ThreadFactory.createList(10);
-				await expect(threads(...threadsArgs)).resolves.toHaveLength(10);
+				await expect(threads(...threadsArgs)).resolves.toMatchObject({
+					edges: expect.toBeArrayOfSize(10),
+				});
 			});
 		});
 
@@ -60,7 +64,9 @@ describe("threads resolver", () => {
 					};
 
 					const result = await threads(...threadsArgs);
-					expect(result.map(t => t._id)).toStrictEqual([threadDocs[1]._id]);
+					expect(result.edges.map(edge => edge.node._id)).toMatchObject([
+						threadDocs[1]._id,
+					]);
 				});
 
 				test("skip first page", async () => {
@@ -73,7 +79,9 @@ describe("threads resolver", () => {
 					};
 
 					const result = await threads(...threadsArgs);
-					expect(result.map(t => t._id)).toStrictEqual([threadDocs[20]._id]);
+					expect(result.edges.map(edge => edge.node._id)).toStrictEqual([
+						threadDocs[20]._id,
+					]);
 				});
 
 				test("skip until last page", async () => {
@@ -85,13 +93,15 @@ describe("threads resolver", () => {
 
 					const result = await threads(...threadsArgs);
 
-					expect(result).toHaveLength(4);
+					expect(result.edges).toHaveLength(4);
 
 					args.page = {
-						after: result[result.length - 1].createdAt,
+						after: result.edges[result.edges.length - 1].node.createdAt,
 					};
 
-					await expect(threads(...threadsArgs)).resolves.toHaveLength(2);
+					await expect(threads(...threadsArgs)).resolves.toMatchObject({
+						edges: expect.toBeArrayOfSize(2),
+					});
 				});
 
 				test("empty result after last thread", async () => {
@@ -105,7 +115,9 @@ describe("threads resolver", () => {
 						after: new Date(after),
 					};
 
-					await expect(threads(...threadsArgs)).resolves.toHaveLength(0);
+					await expect(threads(...threadsArgs)).resolves.toMatchObject({
+						edges: expect.toBeEmpty(),
+					});
 				});
 
 				test("first page when after cursor is now date", async () => {
@@ -115,7 +127,9 @@ describe("threads resolver", () => {
 						after: new Date(),
 					};
 
-					await expect(threads(...threadsArgs)).resolves.toHaveLength(1);
+					await expect(threads(...threadsArgs)).resolves.toMatchObject({
+						edges: expect.toBeArrayOfSize(1),
+					});
 				});
 			});
 
@@ -131,8 +145,8 @@ describe("threads resolver", () => {
 
 					const result = await threads(...threadsArgs);
 
-					expect(result).toHaveLength(4);
-					expect(result.map(t => t._id)).toStrictEqual(
+					expect(result.edges).toHaveLength(4);
+					expect(result.edges.map(edge => edge.node._id)).toStrictEqual(
 						threadDocs.slice(0, 4).map(t => t._id)
 					);
 				});
@@ -152,7 +166,9 @@ describe("threads resolver", () => {
 						first: 0,
 					};
 
-					await expect(threads(...threadsArgs)).resolves.toBeEmpty();
+					await expect(threads(...threadsArgs)).resolves.toMatchObject({
+						edges: expect.toBeEmpty(),
+					});
 				});
 
 				test("limit page by avaliable threads", async () => {
@@ -161,7 +177,9 @@ describe("threads resolver", () => {
 					};
 
 					await ThreadFactory.create();
-					await expect(threads(...threadsArgs)).resolves.toHaveLength(1);
+					await expect(threads(...threadsArgs)).resolves.toMatchObject({
+						edges: expect.toBeArrayOfSize(1),
+					});
 				});
 
 				test("limit last page by avaliable remaining threads", async () => {
@@ -176,8 +194,10 @@ describe("threads resolver", () => {
 
 					const result = await threads(...threadsArgs);
 
-					expect(result).toHaveLength(1);
-					expect(result.map(t => t._id)).toStrictEqual([threadDocs[2]._id]);
+					expect(result.edges).toHaveLength(1);
+					expect(result.edges.map(edge => edge.node._id)).toStrictEqual([
+						threadDocs[2]._id,
+					]);
 				});
 			});
 		});
