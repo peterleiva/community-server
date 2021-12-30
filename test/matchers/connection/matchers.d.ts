@@ -20,5 +20,10 @@ declare namespace jest {
 		 * @param edges
 		 */
 		toMatchEdges(edges: Partial<EdgeConnection<unknown>>): R;
+		/**
+		 * match list of nodes
+		 * @param edges
+		 */
+		toMatchNodes(nodes: unknown[]): R;
 	}
 }
