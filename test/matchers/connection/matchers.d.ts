@@ -6,5 +6,6 @@ declare namespace jest {
 		toHaveNextPage(): R;
 		toHavePreviousPage(): R;
 		toMatchPageInfo(pageInfo: Partial<PageInfo>): R;
+		toHaveEmptyEdges(): R;
 	}
 }
