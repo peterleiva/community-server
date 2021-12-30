@@ -15,5 +15,10 @@ declare namespace jest {
 		 * @param size edges length
 		 */
 		toBeEdgesOfSize(size: number): R;
+		/**
+		 * match edges object list
+		 * @param edges
+		 */
+		toMatchEdges(edges: Partial<EdgeConnection<unknown>>): R;
 	}
 }
