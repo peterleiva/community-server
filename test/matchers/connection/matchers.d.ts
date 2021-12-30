@@ -4,6 +4,7 @@
 declare namespace jest {
 	interface Matchers<R> {
 		toHaveNextPage(): R;
+		toHavePreviousPage(): R;
 		toMatchPageInfo(pageInfo: Partial<PageInfo>): R;
 	}
 }
