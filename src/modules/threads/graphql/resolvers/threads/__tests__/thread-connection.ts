@@ -33,9 +33,9 @@ describe("thread connection resolver", () => {
 
 			await expect(
 				resolver(null, {}, null, {} as GraphQLResolveInfo)
-			).resolves.toMatchObject({
-				edges: sortedThreads.map(t => ({ cursor: t.createdAt, node: t._id })),
-			});
+			).resolves.toMatchEdges(
+				sortedThreads.map(t => ({ cursor: t.createdAt, node: t._id }))
+			);
 		});
 	});
 
@@ -52,11 +52,7 @@ describe("thread connection resolver", () => {
 			test("hasPreviousPage is false when first page", async () => {
 				await expect(
 					resolver(null, {}, null, {} as GraphQLResolveInfo)
-				).resolves.toMatchObject({
-					pageInfo: {
-						hasPreviousPage: false,
-					},
-				});
+				).resolves.not.toHavePreviousPage();
 			});
 
 			test("hasPreviousPage is true when has newest thread", async () => {
@@ -67,41 +63,27 @@ describe("thread connection resolver", () => {
 						null,
 						{} as GraphQLResolveInfo
 					)
-				).resolves.toMatchObject({
-					pageInfo: {
-						hasPreviousPage: true,
-					},
-				});
+				).resolves.toHavePreviousPage();
 			});
 
 			test("hasNextPage is false when oldest thread", async () => {
 				await expect(
 					resolver(null, {}, null, {} as GraphQLResolveInfo)
-				).resolves.toMatchObject({
-					pageInfo: {
-						hasNextPage: false,
-					},
-				});
+				).resolves.not.toHaveNextPage();
 			});
 
 			test("hasNextPage is true when has next page", async () => {
 				await expect(
 					resolver(null, { page: { first: 4 } }, null, {} as GraphQLResolveInfo)
-				).resolves.toMatchObject({
-					pageInfo: {
-						hasNextPage: true,
-					},
-				});
+				).resolves.toHaveNextPage();
 			});
 
 			test("cursors is first and last thread from collection", async () => {
 				await expect(
 					resolver(null, {}, null, {} as GraphQLResolveInfo)
-				).resolves.toMatchObject({
-					pageInfo: {
-						startCursor: threads[0].createdAt,
-						endCursor: threads[threads.length - 1].createdAt,
-					},
+				).resolves.toMatchPageInfo({
+					startCursor: threads[0].createdAt,
+					endCursor: threads[threads.length - 1].createdAt,
 				});
 			});
 		});
@@ -110,11 +92,9 @@ describe("thread connection resolver", () => {
 			test("hasPreviousPage and hasNextPage is false", async () => {
 				await expect(
 					resolver(null, {}, null, {} as GraphQLResolveInfo)
-				).resolves.toMatchObject({
-					pageInfo: {
-						hasPreviousPage: false,
-						hasNextPage: false,
-					},
+				).resolves.toMatchPageInfo({
+					hasPreviousPage: false,
+					hasNextPage: false,
 				});
 			});
 
