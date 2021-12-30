@@ -6,6 +6,14 @@ declare namespace jest {
 		toHaveNextPage(): R;
 		toHavePreviousPage(): R;
 		toMatchPageInfo(pageInfo: Partial<PageInfo>): R;
+		/**
+		 * check if edges is empty array
+		 */
 		toHaveEmptyEdges(): R;
+		/**
+		 * check the length of edges object
+		 * @param size edges length
+		 */
+		toBeEdgesOfSize(size: number): R;
 	}
 }
