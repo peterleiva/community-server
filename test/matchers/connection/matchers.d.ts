@@ -1,7 +1,9 @@
 /// <reference types="jest" />
+/// <reference types="modules/connection/types" />
 
 declare namespace jest {
-	export interface Matchers<R> {
+	interface Matchers<R> {
 		toHaveNextPage(): R;
+		toMatchPageInfo(pageInfo: Partial<PageInfo>): R;
 	}
 }
