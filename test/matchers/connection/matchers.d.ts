@@ -25,5 +25,10 @@ declare namespace jest {
 		 * @param edges
 		 */
 		toMatchNodes(nodes: unknown[]): R;
+		/**
+		 * check if has property of the first page with optional size
+		 * @param size
+		 */
+		toBeFirstPage(size?: number): R;
 	}
 }
