@@ -116,7 +116,7 @@
 		"graphql": "^15.7.2",
 		"graphql-scalars": "^1.13.6",
 		"helmet": "^4.6.0",
-		"http-errors": "^1.7.2",
+		"http-errors": "^1.8.1",
 		"mongoose": "^6.0.13",
 		"mongoose-autopopulate": "^0.16.0",
 		"node-environment": "^0.5.0",
