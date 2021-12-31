@@ -50,6 +50,8 @@ export default abstract class ConnectionBuilder<TPaged, TNode> {
 	 * Page results, cached
 	 */
 	private async results(): Promise<TPaged[]> {
+		if (this.#page.limit === 0) return [];
+
 		this.#results ??= await this.#paginator(this.#page);
 
 		return this.#results;

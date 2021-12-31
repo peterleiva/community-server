@@ -22,8 +22,8 @@ export default function shouldBehavesLikePageLimit(
 	resolver: Resolver
 ) {
 	shouldBehavesLike("page limit", () => {
-		describe("Limiting Page size", () => {
-			test("limit by with 'first' argument", async () => {
+		describe("Limiting results", () => {
+			test("limit by 'first' argument", async () => {
 				await factory(4);
 				const limit = 2;
 				const page = setupPage(limit);
@@ -37,25 +37,18 @@ export default function shouldBehavesLikePageLimit(
 				await expect(resolver(page)).rejects.toThrowError(NonNegativeArgument);
 			});
 
-			test("zero limit returns empty page", async () => {
+			test("zero returns empty edges", async () => {
 				await factory(1);
 				const page = setupPage(0);
 
 				await expect(resolver(page)).resolves.toHaveEmptyEdges();
 			});
 
-			test("limit page by avaliable threads", async () => {
-				const page = setupPage(2);
-				await factory(1);
-
-				await expect(resolver(page)).resolves.toBeEdgesOfSize(1);
-			});
-
-			test("limit last page by avaliable remaining threads", async () => {
+			test("limiting non-edge page", async () => {
 				const edges = await factory(3);
 				const args = {
 					page: {
-						first: 2,
+						first: 1,
 						after: edges[1].cursor,
 					},
 				};

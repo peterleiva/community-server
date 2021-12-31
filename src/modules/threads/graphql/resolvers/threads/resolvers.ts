@@ -3,14 +3,14 @@ import { Connection, type PageArgs, Page } from "modules/connection";
 import { type ThreadDocument, ThreadModel } from "../../../thread";
 import ConnectionBuilder from "./connection-builder";
 
-async function paginator(page: Page): Promise<ThreadDocument[]> {
+function paginator(page: Page): Promise<ThreadDocument[]> {
 	const query = ThreadModel.find({
 		createdAt: { $lt: page.current },
 	})
 		.sort({ createdAt: -1 })
 		.limit(page.limit);
 
-	return await query.exec();
+	return query.exec();
 }
 
 export const threads: IFieldResolver<
