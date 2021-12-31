@@ -45,5 +45,11 @@ module.exports = {
 			],
 			extends: "./configs/eslint/jest",
 		},
+		{
+			files: "./test/shared/**/*",
+			rules: {
+				"jest/no-export": "off",
+			},
+		},
 	],
 };
