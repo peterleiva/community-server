@@ -1,12 +1,17 @@
 import { GraphQLResolveInfo } from "graphql";
 import { ThreadFactory } from "test/factory";
 import { databaseSetup } from "test/utils";
-import { total, threads as resolver } from "../threads";
+import { shouldBehavesLikeConnection } from "test/shared/connection";
+import { total, threads as resolver } from "../resolvers";
 import { ThreadDocument } from "modules/threads";
 
 databaseSetup();
 
 describe("thread connection resolver", () => {
+	shouldBehavesLikeConnection(() =>
+		resolver(null, {}, null, {} as GraphQLResolveInfo)
+	);
+
 	describe("total resolver", () => {
 		test("total is 0 when no threads", async () => {
 			await expect(
@@ -23,6 +28,8 @@ describe("thread connection resolver", () => {
 			).resolves.toBe(length);
 		});
 	});
+
+	test.todo("edges are sorted by creation time desc");
 
 	describe("edges resolver", () => {
 		test("edges gives node and cursor for each thread", async () => {
@@ -86,19 +93,6 @@ describe("thread connection resolver", () => {
 					endCursor: threads[threads.length - 1].createdAt,
 				});
 			});
-		});
-
-		describe("threads collection is empty", () => {
-			test("hasPreviousPage and hasNextPage is false", async () => {
-				await expect(
-					resolver(null, {}, null, {} as GraphQLResolveInfo)
-				).resolves.toMatchPageInfo({
-					hasPreviousPage: false,
-					hasNextPage: false,
-				});
-			});
-
-			test.todo("startCursor is");
 		});
 	});
 });
