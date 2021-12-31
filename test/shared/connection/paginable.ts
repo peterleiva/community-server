@@ -1,4 +1,4 @@
-import { shouldBehavesLike } from "test/shared";
+import shouldBehavesLike from "../should-behaves-like";
 import shouldBehavesLikePageLimit from "./page-limit";
 import shouldBehavesLikeSliceable from "./sliceable";
 import type { Factory, Resolver } from "./types";
