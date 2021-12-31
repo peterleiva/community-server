@@ -1,7 +1,10 @@
 import { GraphQLResolveInfo } from "graphql";
 import { ThreadFactory } from "test/factory";
 import { databaseSetup } from "test/utils";
-import { shouldBehavesLikeConnection } from "test/shared/connection";
+import {
+	shouldBehavesLikeConnection,
+	shouldBehavesLikePaginable,
+} from "test/shared";
 import { total, threads as resolver } from "../resolvers";
 import { ThreadDocument } from "modules/threads";
 
@@ -10,6 +13,24 @@ databaseSetup();
 describe("thread connection resolver", () => {
 	shouldBehavesLikeConnection(() =>
 		resolver(null, {}, null, {} as GraphQLResolveInfo)
+	);
+
+	shouldBehavesLikePaginable(
+		async size =>
+			(await ThreadFactory.createList(size))
+				.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
+				.map(t => ({ node: t, cursor: t.createdAt })),
+
+		async page => {
+			const result = await resolver(
+				null,
+				page ?? {},
+				null,
+				{} as GraphQLResolveInfo
+			);
+
+			return result;
+		}
 	);
 
 	describe("total resolver", () => {
@@ -54,35 +75,6 @@ describe("thread connection resolver", () => {
 				threads = (await ThreadFactory.createList(10)).sort(
 					(a, b) => b.createdAt.getTime() - a.createdAt.getTime()
 				);
-			});
-
-			test("hasPreviousPage is false when first page", async () => {
-				await expect(
-					resolver(null, {}, null, {} as GraphQLResolveInfo)
-				).resolves.not.toHavePreviousPage();
-			});
-
-			test("hasPreviousPage is true when has newest thread", async () => {
-				await expect(
-					resolver(
-						null,
-						{ page: { after: threads[2].createdAt } },
-						null,
-						{} as GraphQLResolveInfo
-					)
-				).resolves.toHavePreviousPage();
-			});
-
-			test("hasNextPage is false when oldest thread", async () => {
-				await expect(
-					resolver(null, {}, null, {} as GraphQLResolveInfo)
-				).resolves.not.toHaveNextPage();
-			});
-
-			test("hasNextPage is true when has next page", async () => {
-				await expect(
-					resolver(null, { page: { first: 4 } }, null, {} as GraphQLResolveInfo)
-				).resolves.toHaveNextPage();
 			});
 
 			test("cursors is first and last thread from collection", async () => {
