@@ -40,6 +40,12 @@ export default abstract class ConnectionBuilder<TPaged, TNode> {
 	abstract hasPreviousPage(pages?: TPaged[]): Promise<boolean>;
 	abstract edge(data: TPaged): Promise<Edge<TNode>>;
 
+	protected async isEmpty(): Promise<boolean> {
+		const results = await this.results();
+
+		return results.length === 0;
+	}
+
 	/**
 	 * Page results, cached
 	 */
