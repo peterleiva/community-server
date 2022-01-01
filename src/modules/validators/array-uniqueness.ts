@@ -9,15 +9,11 @@ import { ValidateFn, ValidatorMessageFn } from "mongoose";
  * @return when no duplicated values occurs return true
  */
 export const validator: ValidateFn<unknown[]> = function validator(list) {
-	for (let i = 0; i < list.length; i++) {
-		for (let j = i + 1; j < list.length; j++) {
-			if (Object.is(list[i], list[j])) {
-				return false;
-			}
-		}
-	}
+	const values = new Set<unknown>();
 
-	return true;
+	list.forEach(v => values.add(v));
+
+	return values.size === list.length;
 };
 
 export const message: ValidatorMessageFn = ({ path, value }) => {
