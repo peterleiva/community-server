@@ -6,6 +6,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- Connection module deals with paginating using [Relay's Connection pattern](https://relay.dev/graphql/connections.htm)
+
 ## [0.3.0] - 2021-12-23
 
 ### Added
