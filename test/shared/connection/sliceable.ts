@@ -1,4 +1,5 @@
-import shouldBehavesLike from "../should-behaves-like";
+import { NonNegativeArgument } from "lib";
+import { shouldBehavesLike } from "..";
 import { Resolver, Factory } from "./types";
 import { setupPageArgs } from "test/factory";
 
@@ -7,54 +8,58 @@ export default function shouldBehavesLikeSliceable(
 	resolver: Resolver
 ) {
 	shouldBehavesLike("sliceable", () => {
-		test("slicing collection with 'after'", async () => {
-			const edges = await factory(2);
-			const args = setupPageArgs({ after: edges[0].cursor });
+		describe("Limiting results", () => {
+			test("limit by 'first' argument", async () => {
+				const edges = await factory(2);
+				const limit = 1;
+				const page = setupPageArgs({ first: limit });
 
-			const result = await resolver(args);
+				const result = await resolver(page);
 
-			expect(result).toBeEdgesOfSize(1);
-			expect(result).toHavePreviousPage();
-			expect(result).not.toHaveNextPage();
-		});
+				expect(result).toBeFirstPage(limit);
+				expect(result).toHaveNextPage();
+				expect(result).toHaveCursors({
+					startCursor: edges[0].cursor,
+					endCursor: edges[0].cursor,
+				});
+			});
 
-		test("skip first page", async () => {
-			const edges = await factory(21);
-			const args = setupPageArgs({ after: edges[19].cursor });
+			test("negative limit throws NonNegativeArgument", async () => {
+				const page = setupPageArgs({ first: -1 });
 
-			const result = await resolver(args);
+				await expect(resolver(page)).rejects.toThrowError(NonNegativeArgument);
+			});
 
-			expect(result).toBeEdgesOfSize(1);
-			expect(result).toHavePreviousPage();
-		});
+			test("zero returns empty edges", async () => {
+				await factory(1);
+				const page = setupPageArgs({ first: 0 });
 
-		test("skip until last page", async () => {
-			const edges = await factory(6);
-			const args = setupPageArgs({ after: edges[3].cursor });
+				await expect(resolver(page)).resolves.toHaveEmptyEdges();
+			});
 
-			const result = await resolver(args);
+			test("don't limit edges when edges is less than 'first'", async () => {
+				const page = setupPageArgs({ first: 10 });
+				const edges = await factory(2);
 
-			expect(result).toBeEdgesOfSize(2);
-			expect(result).not.toHaveNextPage();
-			expect(result).toHavePreviousPage();
-		});
+				const result = await resolver(page);
 
-		test("empty result after last thread", async () => {
-			const edges = await factory(2);
-			const args = setupPageArgs({ after: edges[1].cursor });
+				expect(result).toBeFirstPage(edges.length);
+				expect(result).toHaveCursors({
+					startCursor: edges[0].cursor,
+					endCursor: edges[1].cursor,
+				});
+				expect(result).not.toHaveNextPage();
+			});
 
-			const result = await resolver(args);
+			test("limit with edges greater than 'first'", async () => {
+				const edges = await factory(3);
+				const args = setupPageArgs({
+					first: 1,
+					after: edges[1].cursor,
+				});
 
-			expect(result).toHaveEmptyEdges();
-			expect(result).not.toHaveNextPage();
-			expect(result).toHavePreviousPage();
-		});
-
-		test("first page when after cursor is now date", async () => {
-			await factory(1);
-			const page = setupPageArgs({ after: new Date() });
-
-			await expect(resolver(page)).resolves.toBeFirstPage(1);
+				await expect(resolver(args)).resolves.toBeEdgesOfSize(1);
+			});
 		});
 	});
 }
