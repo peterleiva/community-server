@@ -1,19 +1,11 @@
 import { GraphQLResolveInfo } from "graphql";
 import { ThreadFactory } from "test/factory";
 import { databaseSetup } from "test/utils";
-import {
-	shouldBehavesLikeConnection,
-	shouldBehavesLikePaginable,
-} from "test/shared";
+import { shouldBehavesLikePaginable } from "test/shared";
 import { total, threads as resolver } from "../resolvers";
-import { ThreadDocument } from "modules/threads";
-
-databaseSetup();
 
 describe("thread connection resolver", () => {
-	shouldBehavesLikeConnection(() =>
-		resolver(null, {}, null, {} as GraphQLResolveInfo)
-	);
+	databaseSetup();
 
 	shouldBehavesLikePaginable(
 		async size =>
@@ -64,27 +56,6 @@ describe("thread connection resolver", () => {
 			).resolves.toMatchEdges(
 				sortedThreads.map(t => ({ cursor: t.createdAt, node: t._id }))
 			);
-		});
-	});
-
-	describe("pageInfo resolver", () => {
-		describe("threads collection is not empty", () => {
-			let threads: ThreadDocument[];
-
-			beforeEach(async () => {
-				threads = (await ThreadFactory.createList(10)).sort(
-					(a, b) => b.createdAt.getTime() - a.createdAt.getTime()
-				);
-			});
-
-			test("cursors is first and last thread from collection", async () => {
-				await expect(
-					resolver(null, {}, null, {} as GraphQLResolveInfo)
-				).resolves.toMatchPageInfo({
-					startCursor: threads[0].createdAt,
-					endCursor: threads[threads.length - 1].createdAt,
-				});
-			});
 		});
 	});
 });
