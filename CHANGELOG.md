@@ -10,6 +10,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 - Connection module deals with paginating using [Relay's Connection pattern](https://relay.dev/graphql/connections.htm)
 
+### Changed
+
+- Cors accept any combination of localhost and port in origin
+
+### Fixed
+
+- resolver threads provide correct pageInfo's hasPreviousPage
+
+### Security
+
+- Upgrade dependencies packages recomentations from Snykr
+
 ## [0.3.0] - 2021-12-23
 
 ### Added
