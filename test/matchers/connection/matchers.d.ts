@@ -30,9 +30,5 @@ declare namespace jest {
 		 * @param size
 		 */
 		toBeFirstPage(size?: number): R;
-		/**
-		 * Check startCursor or endCursor
-		 */
-		toHaveCursors(cursors: { startCursor?: Cursor; endCursor?: Cursor }): R;
 	}
 }
