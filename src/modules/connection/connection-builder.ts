@@ -91,7 +91,7 @@ export default abstract class ConnectionBuilder<TPaged, TNode> {
 		const results = await this.results();
 		const firstResult = results?.[0];
 
-		if (!firstResult) return new Date();
+		if (!firstResult) return this.#page.current;
 
 		const first = await this.edge(firstResult);
 		return first.cursor;
@@ -101,7 +101,7 @@ export default abstract class ConnectionBuilder<TPaged, TNode> {
 		const results = await this.results();
 		const lastResult = results?.[results.length - 1];
 
-		if (!lastResult) return new Date();
+		if (!lastResult) return this.#page.current;
 
 		const last = await this.edge(lastResult);
 
