@@ -11,6 +11,10 @@ import { PaginateError } from "./errors";
 import CursorPage from "./cursor-page";
 import Page from "./page";
 
+type HasPage<TPage> = {
+	results: TPage[];
+	page: Page;
+};
 export default abstract class ConnectionBuilder<TPaged, TNode> {
 	#paginator: Paginator<TPaged>;
 	#results?: TPaged[];
@@ -36,8 +40,8 @@ export default abstract class ConnectionBuilder<TPaged, TNode> {
 		};
 	}
 
-	abstract hasNextPage(pages?: TPaged[]): Promise<boolean>;
-	abstract hasPreviousPage(pages?: TPaged[]): Promise<boolean>;
+	abstract hasNextPage(pages?: HasPage<TPaged>): Promise<boolean>;
+	abstract hasPreviousPage(pages?: HasPage<TPaged>): Promise<boolean>;
 	abstract edge(data: TPaged): Promise<Edge<TNode>>;
 
 	protected async isEmpty(): Promise<boolean> {
@@ -71,8 +75,8 @@ export default abstract class ConnectionBuilder<TPaged, TNode> {
 			await Promise.all([
 				this.startCursor(),
 				this.endCursor(),
-				this.hasNextPage(results),
-				this.hasPreviousPage(results),
+				this.hasNextPage({ results, page }),
+				this.hasPreviousPage({ results, page }),
 			]);
 
 		return {
