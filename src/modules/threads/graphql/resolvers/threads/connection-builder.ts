@@ -1,4 +1,4 @@
-import { ConnectionBuilder as Builder, Edge } from "modules/connection";
+import { ConnectionBuilder as Builder, Edge, Page } from "modules/connection";
 import { ThreadDocument, ThreadModel } from "modules/threads";
 
 export default class ConnectionBuilder extends Builder<
@@ -22,11 +22,14 @@ export default class ConnectionBuilder extends Builder<
 		return !!hasNextPage;
 	}
 
-	async hasPreviousPage(): Promise<boolean> {
-		const startCursor = await this.startCursor();
-
+	async hasPreviousPage({
+		page,
+	}: {
+		page: Page;
+		results: ThreadDocument[];
+	}): Promise<boolean> {
 		const hasPreviousPage = await ThreadModel.findOne({
-			createdAt: { $gt: startCursor },
+			createdAt: { $gte: page.current },
 		}).exec();
 
 		return !!hasPreviousPage;
