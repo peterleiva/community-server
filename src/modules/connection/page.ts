@@ -2,10 +2,11 @@ import type { PageArgs, Cursor } from "./types";
 import { NonNegativeArgument } from "lib/errors";
 
 export default abstract class Page {
+	static DEFAULT_SIZE = 20;
 	#first: number;
 
 	constructor({ page }: Omit<PageArgs, "after">) {
-		this.#first = page?.first ?? 20;
+		this.#first = page?.first ?? Page.DEFAULT_SIZE;
 
 		if (this.#first < 0) {
 			throw new NonNegativeArgument("first", this.#first);
