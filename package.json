@@ -1,6 +1,6 @@
 {
 	"name": "community-server",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "Community is a forum application, also known as community, which connects people around a discussion topic to help each other, this is the server module, which bootstrap the GraphQL API",
 	"private": true,
 	"main": "dist/main.js",
