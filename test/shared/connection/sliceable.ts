@@ -1,6 +1,7 @@
 import { NonNegativeArgument } from "lib";
 import { shouldBehavesLike } from "..";
 import { Resolver, Factory } from "./types";
+import { Page } from "modules/connection";
 import { setupPageArgs } from "test/factory";
 
 export default function shouldBehavesLikeSliceable(
@@ -8,23 +9,40 @@ export default function shouldBehavesLikeSliceable(
 	resolver: Resolver
 ) {
 	shouldBehavesLike("sliceable", () => {
-		describe("Limiting results", () => {
-			test("limit by 'first' argument", async () => {
-				const edges = await factory(2);
+		test("slice to default page size", async () => {
+			await factory(21);
+			const results = await resolver();
+
+			expect(results).toBeFirstPage(Page.DEFAULT_SIZE);
+			expect(results).toHaveNextPage();
+		});
+
+		test("no slicing", async () => {
+			const edges = await factory(2);
+			const result = await resolver();
+
+			expect(result).toBeFirstPage(edges.length);
+			expect(result).not.toHaveNextPage();
+			expect(result).not.toHavePreviousPage();
+		});
+
+		describe("with 'first' argument", () => {
+			test("slicing edges greater than 'first'", async () => {
+				const edges = await factory(3);
 				const limit = 1;
-				const page = setupPageArgs({ first: limit });
+				const page = setupPageArgs({ first: limit, after: edges[0].cursor });
 
 				const result = await resolver(page);
 
-				expect(result).toBeFirstPage(limit);
+				expect(result).toHavePreviousPage();
 				expect(result).toHaveNextPage();
-				expect(result).toHaveCursors({
-					startCursor: edges[0].cursor,
-					endCursor: edges[0].cursor,
+				expect(result).toMatchPageInfo({
+					startCursor: edges[1].cursor,
+					endCursor: edges[1].cursor,
 				});
 			});
 
-			test("negative limit throws NonNegativeArgument", async () => {
+			test("negative value throws NonNegativeArgument", async () => {
 				const page = setupPageArgs({ first: -1 });
 
 				await expect(resolver(page)).rejects.toThrowError(NonNegativeArgument);
@@ -44,21 +62,12 @@ export default function shouldBehavesLikeSliceable(
 				const result = await resolver(page);
 
 				expect(result).toBeFirstPage(edges.length);
-				expect(result).toHaveCursors({
+				expect(result).toMatchPageInfo({
 					startCursor: edges[0].cursor,
 					endCursor: edges[1].cursor,
 				});
 				expect(result).not.toHaveNextPage();
-			});
-
-			test("limit with edges greater than 'first'", async () => {
-				const edges = await factory(3);
-				const args = setupPageArgs({
-					first: 1,
-					after: edges[1].cursor,
-				});
-
-				await expect(resolver(args)).resolves.toBeEdgesOfSize(1);
+				expect(result).not.toHavePreviousPage();
 			});
 		});
 	});
