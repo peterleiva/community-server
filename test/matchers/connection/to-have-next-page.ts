@@ -1,4 +1,5 @@
 import { Connection } from "modules/connection";
+import message from "./message";
 
 const toHaveNextPage: jest.CustomMatcher = function toHaveNextPage(
 	this: jest.MatcherContext,
@@ -6,17 +7,15 @@ const toHaveNextPage: jest.CustomMatcher = function toHaveNextPage(
 ) {
 	const pass = received?.pageInfo?.hasNextPage === true;
 
-	const message = `
-	Expected value to ${this.isNot ? "not " : ""}have pageInfo:
-		${this.utils.printExpected({ pageInfo: { hasNextPage: true } })}
-
-	Received:
-		${this.utils.printReceived({ pageInfo: received["pageInfo"] })}
-	`;
-
 	const result = {
 		pass,
-		message: () => message,
+		message: message(
+			false,
+			{
+				pageInfo: { hasNextPage: received.pageInfo?.hasNextPage },
+			},
+			{ pageInfo: { hasNextPage: this.isNot } }
+		),
 	};
 
 	return result;
