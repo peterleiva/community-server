@@ -4,11 +4,11 @@ import {
 	typeDefs as scalarTypeDefs,
 	resolvers as scalarResolvers,
 } from "graphql-scalars";
-import typeDefs from "./typedefs";
 import * as Connection from "modules/connection";
 import { schema as threads } from "modules/threads";
 import { schema as users } from "modules/user";
 import { resolvers } from "modules/resolvers";
+import baseTypes from "./typedefs.graphql";
 
 const root = gql`
 	schema {
@@ -21,8 +21,8 @@ const root = gql`
 export const schema = makeExecutableSchema({
 	typeDefs: [
 		root,
+		baseTypes,
 		Connection.typeDefs,
-		typeDefs,
 		threads.typeDefs,
 		users.typeDefs,
 		...scalarTypeDefs,
