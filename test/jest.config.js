@@ -1,7 +1,6 @@
-const { merge } = require("lodash");
-
 /** @type {import('ts-jest/dist/types').InitialOptionsTsJest} */
-module.exports = merge(
+module.exports = Object.assign(
+	{},
 	require("./jest-common"),
 	require("./jest-typescript")(),
 	{

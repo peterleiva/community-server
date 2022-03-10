@@ -55,7 +55,6 @@
 		"@types/express": "^4.17.12",
 		"@types/http-errors": "^1.8.0",
 		"@types/jest": "^27.0.1",
-		"@types/lodash": "^4.14.170",
 		"@types/node": "^16.4.12",
 		"@types/pino-http": "^5.4.1",
 		"@types/pino-multi-stream": "^5.1.2",
@@ -127,6 +126,7 @@
 		"pino-multi-stream": "^5.3.0",
 		"pino-pretty": "^6.0.0",
 		"pino-tee": "^0.3.0",
+		"ramda": "^0.28.0",
 		"sprintf-js": "^1.0.3"
 	},
 	"lint-staged": {

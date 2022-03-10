@@ -5,6 +5,7 @@ const { defaults: tsjPreset } = require("ts-jest/presets");
 module.exports = function (tsconfig = resolve(__dirname, "../tsconfig.json")) {
 	return {
 		transform: {
+			"\\.(gql|graphql)$": "jest-transform-graphql",
 			...tsjPreset.transform,
 		},
 		globals: {
