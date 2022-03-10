@@ -1,7 +1,7 @@
 import type { IResolvers, IFieldResolver } from "@graphql-tools/utils";
 import type { ObjectId } from "mongoose";
 import type { UserDocument } from "../schema";
-import type { UserType } from "./typedefs";
+import type { UserType } from "./types";
 
 const avatar: IFieldResolver<UserDocument, unknown, unknown, string> =
 	function avatar() {

@@ -2,7 +2,7 @@ import type { IFieldResolver } from "@graphql-tools/utils";
 import type { Types, Aggregate } from "mongoose";
 import type { ThreadDocument } from "modules/threads";
 import type { UserType } from "modules/user/graphql";
-import type { ThreadType } from "../typedefs";
+import type { ThreadType } from "../types";
 import { CursorPage, type PageArgs, type Edge } from "modules/connection";
 import { PostModel, type PostDocument } from "modules/post";
 

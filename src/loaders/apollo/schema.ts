@@ -1,4 +1,3 @@
-import { gql } from "apollo-server-core";
 import { makeExecutableSchema } from "@graphql-tools/schema";
 import {
 	typeDefs as scalarTypeDefs,
@@ -8,15 +7,8 @@ import * as Connection from "modules/connection";
 import { schema as threads } from "modules/threads";
 import { schema as users } from "modules/user";
 import { resolvers } from "modules/resolvers";
-import baseTypes from "./typedefs.graphql";
-
-const root = gql`
-	schema {
-		query: Query
-	}
-
-	type Query
-`;
+import baseTypes from "./base.graphql";
+import root from "./root.graphql";
 
 export const schema = makeExecutableSchema({
 	typeDefs: [

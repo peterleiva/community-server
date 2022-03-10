@@ -1,2 +1,3 @@
 export * from "./resolvers";
-export * from "./typedefs";
+export * from "./types";
+export { default as typeDefs } from "./threads.graphql";
