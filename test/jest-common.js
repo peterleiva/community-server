@@ -10,5 +10,9 @@ module.exports = {
 		resolve(__dirname),
 		resolve(__dirname, "../src"),
 	],
-	setupFilesAfterEnv: ["jest-extended/all", "./test/matchers/index.ts"],
+	setupFilesAfterEnv: [
+		"jest-extended/all",
+		"./test/matchers/index.ts",
+		"./test/global-setup.ts",
+	],
 };

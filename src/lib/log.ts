@@ -3,6 +3,7 @@ import pino from "pino";
 import { multistream } from "pino-multi-stream";
 import config from "config";
 import redirect from "./redirect-stream";
+import { type Writable } from "stream";
 
 const basepath = `${process.cwd()}/tmp/log`;
 const logFile = `${basepath}/${config.env()}.log`;
@@ -14,16 +15,23 @@ if (!existsSync(basepath)) {
 	});
 }
 
-const file = createWriteStream(logFile, { flags: "a", mode: 0o640 });
+//  save log except in test environment
+const redirectToFile = (...streams: Writable[]) =>
+	config.env("test")
+		? redirect(...streams)
+		: redirect(
+				createWriteStream(logFile, { flags: "a", mode: 0o640 }),
+				...streams
+		  );
 
 const streams = [
-	{ stream: redirect(file, process.stdout) },
-	{ level: "error", stream: redirect(file, process.stderr) },
+	{ stream: redirectToFile(process.stdout) },
+	{ level: "error", stream: redirectToFile(process.stderr) },
 ];
 
-const redact = config.env("production", "staging")
-	? ["*.remoteAddress", "*.remotePort"]
-	: [];
+const redact: string[] = [];
+
+if (config.env("prod")) redact.push(...["*.remoteAddress", "*.remotePort"]);
 
 const log = pino(
 	{
@@ -32,7 +40,7 @@ const log = pino(
 			translateTime: "SYS:standard",
 		},
 		redact,
-		level: config.logLevel,
+		level: config.env("test") ? "warn" : config.logLevel,
 	},
 	multistream(streams, { dedupe: true })
 );

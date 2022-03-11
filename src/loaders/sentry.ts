@@ -3,7 +3,6 @@ import * as Tracing from "@sentry/tracing";
 import type { Application } from "express";
 import config from "config";
 import createError from "http-errors";
-import { log } from "lib";
 
 type ErrorHandler = () => void;
 

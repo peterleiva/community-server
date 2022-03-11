@@ -1,6 +1,6 @@
-import bootstrap from "./bootstrap";
 import { log } from "lib";
+import bootstrap from "./bootstrap";
 
-global.log = log;
+global.log ??= log;
 
 bootstrap();

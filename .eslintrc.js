@@ -51,5 +51,11 @@ module.exports = {
 				"jest/no-export": "off",
 			},
 		},
+		{
+			files: "*.d.ts",
+			rules: {
+				"no-var": "off",
+			},
+		},
 	],
 };
