@@ -57,5 +57,13 @@ module.exports = {
 				"no-var": "off",
 			},
 		},
+		{
+			files: "./src/types/schema.ts",
+			rules: {
+				"@typescript-eslint/ban-types": "off",
+				"@typescript-eslint/no-explicit-any": "off",
+				"max-len": "off",
+			},
+		},
 	],
 };
