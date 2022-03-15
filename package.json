@@ -25,7 +25,7 @@
 		"start": "node .",
 		"build": "scripts/build.sh -e production",
 		"build:analyzer": "npm run build -- analyzer",
-		"dev": "scripts/build.sh -w -e development",
+		"dev": "concurrently --raw \"npm:codegen -- --watch\" \"scripts/build.sh -w -e development\"",
 		"console": "ts-node --project tsconfig.json -r tsconfig-paths/register scripts/console.ts",
 		"lint": "eslint .",
 		"typecheck": "tsc --noEmit --project src/tsconfig.app.json",
@@ -38,7 +38,8 @@
 		"test:e2e": "npm t -- --config e2e/jest.config.js",
 		"test:e2e:watch": "npm run test:e2e -- --watch",
 		"prepare": "is-ci || concurrently --raw \"husky install\" \"scripts/build.sh\"",
-		"clean": "rimraf dist tmp"
+		"clean": "rimraf dist tmp",
+		"codegen": "graphql-codegen --config codegen.yml"
 	},
 	"bugs": {
 		"url": "https://github.com/pherval/community-server/issues"
@@ -48,6 +49,11 @@
 		"@apollo/client": "^3.5.6",
 		"@babel/core": "^7.14.8",
 		"@babel/preset-env": "^7.14.9",
+		"@graphql-codegen/cli": "2.6.2",
+		"@graphql-codegen/introspection": "2.1.1",
+		"@graphql-codegen/typescript": "2.4.7",
+		"@graphql-codegen/typescript-mongodb": "2.3.5",
+		"@graphql-codegen/typescript-resolvers": "2.5.4",
 		"@tsconfig/node16": "^1.0.2",
 		"@types/compression": "^1.7.0",
 		"@types/core-js": "^2.5.4",
@@ -99,6 +105,8 @@
 		"webpack-node-externals": "^3.0.0"
 	},
 	"dependencies": {
+		"@graphql-codegen/cli": "^2.6.2",
+		"@graphql-codegen/graphql-modules-preset": "^2.3.7",
 		"@graphql-tools/schema": "^8.3.1",
 		"@sentry/node": "^6.16.1",
 		"@sentry/tracing": "^6.16.1",

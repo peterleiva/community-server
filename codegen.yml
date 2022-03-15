@@ -1,0 +1,17 @@
+overwrite: true
+schema:
+  - src/loaders/apollo/*.graphql
+  - src/modules/**/*.graphql
+hooks:
+  afterAllFileWrite:
+    - npx prettier --write
+    - npx eslint --fix
+generates:
+  src/types/schema.ts:
+    plugins:
+      - "typescript"
+      - "typescript-resolvers"
+      - "typescript-mongodb"
+  ./graphql.schema.json:
+    plugins:
+      - "introspection"
