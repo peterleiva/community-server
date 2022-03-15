@@ -1,15 +1,14 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
 import type { Types, Aggregate } from "mongoose";
 import type { ThreadDocument } from "modules/threads";
-import type { UserType } from "modules/user/graphql";
-import type { ThreadType } from "../types";
+import type { Thread, User } from "types/schema";
 import { CursorPage, type PageArgs, type Edge } from "modules/connection";
 import { PostModel, type PostDocument } from "modules/post";
 
 type AggregationResult = {
 	meta: { interactions: number }[];
 	page: {
-		edge: Edge<UserType>;
+		edge: Edge<User>;
 		hasPrevious: boolean;
 		hasNext: boolean;
 	}[];
@@ -29,7 +28,7 @@ export const participants: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	PageArgs,
-	Promise<ThreadType["participants"]>
+	Promise<Thread["participants"]>
 > = async function participants(source, args) {
 	const page = new CursorPage(args);
 
@@ -111,7 +110,7 @@ export const lastActivity: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	unknown,
-	Promise<ThreadType["lastActivity"]>
+	Promise<Thread["lastActivity"]>
 > = async function lastActivity(source) {
 	const docs = await buildRepliesAggregate<{ activity: Date }>(
 		source.op._id
@@ -132,7 +131,7 @@ export const replies: IFieldResolver<
 	ThreadDocument,
 	unknown,
 	unknown,
-	Promise<ThreadType["replies"]>
+	Promise<Thread["replies"]>
 > = async function replies(source) {
 	const docs = await buildRepliesAggregate<{
 		replies: number;

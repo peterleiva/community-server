@@ -1,5 +1,6 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
 import { Connection, type PageArgs, Page } from "modules/connection";
+import type { ThreadConnectionResolvers } from "types/schema";
 import { type ThreadDocument, ThreadModel } from "../../../thread";
 import ConnectionBuilder from "./connection-builder";
 
@@ -24,11 +25,7 @@ export const threads: IFieldResolver<
 	return builder.build();
 };
 
-export const total: IFieldResolver<
-	null,
-	null,
-	PageArgs,
-	Promise<number>
-> = async function total() {
-	return ThreadModel.estimatedDocumentCount().exec();
-};
+export const total: ThreadConnectionResolvers["total"] =
+	async function total() {
+		return ThreadModel.estimatedDocumentCount().exec();
+	};

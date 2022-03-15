@@ -1,5 +1,9 @@
-import { ConnectionBuilder as Builder, Edge, Page } from "modules/connection";
-import { ThreadDocument, ThreadModel } from "modules/threads";
+import {
+	type Edge,
+	ConnectionBuilder as Builder,
+	Page,
+} from "modules/connection";
+import { type ThreadDocument, ThreadModel } from "modules/threads";
 
 export default class ConnectionBuilder extends Builder<
 	ThreadDocument,
