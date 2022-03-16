@@ -15,7 +15,6 @@ const postSchema = new Schema<Post>(
 	{
 		message: {
 			type: String,
-			minLength: 10,
 			maxLength: 10_000,
 		},
 
