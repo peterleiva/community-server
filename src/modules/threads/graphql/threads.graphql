@@ -7,6 +7,28 @@ extend type Query {
 	threads(page: ForwardPageInput): ThreadConnection!
 }
 
+extend type Mutation {
+	createThread(thread: CreateThreadInput): CreateThreadResponse!
+}
+
+input CreateThreadInput {
+	"thread unique title"
+	title: String!
+	"thread additional text"
+	message: String
+}
+
+"""
+Response object for creating threads
+"""
+type CreateThreadResponse implements MutationResponse {
+	code: String!
+	success: Boolean!
+	message: String!
+	"created thread when the operation is a success"
+	thread: Thread
+}
+
 """
 Thread connection implements Connection defining edges, pageInfo and has the
 total number of threads in the community. The total number of threads refers

@@ -117,6 +117,23 @@ export type Connection = {
 	pageInfo: PageInfo;
 };
 
+export type CreateThreadInput = {
+	/** thread additional text */
+	message?: InputMaybe<Scalars["String"]>;
+	/** thread unique title */
+	title: Scalars["String"];
+};
+
+/** Response object for creating threads */
+export type CreateThreadResponse = MutationResponse & {
+	__typename?: "CreateThreadResponse";
+	code: Scalars["String"];
+	message: Scalars["String"];
+	success: Scalars["Boolean"];
+	/** created thread when the operation is a success */
+	thread?: Maybe<Thread>;
+};
+
 /**
  * The concept of an [*edge*
  * ](https://relay.dev/graphql/connections.htm#sec-Edge-Types) also proves
@@ -143,6 +160,25 @@ export type ForwardPageInput = {
 	after?: InputMaybe<Scalars["Cursor"]>;
 	/** at most first edges */
 	first?: InputMaybe<Scalars["NonNegativeInt"]>;
+};
+
+export type Mutation = {
+	__typename?: "Mutation";
+	createThread: CreateThreadResponse;
+};
+
+export type MutationCreateThreadArgs = {
+	thread?: InputMaybe<CreateThreadInput>;
+};
+
+/** Mutation response basic object which every mutation return type must implement */
+export type MutationResponse = {
+	/** response code status, can be HTTP or application specific */
+	code: Scalars["String"];
+	/** message with more details about the operation */
+	message: Scalars["String"];
+	/** indicates whether the operation was a success */
+	success: Scalars["Boolean"];
 };
 
 /**
@@ -531,6 +567,12 @@ export type ResolversTypes = {
 		| ResolversTypes["PostParticipantsConnection"]
 		| ResolversTypes["PostRepliesConnection"]
 		| ResolversTypes["ThreadConnection"];
+	CreateThreadInput: CreateThreadInput;
+	CreateThreadResponse: ResolverTypeWrapper<
+		Omit<CreateThreadResponse, "thread"> & {
+			thread?: Maybe<ResolversTypes["Thread"]>;
+		}
+	>;
 	Currency: ResolverTypeWrapper<Scalars["Currency"]>;
 	Cursor: ResolverTypeWrapper<Scalars["Cursor"]>;
 	DID: ResolverTypeWrapper<Scalars["DID"]>;
@@ -564,6 +606,8 @@ export type ResolversTypes = {
 	Long: ResolverTypeWrapper<Scalars["Long"]>;
 	Longitude: ResolverTypeWrapper<Scalars["Longitude"]>;
 	MAC: ResolverTypeWrapper<Scalars["MAC"]>;
+	Mutation: ResolverTypeWrapper<{}>;
+	MutationResponse: ResolversTypes["CreateThreadResponse"];
 	Naming: ResolverTypeWrapper<Naming>;
 	NegativeFloat: ResolverTypeWrapper<Scalars["NegativeFloat"]>;
 	NegativeInt: ResolverTypeWrapper<Scalars["NegativeInt"]>;
@@ -642,6 +686,10 @@ export type ResolversParentTypes = {
 		| ResolversParentTypes["PostParticipantsConnection"]
 		| ResolversParentTypes["PostRepliesConnection"]
 		| ResolversParentTypes["ThreadConnection"];
+	CreateThreadInput: CreateThreadInput;
+	CreateThreadResponse: Omit<CreateThreadResponse, "thread"> & {
+		thread?: Maybe<ResolversParentTypes["Thread"]>;
+	};
 	Currency: Scalars["Currency"];
 	Cursor: Scalars["Cursor"];
 	DID: Scalars["DID"];
@@ -675,6 +723,8 @@ export type ResolversParentTypes = {
 	Long: Scalars["Long"];
 	Longitude: Scalars["Longitude"];
 	MAC: Scalars["MAC"];
+	Mutation: {};
+	MutationResponse: ResolversParentTypes["CreateThreadResponse"];
 	Naming: Naming;
 	NegativeFloat: Scalars["NegativeFloat"];
 	NegativeInt: Scalars["NegativeInt"];
@@ -762,6 +812,17 @@ export type ConnectionResolvers<
 	>;
 	edges?: Resolver<Array<ResolversTypes["Edge"]>, ParentType, ContextType>;
 	pageInfo?: Resolver<ResolversTypes["PageInfo"], ParentType, ContextType>;
+};
+
+export type CreateThreadResponseResolvers<
+	ContextType = any,
+	ParentType = ResolversParentTypes["CreateThreadResponse"]
+> = {
+	code?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	success?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+	thread?: Resolver<Maybe<ResolversTypes["Thread"]>, ParentType, ContextType>;
+	__isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 };
 
 export interface CurrencyScalarConfig
@@ -911,6 +972,28 @@ export interface MacScalarConfig
 	extends GraphQLScalarTypeConfig<ResolversTypes["MAC"], any> {
 	name: "MAC";
 }
+
+export type MutationResolvers<
+	ContextType = any,
+	ParentType = ResolversParentTypes["Mutation"]
+> = {
+	createThread?: Resolver<
+		ResolversTypes["CreateThreadResponse"],
+		ParentType,
+		ContextType,
+		Partial<MutationCreateThreadArgs>
+	>;
+};
+
+export type MutationResponseResolvers<
+	ContextType = any,
+	ParentType = ResolversParentTypes["MutationResponse"]
+> = {
+	__resolveType: TypeResolveFn<"CreateThreadResponse", ParentType, ContextType>;
+	code?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	message?: Resolver<ResolversTypes["String"], ParentType, ContextType>;
+	success?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
+};
 
 export type NamingResolvers<
 	ContextType = any,
@@ -1227,6 +1310,7 @@ export type Resolvers<ContextType = any> = {
 	BigInt?: GraphQLScalarType;
 	Byte?: GraphQLScalarType;
 	Connection?: ConnectionResolvers<ContextType>;
+	CreateThreadResponse?: CreateThreadResponseResolvers<ContextType>;
 	Currency?: GraphQLScalarType;
 	Cursor?: GraphQLScalarType;
 	DID?: GraphQLScalarType;
@@ -1255,6 +1339,8 @@ export type Resolvers<ContextType = any> = {
 	Long?: GraphQLScalarType;
 	Longitude?: GraphQLScalarType;
 	MAC?: GraphQLScalarType;
+	Mutation?: MutationResolvers<ContextType>;
+	MutationResponse?: MutationResponseResolvers<ContextType>;
 	Naming?: NamingResolvers<ContextType>;
 	NegativeFloat?: GraphQLScalarType;
 	NegativeInt?: GraphQLScalarType;

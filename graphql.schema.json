@@ -3,7 +3,9 @@
 		"queryType": {
 			"name": "Query"
 		},
-		"mutationType": null,
+		"mutationType": {
+			"name": "Mutation"
+		},
 		"subscriptionType": null,
 		"types": [
 			{
@@ -147,6 +149,122 @@
 						"ofType": null
 					}
 				]
+			},
+			{
+				"kind": "INPUT_OBJECT",
+				"name": "CreateThreadInput",
+				"description": null,
+				"fields": null,
+				"inputFields": [
+					{
+						"name": "message",
+						"description": "thread additional text",
+						"type": {
+							"kind": "SCALAR",
+							"name": "String",
+							"ofType": null
+						},
+						"defaultValue": null,
+						"isDeprecated": false,
+						"deprecationReason": null
+					},
+					{
+						"name": "title",
+						"description": "thread unique title",
+						"type": {
+							"kind": "NON_NULL",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "String",
+								"ofType": null
+							}
+						},
+						"defaultValue": null,
+						"isDeprecated": false,
+						"deprecationReason": null
+					}
+				],
+				"interfaces": null,
+				"enumValues": null,
+				"possibleTypes": null
+			},
+			{
+				"kind": "OBJECT",
+				"name": "CreateThreadResponse",
+				"description": "Response object for creating threads",
+				"fields": [
+					{
+						"name": "code",
+						"description": null,
+						"args": [],
+						"type": {
+							"kind": "NON_NULL",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "String",
+								"ofType": null
+							}
+						},
+						"isDeprecated": false,
+						"deprecationReason": null
+					},
+					{
+						"name": "message",
+						"description": null,
+						"args": [],
+						"type": {
+							"kind": "NON_NULL",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "String",
+								"ofType": null
+							}
+						},
+						"isDeprecated": false,
+						"deprecationReason": null
+					},
+					{
+						"name": "success",
+						"description": null,
+						"args": [],
+						"type": {
+							"kind": "NON_NULL",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "Boolean",
+								"ofType": null
+							}
+						},
+						"isDeprecated": false,
+						"deprecationReason": null
+					},
+					{
+						"name": "thread",
+						"description": "created thread when the operation is a success",
+						"args": [],
+						"type": {
+							"kind": "OBJECT",
+							"name": "Thread",
+							"ofType": null
+						},
+						"isDeprecated": false,
+						"deprecationReason": null
+					}
+				],
+				"inputFields": null,
+				"interfaces": [
+					{
+						"kind": "INTERFACE",
+						"name": "MutationResponse",
+						"ofType": null
+					}
+				],
+				"enumValues": null,
+				"possibleTypes": null
 			},
 			{
 				"kind": "SCALAR",
@@ -521,6 +639,111 @@
 				"interfaces": null,
 				"enumValues": null,
 				"possibleTypes": null
+			},
+			{
+				"kind": "OBJECT",
+				"name": "Mutation",
+				"description": null,
+				"fields": [
+					{
+						"name": "createThread",
+						"description": null,
+						"args": [
+							{
+								"name": "thread",
+								"description": null,
+								"type": {
+									"kind": "INPUT_OBJECT",
+									"name": "CreateThreadInput",
+									"ofType": null
+								},
+								"defaultValue": null,
+								"isDeprecated": false,
+								"deprecationReason": null
+							}
+						],
+						"type": {
+							"kind": "NON_NULL",
+							"name": null,
+							"ofType": {
+								"kind": "OBJECT",
+								"name": "CreateThreadResponse",
+								"ofType": null
+							}
+						},
+						"isDeprecated": false,
+						"deprecationReason": null
+					}
+				],
+				"inputFields": null,
+				"interfaces": [],
+				"enumValues": null,
+				"possibleTypes": null
+			},
+			{
+				"kind": "INTERFACE",
+				"name": "MutationResponse",
+				"description": "Mutation response basic object which every mutation return type must implement",
+				"fields": [
+					{
+						"name": "code",
+						"description": "response code status, can be HTTP or application specific",
+						"args": [],
+						"type": {
+							"kind": "NON_NULL",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "String",
+								"ofType": null
+							}
+						},
+						"isDeprecated": false,
+						"deprecationReason": null
+					},
+					{
+						"name": "message",
+						"description": "message with more details about the operation",
+						"args": [],
+						"type": {
+							"kind": "NON_NULL",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "String",
+								"ofType": null
+							}
+						},
+						"isDeprecated": false,
+						"deprecationReason": null
+					},
+					{
+						"name": "success",
+						"description": "indicates whether the operation was a success",
+						"args": [],
+						"type": {
+							"kind": "NON_NULL",
+							"name": null,
+							"ofType": {
+								"kind": "SCALAR",
+								"name": "Boolean",
+								"ofType": null
+							}
+						},
+						"isDeprecated": false,
+						"deprecationReason": null
+					}
+				],
+				"inputFields": null,
+				"interfaces": [],
+				"enumValues": null,
+				"possibleTypes": [
+					{
+						"kind": "OBJECT",
+						"name": "CreateThreadResponse",
+						"ofType": null
+					}
+				]
 			},
 			{
 				"kind": "OBJECT",

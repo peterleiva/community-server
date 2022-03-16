@@ -7,8 +7,8 @@ import * as Connection from "modules/connection";
 import { schema as threads } from "modules/threads";
 import { schema as users } from "modules/user";
 import { resolvers } from "modules/resolvers";
-import baseTypes from "./base.graphql";
 import root from "./root.graphql";
+import baseTypes from "./base.graphql";
 
 export const schema = makeExecutableSchema({
 	typeDefs: [

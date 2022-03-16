@@ -110,3 +110,15 @@ type PostReplyEdge implements Edge {
 	"post's cursor"
 	cursor: Cursor!
 }
+
+"""
+Mutation response basic object which every mutation return type must implement
+"""
+interface MutationResponse {
+	"response code status, can be HTTP or application specific"
+	code: String!
+	"indicates whether the operation was a success"
+	success: Boolean!
+	"message with more details about the operation"
+	message: String!
+}
