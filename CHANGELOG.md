@@ -6,6 +6,25 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 
 ## [Unreleased]
 
+### Added
+
+- webpack `.graphql` loader
+- GraphQL type generator. [checkout](https://www.graphql-code-generator.com/docs/getting-started)
+- Logger as global variable `log`
+
+### Removed
+
+- Post's message minimium length requirement
+
+### Changed
+
+- Move graphql schema to `.graphql` files
+- README minor improvements
+
+### Security
+
+- upgrade dependencies with vulnerabilities
+
 ## [0.4.0] - 2022-01-02
 
 ### Added
