@@ -14,7 +14,7 @@ describe("Thread Type resolvers", () => {
 			{ associations: { op: op._id } }
 		);
 
-		const result = await post(thread, null, null, {} as GraphQLResolveInfo);
+		const result = await post(thread, {}, null);
 
 		expect(result).toBeInstanceOf(PostModel);
 		expect(result._id).toStrictEqual(op._id);

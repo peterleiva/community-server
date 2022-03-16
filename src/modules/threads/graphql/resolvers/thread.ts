@@ -1,7 +1,7 @@
 import type { IFieldResolver } from "@graphql-tools/utils";
 import type { Types, Aggregate } from "mongoose";
 import type { ThreadDocument } from "modules/threads";
-import type { Thread, User } from "types/schema";
+import type { Thread, User, ThreadResolvers } from "types/schema";
 import { CursorPage, type PageArgs, type Edge } from "modules/connection";
 import { PostModel, type PostDocument } from "modules/post";
 
@@ -96,48 +96,37 @@ export const participants: IFieldResolver<
 	return result;
 };
 
-export const post: IFieldResolver<
-	ThreadDocument,
-	unknown,
-	unknown,
-	Promise<PostDocument>
-> = async function post(source) {
+export const post: NonNullable<ThreadResolvers["post"]> = async function post(
+	source
+) {
 	const { op } = await source.populate<{ op: PostDocument }>("op");
 	return op;
 };
 
-export const lastActivity: IFieldResolver<
-	ThreadDocument,
-	unknown,
-	unknown,
-	Promise<Thread["lastActivity"]>
-> = async function lastActivity(source) {
-	const docs = await buildRepliesAggregate<{ activity: Date }>(
-		source.op._id
-	).project({
-		activity: {
-			$max: {
-				$concatArrays: [["$updatedAt"], "$replies.updatedAt"],
+export const lastActivity: NonNullable<ThreadResolvers["lastActivity"]> =
+	async function lastActivity(source) {
+		const docs = await buildRepliesAggregate<{ activity: Date }>(
+			source.op._id
+		).project({
+			activity: {
+				$max: {
+					$concatArrays: [["$updatedAt"], "$replies.updatedAt"],
+				},
 			},
-		},
-	});
+		});
 
-	const [{ activity }] = docs;
+		const [{ activity }] = docs;
 
-	return activity;
-};
+		return activity;
+	};
 
-export const replies: IFieldResolver<
-	ThreadDocument,
-	unknown,
-	unknown,
-	Promise<Thread["replies"]>
-> = async function replies(source) {
-	const docs = await buildRepliesAggregate<{
-		replies: number;
-	}>(source.op._id).project({ replies: { $size: "$replies" } });
+export const replies: NonNullable<ThreadResolvers["replies"]> =
+	async function replies(source) {
+		const docs = await buildRepliesAggregate<{
+			replies: number;
+		}>(source.op._id).project({ replies: { $size: "$replies" } });
 
-	const [{ replies }] = docs;
+		const [{ replies }] = docs;
 
-	return replies;
-};
+		return replies;
+	};

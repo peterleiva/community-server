@@ -9,8 +9,13 @@ hooks:
 generates:
   src/types/schema.ts:
     config:
+      makeResolverTypeCallable: true
+      optionalInfoArgument: true
+      allowParentTypeOverride: true
       mappers:
         User: modules/user/schema#UserDocument
+        Thread: modules/threads/thread#ThreadDocument
+        Post: modules/post#PostDocument
 
     plugins:
       - "typescript"

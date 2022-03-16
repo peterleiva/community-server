@@ -4,6 +4,8 @@ import {
 	GraphQLScalarTypeConfig,
 } from "graphql";
 import { UserDocument } from "modules/user/schema";
+import { ThreadDocument } from "modules/threads/thread";
+import { PostDocument } from "modules/post";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -415,32 +417,32 @@ export type User = Node &
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
 
-export type ResolverWithResolve<TResult, TParent, TContext, TArgs> = {
-	resolve: ResolverFn<TResult, TParent, TContext, TArgs>;
-};
-export type Resolver<TResult, TParent = {}, TContext = {}, TArgs = {}> =
-	| ResolverFn<TResult, TParent, TContext, TArgs>
-	| ResolverWithResolve<TResult, TParent, TContext, TArgs>;
+export type Resolver<
+	TResult,
+	TParent = {},
+	TContext = {},
+	TArgs = {}
+> = ResolverFn<TResult, TParent, TContext, TArgs>;
 
 export type ResolverFn<TResult, TParent, TContext, TArgs> = (
 	parent: TParent,
 	args: TArgs,
 	context: TContext,
-	info: GraphQLResolveInfo
+	info?: GraphQLResolveInfo
 ) => Promise<TResult> | TResult;
 
 export type SubscriptionSubscribeFn<TResult, TParent, TContext, TArgs> = (
 	parent: TParent,
 	args: TArgs,
 	context: TContext,
-	info: GraphQLResolveInfo
+	info?: GraphQLResolveInfo
 ) => AsyncIterable<TResult> | Promise<AsyncIterable<TResult>>;
 
 export type SubscriptionResolveFn<TResult, TParent, TContext, TArgs> = (
 	parent: TParent,
 	args: TArgs,
 	context: TContext,
-	info: GraphQLResolveInfo
+	info?: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
 export interface SubscriptionSubscriberObject<
@@ -494,13 +496,13 @@ export type SubscriptionResolver<
 export type TypeResolveFn<TTypes, TParent = {}, TContext = {}> = (
 	parent: TParent,
 	context: TContext,
-	info: GraphQLResolveInfo
+	info?: GraphQLResolveInfo
 ) => Maybe<TTypes> | Promise<Maybe<TTypes>>;
 
 export type IsTypeOfResolverFn<T = {}, TContext = {}> = (
 	obj: T,
 	context: TContext,
-	info: GraphQLResolveInfo
+	info?: GraphQLResolveInfo
 ) => boolean | Promise<boolean>;
 
 export type NextResolverFn<T> = () => Promise<T>;
@@ -515,7 +517,7 @@ export type DirectiveResolverFn<
 	parent: TParent,
 	args: TArgs,
 	context: TContext,
-	info: GraphQLResolveInfo
+	info?: GraphQLResolveInfo
 ) => TResult | Promise<TResult>;
 
 /** Mapping between all available schema types and the resolvers types */
@@ -581,12 +583,7 @@ export type ResolversTypes = {
 	Port: ResolverTypeWrapper<Scalars["Port"]>;
 	PositiveFloat: ResolverTypeWrapper<Scalars["PositiveFloat"]>;
 	PositiveInt: ResolverTypeWrapper<Scalars["PositiveInt"]>;
-	Post: ResolverTypeWrapper<
-		Omit<Post, "author" | "replies"> & {
-			author: ResolversTypes["User"];
-			replies: ResolversTypes["PostRepliesConnection"];
-		}
-	>;
+	Post: ResolverTypeWrapper<PostDocument>;
 	PostParticipantsConnection: ResolverTypeWrapper<
 		Omit<PostParticipantsConnection, "edges"> & {
 			edges: Array<ResolversTypes["PostParticipantsEdge"]>;
@@ -609,12 +606,7 @@ export type ResolversTypes = {
 	RGBA: ResolverTypeWrapper<Scalars["RGBA"]>;
 	SafeInt: ResolverTypeWrapper<Scalars["SafeInt"]>;
 	String: ResolverTypeWrapper<Scalars["String"]>;
-	Thread: ResolverTypeWrapper<
-		Omit<Thread, "participants" | "post"> & {
-			participants: ResolversTypes["PostParticipantsConnection"];
-			post: ResolversTypes["Post"];
-		}
-	>;
+	Thread: ResolverTypeWrapper<ThreadDocument>;
 	ThreadConnection: ResolverTypeWrapper<
 		Omit<ThreadConnection, "edges"> & {
 			edges: Array<ResolversTypes["ThreadEdge"]>;
@@ -702,10 +694,7 @@ export type ResolversParentTypes = {
 	Port: Scalars["Port"];
 	PositiveFloat: Scalars["PositiveFloat"];
 	PositiveInt: Scalars["PositiveInt"];
-	Post: Omit<Post, "author" | "replies"> & {
-		author: ResolversParentTypes["User"];
-		replies: ResolversParentTypes["PostRepliesConnection"];
-	};
+	Post: PostDocument;
 	PostParticipantsConnection: Omit<PostParticipantsConnection, "edges"> & {
 		edges: Array<ResolversParentTypes["PostParticipantsEdge"]>;
 	};
@@ -724,10 +713,7 @@ export type ResolversParentTypes = {
 	RGBA: Scalars["RGBA"];
 	SafeInt: Scalars["SafeInt"];
 	String: Scalars["String"];
-	Thread: Omit<Thread, "participants" | "post"> & {
-		participants: ResolversParentTypes["PostParticipantsConnection"];
-		post: ResolversParentTypes["Post"];
-	};
+	Thread: ThreadDocument;
 	ThreadConnection: Omit<ThreadConnection, "edges"> & {
 		edges: Array<ResolversParentTypes["ThreadEdge"]>;
 	};
@@ -767,7 +753,7 @@ export interface ByteScalarConfig
 
 export type ConnectionResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["Connection"] = ResolversParentTypes["Connection"]
+	ParentType = ResolversParentTypes["Connection"]
 > = {
 	__resolveType: TypeResolveFn<
 		"PostParticipantsConnection" | "PostRepliesConnection" | "ThreadConnection",
@@ -810,7 +796,7 @@ export interface DurationScalarConfig
 
 export type EdgeResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["Edge"] = ResolversParentTypes["Edge"]
+	ParentType = ResolversParentTypes["Edge"]
 > = {
 	__resolveType: TypeResolveFn<
 		"PostParticipantsEdge" | "PostReplyEdge" | "ThreadEdge",
@@ -928,7 +914,7 @@ export interface MacScalarConfig
 
 export type NamingResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["Naming"] = ResolversParentTypes["Naming"]
+	ParentType = ResolversParentTypes["Naming"]
 > = {
 	first?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
 	last?: Resolver<Maybe<ResolversTypes["String"]>, ParentType, ContextType>;
@@ -948,7 +934,7 @@ export interface NegativeIntScalarConfig
 
 export type NodeResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["Node"] = ResolversParentTypes["Node"]
+	ParentType = ResolversParentTypes["Node"]
 > = {
 	__resolveType: TypeResolveFn<
 		"Post" | "Thread" | "User",
@@ -990,7 +976,7 @@ export interface ObjectIdScalarConfig
 
 export type PageInfoResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["PageInfo"] = ResolversParentTypes["PageInfo"]
+	ParentType = ResolversParentTypes["PageInfo"]
 > = {
 	endCursor?: Resolver<ResolversTypes["Cursor"], ParentType, ContextType>;
 	hasNextPage?: Resolver<ResolversTypes["Boolean"], ParentType, ContextType>;
@@ -1025,7 +1011,7 @@ export interface PositiveIntScalarConfig
 
 export type PostResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["Post"] = ResolversParentTypes["Post"]
+	ParentType = ResolversParentTypes["Post"]
 > = {
 	author?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
 	createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
@@ -1044,7 +1030,7 @@ export type PostResolvers<
 
 export type PostParticipantsConnectionResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["PostParticipantsConnection"] = ResolversParentTypes["PostParticipantsConnection"]
+	ParentType = ResolversParentTypes["PostParticipantsConnection"]
 > = {
 	edges?: Resolver<
 		Array<ResolversTypes["PostParticipantsEdge"]>,
@@ -1062,7 +1048,7 @@ export type PostParticipantsConnectionResolvers<
 
 export type PostParticipantsEdgeResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["PostParticipantsEdge"] = ResolversParentTypes["PostParticipantsEdge"]
+	ParentType = ResolversParentTypes["PostParticipantsEdge"]
 > = {
 	cursor?: Resolver<ResolversTypes["Cursor"], ParentType, ContextType>;
 	node?: Resolver<ResolversTypes["User"], ParentType, ContextType>;
@@ -1071,7 +1057,7 @@ export type PostParticipantsEdgeResolvers<
 
 export type PostRepliesConnectionResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["PostRepliesConnection"] = ResolversParentTypes["PostRepliesConnection"]
+	ParentType = ResolversParentTypes["PostRepliesConnection"]
 > = {
 	edges?: Resolver<
 		Array<ResolversTypes["PostReplyEdge"]>,
@@ -1084,7 +1070,7 @@ export type PostRepliesConnectionResolvers<
 
 export type PostReplyEdgeResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["PostReplyEdge"] = ResolversParentTypes["PostReplyEdge"]
+	ParentType = ResolversParentTypes["PostReplyEdge"]
 > = {
 	cursor?: Resolver<ResolversTypes["Cursor"], ParentType, ContextType>;
 	node?: Resolver<ResolversTypes["Post"], ParentType, ContextType>;
@@ -1098,7 +1084,7 @@ export interface PostalCodeScalarConfig
 
 export type QueryResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["Query"] = ResolversParentTypes["Query"]
+	ParentType = ResolversParentTypes["Query"]
 > = {
 	threads?: Resolver<
 		ResolversTypes["ThreadConnection"],
@@ -1125,7 +1111,7 @@ export interface SafeIntScalarConfig
 
 export type ThreadResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["Thread"] = ResolversParentTypes["Thread"]
+	ParentType = ResolversParentTypes["Thread"]
 > = {
 	createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;
 	id?: Resolver<ResolversTypes["ID"], ParentType, ContextType>;
@@ -1145,7 +1131,7 @@ export type ThreadResolvers<
 
 export type ThreadConnectionResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["ThreadConnection"] = ResolversParentTypes["ThreadConnection"]
+	ParentType = ResolversParentTypes["ThreadConnection"]
 > = {
 	edges?: Resolver<
 		Array<ResolversTypes["ThreadEdge"]>,
@@ -1159,7 +1145,7 @@ export type ThreadConnectionResolvers<
 
 export type ThreadEdgeResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["ThreadEdge"] = ResolversParentTypes["ThreadEdge"]
+	ParentType = ResolversParentTypes["ThreadEdge"]
 > = {
 	cursor?: Resolver<ResolversTypes["Cursor"], ParentType, ContextType>;
 	node?: Resolver<ResolversTypes["Thread"], ParentType, ContextType>;
@@ -1178,7 +1164,7 @@ export interface TimestampScalarConfig
 
 export type TimestampsResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["Timestamps"] = ResolversParentTypes["Timestamps"]
+	ParentType = ResolversParentTypes["Timestamps"]
 > = {
 	__resolveType: TypeResolveFn<
 		"Post" | "Thread" | "User",
@@ -1216,7 +1202,7 @@ export interface UnsignedIntScalarConfig
 
 export type UserResolvers<
 	ContextType = any,
-	ParentType extends ResolversParentTypes["User"] = ResolversParentTypes["User"]
+	ParentType = ResolversParentTypes["User"]
 > = {
 	avatar?: Resolver<Maybe<ResolversTypes["Avatar"]>, ParentType, ContextType>;
 	createdAt?: Resolver<ResolversTypes["DateTime"], ParentType, ContextType>;

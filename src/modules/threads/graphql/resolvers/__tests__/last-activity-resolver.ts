@@ -36,9 +36,9 @@ describe("lastActivity resolver", () => {
 		reply.message = "updated post message";
 		const { updatedAt } = await reply.save();
 
-		await expect(
-			lastActivity(thread, {}, null, {} as GraphQLResolveInfo)
-		).resolves.toStrictEqual(updatedAt);
+		await expect(lastActivity(thread, {}, {})).resolves.toStrictEqual(
+			updatedAt
+		);
 	});
 
 	test("gives last update of op if it was last updated", async () => {
@@ -48,8 +48,8 @@ describe("lastActivity resolver", () => {
 		op.message = "update message";
 		const { updatedAt } = await op.save();
 
-		await expect(
-			lastActivity(thread, {}, null, {} as GraphQLResolveInfo)
-		).resolves.toStrictEqual(updatedAt);
+		await expect(lastActivity(thread, {}, {})).resolves.toStrictEqual(
+			updatedAt
+		);
 	});
 });

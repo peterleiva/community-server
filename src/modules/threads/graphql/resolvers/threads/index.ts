@@ -1,8 +1,3 @@
-import type { IResolvers } from "@graphql-tools/utils";
-import { total, threads } from "./resolvers";
-
-const ThreadConnection: IResolvers = {
-	total,
-};
+import { ThreadConnection, threads } from "./resolvers";
 
 export { threads, ThreadConnection };

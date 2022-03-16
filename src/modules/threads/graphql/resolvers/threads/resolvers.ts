@@ -25,7 +25,8 @@ export const threads: IFieldResolver<
 	return builder.build();
 };
 
-export const total: ThreadConnectionResolvers["total"] =
-	async function total() {
+export const ThreadConnection: ThreadConnectionResolvers<null, null> = {
+	async total() {
 		return ThreadModel.estimatedDocumentCount().exec();
-	};
+	},
+};

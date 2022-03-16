@@ -2,7 +2,7 @@ import { GraphQLResolveInfo } from "graphql";
 import { ThreadFactory } from "test/factory";
 import { databaseSetup } from "test/utils";
 import { shouldBehavesLikePaginable } from "test/shared";
-import { total, threads as resolver } from "../resolvers";
+import { threads as resolver, ThreadConnection } from "../resolvers";
 
 describe("thread connection resolver", () => {
 	databaseSetup();
@@ -27,18 +27,16 @@ describe("thread connection resolver", () => {
 
 	describe("total resolver", () => {
 		test("total is 0 when no threads", async () => {
-			await expect(
-				total(null, {}, null, {} as GraphQLResolveInfo)
-			).resolves.toBe(0);
+			await expect(ThreadConnection?.total?.(null, {}, null)).resolves.toBe(0);
 		});
 
 		test("total is amount of threads stored", async () => {
 			const length = 11;
 			await ThreadFactory.createList(length);
 
-			await expect(
-				total(null, {}, null, {} as GraphQLResolveInfo)
-			).resolves.toBe(length);
+			await expect(ThreadConnection?.total?.(null, {}, null)).resolves.toBe(
+				length
+			);
 		});
 	});
 

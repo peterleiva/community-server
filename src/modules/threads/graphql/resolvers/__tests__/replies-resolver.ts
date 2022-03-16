@@ -1,4 +1,3 @@
-import type { GraphQLResolveInfo } from "graphql";
 import { PostFactory, ThreadFactory } from "test/factory";
 import { databaseSetup } from "test/utils";
 import { replies } from "../thread";
@@ -23,16 +22,12 @@ describe("replies resolver", () => {
 			{ associations: { op: op._id } }
 		);
 
-		await expect(
-			replies(thread, {}, null, {} as GraphQLResolveInfo)
-		).resolves.toBe(3);
+		await expect(replies(thread, {}, null)).resolves.toBe(3);
 	});
 
 	test("no reply when op has no interaction", async () => {
 		const thread = await ThreadFactory.create();
 
-		await expect(
-			replies(thread, {}, null, {} as GraphQLResolveInfo)
-		).resolves.toBe(0);
+		await expect(replies(thread, {}, null)).resolves.toBe(0);
 	});
 });
