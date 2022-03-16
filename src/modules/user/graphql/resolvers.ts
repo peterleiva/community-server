@@ -1,17 +1,12 @@
-import type { IResolvers, IFieldResolver } from "@graphql-tools/utils";
-import type { ObjectId } from "mongoose";
-import type { UserDocument } from "../schema";
-import type { UserType } from "./types";
+import type { Resolvers } from "types/schema";
 
-const avatar: IFieldResolver<UserDocument, unknown, unknown, string> =
-	function avatar() {
-		return "https://picsum.photos/100/100";
-	};
-
-export const resolvers: IResolvers<UserDocument, unknown, unknown, UserType> = {
+export const resolvers: Resolvers = {
 	User: {
-		avatar,
-		id(source): ObjectId {
+		avatar() {
+			return "https://picsum.photos/100/100";
+		},
+
+		id(source) {
 			return source._id;
 		},
 	},

@@ -8,10 +8,13 @@ hooks:
     - npx eslint --fix
 generates:
   src/types/schema.ts:
+    config:
+      mappers:
+        User: modules/user/schema#UserDocument
+
     plugins:
       - "typescript"
       - "typescript-resolvers"
-      - "typescript-mongodb"
   ./graphql.schema.json:
     plugins:
       - "introspection"

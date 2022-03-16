@@ -3,6 +3,7 @@ import {
 	GraphQLScalarType,
 	GraphQLScalarTypeConfig,
 } from "graphql";
+import { UserDocument } from "modules/user/schema";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = {
@@ -14,6 +15,7 @@ export type MakeOptional<T, K extends keyof T> = Omit<T, K> & {
 export type MakeMaybe<T, K extends keyof T> = Omit<T, K> & {
 	[SubKey in K]: Maybe<T[SubKey]>;
 };
+export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
 	ID: string;
@@ -85,11 +87,6 @@ export type Scalars = {
 	UnsignedInt: any;
 	UtcOffset: any;
 	Void: any;
-};
-
-export type AdditionalEntityFields = {
-	path?: InputMaybe<Scalars["String"]>;
-	type?: InputMaybe<Scalars["String"]>;
 };
 
 /**
@@ -523,11 +520,10 @@ export type DirectiveResolverFn<
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = {
-	AdditionalEntityFields: AdditionalEntityFields;
-	String: ResolverTypeWrapper<Scalars["String"]>;
 	Avatar: ResolverTypeWrapper<Scalars["Avatar"]>;
 	BackwardPageInput: BackwardPageInput;
 	BigInt: ResolverTypeWrapper<Scalars["BigInt"]>;
+	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 	Byte: ResolverTypeWrapper<Scalars["Byte"]>;
 	Connection:
 		| ResolversTypes["PostParticipantsConnection"]
@@ -551,6 +547,7 @@ export type ResolversTypes = {
 	HexColorCode: ResolverTypeWrapper<Scalars["HexColorCode"]>;
 	Hexadecimal: ResolverTypeWrapper<Scalars["Hexadecimal"]>;
 	IBAN: ResolverTypeWrapper<Scalars["IBAN"]>;
+	ID: ResolverTypeWrapper<Scalars["ID"]>;
 	IPv4: ResolverTypeWrapper<Scalars["IPv4"]>;
 	IPv6: ResolverTypeWrapper<Scalars["IPv6"]>;
 	ISBN: ResolverTypeWrapper<Scalars["ISBN"]>;
@@ -572,7 +569,6 @@ export type ResolversTypes = {
 		| ResolversTypes["Post"]
 		| ResolversTypes["Thread"]
 		| ResolversTypes["User"];
-	ID: ResolverTypeWrapper<Scalars["ID"]>;
 	NonEmptyString: ResolverTypeWrapper<Scalars["NonEmptyString"]>;
 	NonNegativeFloat: ResolverTypeWrapper<Scalars["NonNegativeFloat"]>;
 	NonNegativeInt: ResolverTypeWrapper<Scalars["NonNegativeInt"]>;
@@ -580,25 +576,53 @@ export type ResolversTypes = {
 	NonPositiveInt: ResolverTypeWrapper<Scalars["NonPositiveInt"]>;
 	ObjectID: ResolverTypeWrapper<Scalars["ObjectID"]>;
 	PageInfo: ResolverTypeWrapper<PageInfo>;
-	Boolean: ResolverTypeWrapper<Scalars["Boolean"]>;
 	PageInput: PageInput;
 	PhoneNumber: ResolverTypeWrapper<Scalars["PhoneNumber"]>;
 	Port: ResolverTypeWrapper<Scalars["Port"]>;
 	PositiveFloat: ResolverTypeWrapper<Scalars["PositiveFloat"]>;
 	PositiveInt: ResolverTypeWrapper<Scalars["PositiveInt"]>;
-	Post: ResolverTypeWrapper<Post>;
-	PostParticipantsConnection: ResolverTypeWrapper<PostParticipantsConnection>;
-	PostParticipantsEdge: ResolverTypeWrapper<PostParticipantsEdge>;
-	PostRepliesConnection: ResolverTypeWrapper<PostRepliesConnection>;
-	PostReplyEdge: ResolverTypeWrapper<PostReplyEdge>;
+	Post: ResolverTypeWrapper<
+		Omit<Post, "author" | "replies"> & {
+			author: ResolversTypes["User"];
+			replies: ResolversTypes["PostRepliesConnection"];
+		}
+	>;
+	PostParticipantsConnection: ResolverTypeWrapper<
+		Omit<PostParticipantsConnection, "edges"> & {
+			edges: Array<ResolversTypes["PostParticipantsEdge"]>;
+		}
+	>;
+	PostParticipantsEdge: ResolverTypeWrapper<
+		Omit<PostParticipantsEdge, "node"> & { node: ResolversTypes["User"] }
+	>;
+	PostRepliesConnection: ResolverTypeWrapper<
+		Omit<PostRepliesConnection, "edges"> & {
+			edges: Array<ResolversTypes["PostReplyEdge"]>;
+		}
+	>;
+	PostReplyEdge: ResolverTypeWrapper<
+		Omit<PostReplyEdge, "node"> & { node: ResolversTypes["Post"] }
+	>;
 	PostalCode: ResolverTypeWrapper<Scalars["PostalCode"]>;
 	Query: ResolverTypeWrapper<{}>;
 	RGB: ResolverTypeWrapper<Scalars["RGB"]>;
 	RGBA: ResolverTypeWrapper<Scalars["RGBA"]>;
 	SafeInt: ResolverTypeWrapper<Scalars["SafeInt"]>;
-	Thread: ResolverTypeWrapper<Thread>;
-	ThreadConnection: ResolverTypeWrapper<ThreadConnection>;
-	ThreadEdge: ResolverTypeWrapper<ThreadEdge>;
+	String: ResolverTypeWrapper<Scalars["String"]>;
+	Thread: ResolverTypeWrapper<
+		Omit<Thread, "participants" | "post"> & {
+			participants: ResolversTypes["PostParticipantsConnection"];
+			post: ResolversTypes["Post"];
+		}
+	>;
+	ThreadConnection: ResolverTypeWrapper<
+		Omit<ThreadConnection, "edges"> & {
+			edges: Array<ResolversTypes["ThreadEdge"]>;
+		}
+	>;
+	ThreadEdge: ResolverTypeWrapper<
+		Omit<ThreadEdge, "node"> & { node: ResolversTypes["Thread"] }
+	>;
 	Time: ResolverTypeWrapper<Scalars["Time"]>;
 	Timestamp: ResolverTypeWrapper<Scalars["Timestamp"]>;
 	Timestamps:
@@ -610,18 +634,17 @@ export type ResolversTypes = {
 	UUID: ResolverTypeWrapper<Scalars["UUID"]>;
 	UnsignedFloat: ResolverTypeWrapper<Scalars["UnsignedFloat"]>;
 	UnsignedInt: ResolverTypeWrapper<Scalars["UnsignedInt"]>;
-	User: ResolverTypeWrapper<User>;
+	User: ResolverTypeWrapper<UserDocument>;
 	UtcOffset: ResolverTypeWrapper<Scalars["UtcOffset"]>;
 	Void: ResolverTypeWrapper<Scalars["Void"]>;
 };
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = {
-	AdditionalEntityFields: AdditionalEntityFields;
-	String: Scalars["String"];
 	Avatar: Scalars["Avatar"];
 	BackwardPageInput: BackwardPageInput;
 	BigInt: Scalars["BigInt"];
+	Boolean: Scalars["Boolean"];
 	Byte: Scalars["Byte"];
 	Connection:
 		| ResolversParentTypes["PostParticipantsConnection"]
@@ -645,6 +668,7 @@ export type ResolversParentTypes = {
 	HexColorCode: Scalars["HexColorCode"];
 	Hexadecimal: Scalars["Hexadecimal"];
 	IBAN: Scalars["IBAN"];
+	ID: Scalars["ID"];
 	IPv4: Scalars["IPv4"];
 	IPv6: Scalars["IPv6"];
 	ISBN: Scalars["ISBN"];
@@ -666,7 +690,6 @@ export type ResolversParentTypes = {
 		| ResolversParentTypes["Post"]
 		| ResolversParentTypes["Thread"]
 		| ResolversParentTypes["User"];
-	ID: Scalars["ID"];
 	NonEmptyString: Scalars["NonEmptyString"];
 	NonNegativeFloat: Scalars["NonNegativeFloat"];
 	NonNegativeInt: Scalars["NonNegativeInt"];
@@ -674,25 +697,43 @@ export type ResolversParentTypes = {
 	NonPositiveInt: Scalars["NonPositiveInt"];
 	ObjectID: Scalars["ObjectID"];
 	PageInfo: PageInfo;
-	Boolean: Scalars["Boolean"];
 	PageInput: PageInput;
 	PhoneNumber: Scalars["PhoneNumber"];
 	Port: Scalars["Port"];
 	PositiveFloat: Scalars["PositiveFloat"];
 	PositiveInt: Scalars["PositiveInt"];
-	Post: Post;
-	PostParticipantsConnection: PostParticipantsConnection;
-	PostParticipantsEdge: PostParticipantsEdge;
-	PostRepliesConnection: PostRepliesConnection;
-	PostReplyEdge: PostReplyEdge;
+	Post: Omit<Post, "author" | "replies"> & {
+		author: ResolversParentTypes["User"];
+		replies: ResolversParentTypes["PostRepliesConnection"];
+	};
+	PostParticipantsConnection: Omit<PostParticipantsConnection, "edges"> & {
+		edges: Array<ResolversParentTypes["PostParticipantsEdge"]>;
+	};
+	PostParticipantsEdge: Omit<PostParticipantsEdge, "node"> & {
+		node: ResolversParentTypes["User"];
+	};
+	PostRepliesConnection: Omit<PostRepliesConnection, "edges"> & {
+		edges: Array<ResolversParentTypes["PostReplyEdge"]>;
+	};
+	PostReplyEdge: Omit<PostReplyEdge, "node"> & {
+		node: ResolversParentTypes["Post"];
+	};
 	PostalCode: Scalars["PostalCode"];
 	Query: {};
 	RGB: Scalars["RGB"];
 	RGBA: Scalars["RGBA"];
 	SafeInt: Scalars["SafeInt"];
-	Thread: Thread;
-	ThreadConnection: ThreadConnection;
-	ThreadEdge: ThreadEdge;
+	String: Scalars["String"];
+	Thread: Omit<Thread, "participants" | "post"> & {
+		participants: ResolversParentTypes["PostParticipantsConnection"];
+		post: ResolversParentTypes["Post"];
+	};
+	ThreadConnection: Omit<ThreadConnection, "edges"> & {
+		edges: Array<ResolversParentTypes["ThreadEdge"]>;
+	};
+	ThreadEdge: Omit<ThreadEdge, "node"> & {
+		node: ResolversParentTypes["Thread"];
+	};
 	Time: Scalars["Time"];
 	Timestamp: Scalars["Timestamp"];
 	Timestamps:
@@ -704,97 +745,10 @@ export type ResolversParentTypes = {
 	UUID: Scalars["UUID"];
 	UnsignedFloat: Scalars["UnsignedFloat"];
 	UnsignedInt: Scalars["UnsignedInt"];
-	User: User;
+	User: UserDocument;
 	UtcOffset: Scalars["UtcOffset"];
 	Void: Scalars["Void"];
 };
-
-export type UnionDirectiveArgs = {
-	discriminatorField?: Maybe<Scalars["String"]>;
-	additionalFields?: Maybe<Array<Maybe<AdditionalEntityFields>>>;
-};
-
-export type UnionDirectiveResolver<
-	Result,
-	Parent,
-	ContextType = any,
-	Args = UnionDirectiveArgs
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type AbstractEntityDirectiveArgs = {
-	discriminatorField: Scalars["String"];
-	additionalFields?: Maybe<Array<Maybe<AdditionalEntityFields>>>;
-};
-
-export type AbstractEntityDirectiveResolver<
-	Result,
-	Parent,
-	ContextType = any,
-	Args = AbstractEntityDirectiveArgs
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type EntityDirectiveArgs = {
-	embedded?: Maybe<Scalars["Boolean"]>;
-	additionalFields?: Maybe<Array<Maybe<AdditionalEntityFields>>>;
-};
-
-export type EntityDirectiveResolver<
-	Result,
-	Parent,
-	ContextType = any,
-	Args = EntityDirectiveArgs
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type ColumnDirectiveArgs = {
-	overrideType?: Maybe<Scalars["String"]>;
-};
-
-export type ColumnDirectiveResolver<
-	Result,
-	Parent,
-	ContextType = any,
-	Args = ColumnDirectiveArgs
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type IdDirectiveArgs = {};
-
-export type IdDirectiveResolver<
-	Result,
-	Parent,
-	ContextType = any,
-	Args = IdDirectiveArgs
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type LinkDirectiveArgs = {
-	overrideType?: Maybe<Scalars["String"]>;
-};
-
-export type LinkDirectiveResolver<
-	Result,
-	Parent,
-	ContextType = any,
-	Args = LinkDirectiveArgs
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type EmbeddedDirectiveArgs = {};
-
-export type EmbeddedDirectiveResolver<
-	Result,
-	Parent,
-	ContextType = any,
-	Args = EmbeddedDirectiveArgs
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
-
-export type MapDirectiveArgs = {
-	path: Scalars["String"];
-};
-
-export type MapDirectiveResolver<
-	Result,
-	Parent,
-	ContextType = any,
-	Args = MapDirectiveArgs
-> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export interface AvatarScalarConfig
 	extends GraphQLScalarTypeConfig<ResolversTypes["Avatar"], any> {
@@ -1355,16 +1309,3 @@ export type Resolvers<ContextType = any> = {
 	UtcOffset?: GraphQLScalarType;
 	Void?: GraphQLScalarType;
 };
-
-export type DirectiveResolvers<ContextType = any> = {
-	union?: UnionDirectiveResolver<any, any, ContextType>;
-	abstractEntity?: AbstractEntityDirectiveResolver<any, any, ContextType>;
-	entity?: EntityDirectiveResolver<any, any, ContextType>;
-	column?: ColumnDirectiveResolver<any, any, ContextType>;
-	id?: IdDirectiveResolver<any, any, ContextType>;
-	link?: LinkDirectiveResolver<any, any, ContextType>;
-	embedded?: EmbeddedDirectiveResolver<any, any, ContextType>;
-	map?: MapDirectiveResolver<any, any, ContextType>;
-};
-
-import { ObjectId } from "mongodb";
