@@ -125,7 +125,7 @@
 		"graphql-tag": "^2.12.6",
 		"helmet": "^4.6.0",
 		"http-errors": "^1.8.1",
-		"mongoose": "^6.0.13",
+		"mongoose": "^6.11.4",
 		"mongoose-autopopulate": "^0.16.0",
 		"node-environment": "^0.5.1",
 		"pino": "^7.5.1",
